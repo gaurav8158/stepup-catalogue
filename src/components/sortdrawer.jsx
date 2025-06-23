@@ -27,7 +27,7 @@ export function SortDrawer({ onApplySort }) {
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm px-4 py-2">
           {/* Header */}
-          <DrawerHeader className="w-full flex flex-row justify-start item-start">
+          <DrawerHeader className="w-full flex flex-row justify-start item-start p-0">
             <DrawerTitle className="text-base font-semibold">
               Sort by:
             </DrawerTitle>
@@ -58,7 +58,7 @@ export function SortDrawer({ onApplySort }) {
           </div>
 
           {/* Footer */}
-              <DrawerFooter className="flex gap-4 pt-4 justify-between w-full flex-row px-0">
+          <DrawerFooter className="flex gap-4 pt-4 justify-between w-full flex-row px-0">
             <DrawerClose asChild>
               <button className="w-1/2 py-2 border border-green-700 text-green-700 rounded-md">
                 Close

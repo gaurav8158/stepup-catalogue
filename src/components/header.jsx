@@ -1,34 +1,184 @@
-import { Search, Heart, ShoppingBag } from "lucide-react";
+// import { Search, Heart, ShoppingBag } from "lucide-react";
+// import Link from "next/link";
+
+// export default function Header() {
+//   return (
+//     <header className=" shadow-md bg-white border-b ">
+//       <div className="flex container mx-auto items-center justify-between px-4 py-3  ">
+//         {/* Logo */}
+//         <Link href="/" className="no-underline">
+//           <div className="flex items-center gap-2">
+//             <img
+//               src="/logo.png" // Replace with your actual path
+//               alt="Aramya Logo"
+//               className="h-10 w-auto"
+//             />
+//           </div>{" "}
+//         </Link>
+
+//         {/* Icons */}
+//         <div className="flex items-center gap-4">
+//           <button>
+//             <Search size={20} className="text-gray-700" />
+//           </button>
+//           <a
+//             href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="inline-block bg-orange-600 font-semibold px-6 py-1 rounded-full text-white hover:bg-orange-700 transition-colors"
+//           >
+//             Sell/Donate
+//           </a>
+
+//           <Link href="/cart" className="flex justify-center items-center">
+//             <button>
+//               <ShoppingBag size={20} className="text-gray-700" />
+//             </button>{" "}
+//           </Link>
+//         </div>
+//       </div>
+//     </header>
+//   );
+// }
+
+"use client";
+import { Search, Heart, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Header() {
-  return (
-    <header className=" shadow-md bg-green-100 border-b ">
-      <div className="flex container mx-auto items-center justify-between px-4 py-3  ">
-        {/* Logo */}
-        <Link href="/" className="no-underline">
-          <div className="flex items-center gap-2">
-            <img
-              src="/logo.png" // Replace with your actual path
-              alt="Aramya Logo"
-              className="h-10 w-auto"
-            />
-          </div>{" "}
-        </Link>
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-        {/* Icons */}
-        <div className="flex items-center gap-4">
-          <button>
-            <Search size={20} className="text-gray-700" />
-          </button>
-          <button>
-            <Heart size={20} className="text-gray-700" />
-          </button>
-          <button>
-            <ShoppingBag size={20} className="text-gray-700" />
-          </button>
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Handle search logic here
+    console.log("Searching for:", searchQuery);
+    // You can redirect to search results page or handle search as needed
+    setIsSearchOpen(false);
+  };
+
+  return (
+    <>
+      <header className="shadow-md bg-white border-b">
+        <div className="flex container mx-auto items-center justify-between px-4 py-3">
+          {/* Logo */}
+          <Link href="/" className="no-underline">
+            <div className="flex items-center gap-2">
+              <img
+                src="/logo.png" // Replace with your actual path
+                alt="Aramya Logo"
+                className="h-10 w-auto"
+              />
+            </div>
+          </Link>
+
+          {/* Icons */}
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsSearchOpen(true)}>
+              <Search size={20} className="text-gray-700" />
+            </button>
+            <a
+              href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-orange-600 font-semibold px-6 py-1 rounded-full text-white hover:bg-orange-700 transition-colors"
+            >
+              Sell/Donate
+            </a>
+
+            <Link href="/cart" className="flex justify-center items-center">
+              <button>
+                <ShoppingBag size={20} className="text-gray-700" />
+              </button>
+            </Link>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Search Popup Modal */}
+      {isSearchOpen && (
+        <div
+         
+          className="fixed inset-0 z-50 bg-black/70 flex items-start justify-center pt-20"
+        >
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 animate-fade-in">
+            <div className="p-6">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Search Products
+                </h2>
+                <button
+                  onClick={() => setIsSearchOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              {/* Search Form */}
+              <form onSubmit={handleSearchSubmit}>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search for products..."
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-lg"
+                    autoFocus
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-orange-600 transition-colors"
+                  >
+                    <Search size={20} />
+                  </button>
+                </div>
+              </form>
+
+              {/* Optional: Popular searches or recent searches */}
+              <div className="mt-6">
+                <h3 className="text-sm font-medium text-gray-600 mb-3">
+                  Popular Searches
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {["Shirt", "Trouser", "Skirt", "Winterwear", "Sports"].map(
+                    (term) => (
+                      <button
+                        key={term}
+                        onClick={() => {
+                          setSearchQuery(term);
+                          handleSearchSubmit({ preventDefault: () => {} });
+                        }}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                      >
+                        {term}
+                      </button>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
+        }
+      `}</style>
+    </>
   );
 }

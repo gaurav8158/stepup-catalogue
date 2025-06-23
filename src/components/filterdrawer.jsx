@@ -56,7 +56,7 @@ export function FilterDrawer({ onApply }) {
       <DrawerContent className="h-screen">
         <div className="mx-auto w-full  max-w-xl px-2 py-2">
           {/* Header */}
-          <DrawerHeader className="flex items-center flex-row justify-between px-2">
+          <DrawerHeader className="p-0 pb-2 flex items-center flex-row justify-between px-2">
             <DrawerTitle className="text-base font-semibold">
               Filters
             </DrawerTitle>
@@ -107,14 +107,14 @@ export function FilterDrawer({ onApply }) {
           </div>
 
           {/* Footer */}
-          <DrawerFooter className="flex flex-row gap-4 pt-4">
-            <DrawerClose asChild className="w-1/2">
+          <DrawerFooter className="flex mx-auto w-full  max-w-xl flex-row gap-4 pt-4  absolute bottom-0 left-0 right-0 bg-white border-t">
+            <DrawerClose asChild className="flex-1">
               <button className="py-2 border border-green-600 text-green-600 rounded-md">
                 Close
               </button>
             </DrawerClose>
 
-            <DrawerClose asChild className="w-1/2">
+            <DrawerClose asChild className="flex-1">
               <button
                 onClick={() => {
                   console.log("Applied Filters:", selected);

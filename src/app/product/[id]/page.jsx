@@ -108,12 +108,18 @@ export default function ProductDetails() {
 
           {/* Buttons */}
           <div className="mt-6 flex gap-4">
-            <button className="flex-1 py-2 bg-green-700 text-white rounded-md font-semibold">
-              Add to Cart
-            </button>
-            <button className="flex-1 py-2 border border-green-700 text-green-700 rounded-md font-semibold">
-              Buy Now
-            </button>
+            <Link
+              href="/cart"
+              className="flex-1 py-2 flex justify-center bg-green-700 text-white rounded-md font-semibold"
+            >
+              <button>Add to Cart</button>
+            </Link>
+            <Link
+              href="/cart"
+              className="flex-1 flex justify-center py-2 border border-green-700 text-green-700 rounded-md font-semibold"
+            >
+              <button>Buy Now</button>
+            </Link>
           </div>
 
           {/* Description */}
