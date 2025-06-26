@@ -2,12 +2,13 @@
 import React, { useState } from "react";
 import { ArrowLeft, Star } from "lucide-react";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 
 const product = {
   id: 1,
   title: "Soft Cotton Striped Straight Black Kurta Set",
-  brand: "Step Up",
-  images: ["/Dress.png", "/Dress.png", "/Dress.png"],
+  brand: "Gems Modern Academy",
+  images: ["/Dress.png", "/Shirt.png"],
   price: 1847,
   originalPrice: 3997,
   discount: 53,
@@ -21,15 +22,29 @@ const product = {
 export default function ProductDetails() {
   const [activeImage, setActiveImage] = useState(product.images[0]);
   const [selectedSize, setSelectedSize] = useState(null);
-
+  const { addToCart } = useCart();
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart({
+        id: product._id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        description: product.description,
+        stock: product.stock,
+        category: product.category,
+        quantity: quantity,
+      });
+    }
+  };
   return (
     <div className="container mx-auto px-4 py-6">
       <div>
         <Link
           href="/"
-          className="flex w-[70px] p-1 items-center gap-2 mb-4 text-gray-600 cursor-pointer"
+          className="flex w-[160px]  font-semibold bg-white rounded-lg  hover:bg-gray-50 shadow px-3  py-2 items-center gap-2 mb-4 text-gray-600 cursor-pointer"
         >
-          <ArrowLeft /> Back
+          <ArrowLeft /> Back To Shop
         </Link>{" "}
       </div>
       <div className="grid md:grid-cols-2 gap-6">
@@ -37,12 +52,12 @@ export default function ProductDetails() {
         <div>
           <div className="w-full rounded overflow-hidden">
             <img
-              src="/Dress.png"
+              src={activeImage}
               alt="Product"
               className="w-full object-cover aspect-[3/4] rounded-lg border"
             />
           </div>
-          {/* <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-4">
             {product.images.map((img, idx) => (
               <img
                 key={idx}
@@ -54,7 +69,7 @@ export default function ProductDetails() {
                 }`}
               />
             ))}
-          </div> */}
+          </div>
         </div>
 
         {/* Right: Info section */}

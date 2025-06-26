@@ -15,7 +15,7 @@ import { SlidersHorizontal } from "lucide-react";
 const filters = {
   schoolName: ["DPS", "St. Xavier's", "GD Goenka", "Ryan Intl."],
   uniformCategory: ["Core Uniform", "PE Uniform", "Winterwear"],
-  gender: ["Boy", "Girl"],
+  gender: ["Boy", "Girl", "Unisex"],
   itemCategory: ["Tshirt", "Skirt", "Trouser", "Shirt", "Dress", "Skort"],
   subCategory: ["Full Sleeve", "Half Sleeve", "Sleeveless"],
   sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
@@ -47,7 +47,7 @@ export function FilterDrawer({ onApply }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <button className="w-1/2 flex items-center justify-center gap-1 py-3 hover:text-green-800 transition">
+        <button className="w-1/2 flex items-center justify-center gap-1 py-4 hover:text-green-800 transition">
           <SlidersHorizontal size={16} />
           Filter
         </button>
@@ -69,7 +69,7 @@ export function FilterDrawer({ onApply }) {
           </DrawerHeader>
 
           {/* Main layout */}
-          <div className="flex max-h-[65vh] overflow-y-auto border-t border-gray-200">
+          <div className="flex h-[65vh] overflow-y-auto border-t border-gray-200">
             {/* Left Tabs */}
             <div className="w-1/3 bg-gray-50 border-r text-sm">
               {filterKeys.map((key) => (

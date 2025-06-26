@@ -18,7 +18,7 @@ export function SortDrawer({ onApplySort }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <button className="w-1/2 flex items-center justify-center gap-1 py-3 hover:text-green-800 transition">
+        <button className="w-1/2 flex items-center justify-center gap-1 py-4 hover:text-green-800 transition">
           <ArrowUpDown size={16} />
           Sort by
         </button>
@@ -37,8 +37,8 @@ export function SortDrawer({ onApplySort }) {
           <div className="space-y-4 py-4">
             {[
               { label: "Recommended", value: "recommended" },
-              { label: "Price: Low to high", value: "lowToHigh" },
-              { label: "Price: High to low", value: "highToLow" },
+              { label: "Price: Low to High", value: "lowToHigh" },
+              { label: "Price: High to Low", value: "highToLow" },
             ].map((option) => (
               <label
                 key={option.value}

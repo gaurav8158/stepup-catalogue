@@ -88,7 +88,10 @@ export default function Header() {
             </a>
 
             <Link href="/cart" className="flex justify-center items-center">
-              <button>
+              <button className="relative">
+                <span className="bg-orange-500 w-5 h-5 flex items-center justify-center rounded-full -top-2 p-1 text-xs -right-2 font-bold absolute text-white">
+                  3
+                </span>
                 <ShoppingBag size={20} className="text-gray-700" />
               </button>
             </Link>
@@ -98,10 +101,7 @@ export default function Header() {
 
       {/* Search Popup Modal */}
       {isSearchOpen && (
-        <div
-         
-          className="fixed inset-0 z-50 bg-black/70 flex items-start justify-center pt-20"
-        >
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-start justify-center pt-20">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 animate-fade-in">
             <div className="p-6">
               {/* Modal Header */}

@@ -33,7 +33,7 @@ export default function ProductCard({ product }) {
         {/* Info */}
         <div className="p-3 space-y-1">
           <div className="font-semibold text-green-800 truncate">
-            {product.brand}
+            {product.school}
           </div>
           <div className="text-[12px] text-gray-600 truncate">
             {product.title}
@@ -41,7 +41,7 @@ export default function ProductCard({ product }) {
 
           <div className="flex items-center justify-between mt-1">
             <span className="text-[13px] font-medium text-gray-800">
-              3Pc Set
+              {product?.uniformCategory}
             </span>
             <div className="text-right">
               <div className="text-[14px] font-semibold text-gray-800">

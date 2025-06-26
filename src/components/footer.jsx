@@ -1,14 +1,12 @@
 import {
   FaFacebookF,
-  FaTwitter,
-  FaTwitterSquare,
   FaYoutube,
 } from "react-icons/fa";
 import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-800 py-10 px-6 md:px-16">
+    <footer className="bg-gray-50  text-gray-800 py-10 pb-4 px-6 md:px-16">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* Brand */}
         <div>

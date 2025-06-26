@@ -1,13 +1,20 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Assistant, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { Toaster } from "react-hot-toast";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
+const geistassistant = Assistant({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'], // Choose as needed
+  variable: '--font-assistant', // Optional if using Tailwind CSS
+  display: 'swap',
+})
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -25,10 +32,13 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/logo.png" type="image/png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-green-50`}
-      > <Header />
-        {children}
-        <Footer />
+        className={`${geistSans.variable} ${geistMono.variable} ${geistassistant.variable} antialiased bg-green-50`}
+      > <CartProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
+        <Toaster />
       </body>
     </html>
   );
