@@ -43,6 +43,7 @@
 
 "use client";
 import { Search, Heart, ShoppingBag, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -79,12 +80,32 @@ export default function Header() {
               <Search size={20} className="text-gray-700" />
             </button>
             <a
+              href="/login"
+
+              className="inline-block bg-[#28B083] font-semibold px-6 py-1 rounded-full text-white hover:bg-green-700 transition-colors"
+            >
+              Login/Register
+            </a>
+            {/* <a
               href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-orange-600 font-semibold px-6 py-1 rounded-full text-white hover:bg-orange-700 transition-colors"
             >
               Sell/Donate
+            </a> */}
+            <a
+              href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/whatsapp.gif"
+                alt="whatsapp"
+                width={400}
+                height={400}
+                className="w-9 h-9"
+              />{" "}
             </a>
 
             <Link href="/cart" className="flex justify-center items-center">

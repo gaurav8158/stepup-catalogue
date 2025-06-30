@@ -32,11 +32,11 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/logo.png" type="image/png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${geistassistant.variable} antialiased bg-green-50`}
+        className={`${geistSans.variable} ${geistMono.variable} ${geistassistant.variable} antialiased `}
       > <CartProvider>
-          <Header />
+          {/* <Header /> */}
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </CartProvider>
         <Toaster />
       </body>

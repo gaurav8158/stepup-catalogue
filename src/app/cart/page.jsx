@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Cartitem from "./cartitem";
 import { ShoppingBag, ShoppingCart } from "lucide-react";
+import Layout from "@/components/layout";
 
 const CartPage = () => {
   const [form, setForm] = useState({
@@ -114,71 +115,73 @@ const CartPage = () => {
     );
   }
   return (
-    <div className="p-4 md:p-8 bg-white min-h-screen">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-6">
-        {/* Left Section */}
-        <div className="flex-1 ">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-xl sm:text-3xl sm:mb-4">
-              {/* {cartItems.length} Items in Cart  */}
-              Shopping Cart
+    <Layout>
+      <div className="p-4 md:p-8 bg-white min-h-screen">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-6">
+          {/* Left Section */}
+          <div className="flex-1 ">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-xl sm:text-3xl sm:mb-4">
+                {/* {cartItems.length} Items in Cart  */}
+                Shopping Cart
+              </h2>
+            </div>
+
+            {cartItems.map((item) => (
+              <Cartitem
+                key={item.id}
+                item={item}
+                removeItem={removeItem}
+                updateQuantity={updateQuantity}
+              />
+            ))}
+          </div>
+
+          {/* Right Section */}
+          <div className="w-full md:w-1/3  p-4 sm:border-l">
+            <h2 className="font-bold text-lg pb-2 border-b mb-4">
+              Price Details (
+              {cartItems.reduce((acc, item) => acc + item.quantity, 0)} Items)
             </h2>
-          </div>
 
-          {cartItems.map((item) => (
-            <Cartitem
-              key={item.id}
-              item={item}
-              removeItem={removeItem}
-              updateQuantity={updateQuantity}
-            />
-          ))}
-        </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span>Total MRP</span>
+                <span>₹{totalMRP}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Discount on MRP</span>
+                <span className="text-green-600">- ₹{totalDiscount}</span>
+              </div>
 
-        {/* Right Section */}
-        <div className="w-full md:w-1/3  p-4 sm:border-l">
-          <h2 className="font-bold text-lg pb-2 border-b mb-4">
-            Price Details (
-            {cartItems.reduce((acc, item) => acc + item.quantity, 0)} Items)
-          </h2>
+              <div className="flex justify-between">
+                <span>Delivery Fee</span>
+                <span>₹{platformFee}</span>
+              </div>
+              <hr />
+              <div className="flex justify-between font-semibold text-lg">
+                <span>Total Amount</span>
+                <span>₹{totalAmount}</span>
+              </div>
+              <hr />
 
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span>Total MRP</span>
-              <span>₹{totalMRP}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Discount on MRP</span>
-              <span className="text-green-600">- ₹{totalDiscount}</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Delivery Fee</span>
-              <span>₹{platformFee}</span>
-            </div>
-            <hr />
-            <div className="flex justify-between font-semibold text-lg">
-              <span>Total Amount</span>
-              <span>₹{totalAmount}</span>
-            </div>
-            <hr />
-
-            <div>
-              <Link href="/checkout" className="no-underline">
-                <button className="mt-4 w-full bg-green-600 hover:bg-green-700 transition-all  text-white py-[10px] rounded">
-                  Proceed to Buy
-                </button>{" "}
-              </Link>
-              <Link href="/" className="no-underline">
-                <button className="mt-4 w-full border border-green-600 hover:bg-green-700  hover:text-white transition-all  text-green-600 py-[10px] rounded">
-                  Continue Shopping{" "}
-                </button>{" "}
-              </Link>
+              <div>
+                <Link href="/checkout" className="no-underline">
+                  <button className="mt-4 w-full bg-green-600 hover:bg-green-700 transition-all  text-white py-[10px] rounded">
+                    Proceed to Buy
+                  </button>{" "}
+                </Link>
+                <Link href="/" className="no-underline">
+                  <button className="mt-4 w-full border border-green-600 hover:bg-green-700  hover:text-white transition-all  text-green-600 py-[10px] rounded">
+                    Continue Shopping{" "}
+                  </button>{" "}
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div>{" "}
+    </Layout>
   );
 };
 
