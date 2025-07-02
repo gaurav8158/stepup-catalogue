@@ -1,56 +1,28 @@
-// import { Search, Heart, ShoppingBag } from "lucide-react";
-// import Link from "next/link";
-
-// export default function Header() {
-//   return (
-//     <header className=" shadow-md bg-white border-b ">
-//       <div className="flex container mx-auto items-center justify-between px-4 py-3  ">
-//         {/* Logo */}
-//         <Link href="/" className="no-underline">
-//           <div className="flex items-center gap-2">
-//             <img
-//               src="/logo.png" // Replace with your actual path
-//               alt="Aramya Logo"
-//               className="h-10 w-auto"
-//             />
-//           </div>{" "}
-//         </Link>
-
-//         {/* Icons */}
-//         <div className="flex items-center gap-4">
-//           <button>
-//             <Search size={20} className="text-gray-700" />
-//           </button>
-//           <a
-//             href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="inline-block bg-orange-600 font-semibold px-6 py-1 rounded-full text-white hover:bg-orange-700 transition-colors"
-//           >
-//             Sell/Donate
-//           </a>
-
-//           <Link href="/cart" className="flex justify-center items-center">
-//             <button>
-//               <ShoppingBag size={20} className="text-gray-700" />
-//             </button>{" "}
-//           </Link>
-//         </div>
-//       </div>
-//     </header>
-//   );
-// }
-
 "use client";
-import { Search, Heart, ShoppingBag, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, X, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ProfileDropdown } from "./profiledropdown";
 
 export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Invalid user data in localStorage");
+        localStorage.removeItem("user");
+        localStorage.removeItem("usertoken");
+      }
+    }
+  }, []);
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     // Handle search logic here
@@ -66,11 +38,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="no-underline">
             <div className="flex items-center gap-2">
-              <img
-                src="/logo.png" // Replace with your actual path
-                alt="Aramya Logo"
-                className="h-10 w-auto"
-              />
+              <img src="/logo.png" alt="stepup Logo" className="h-10 w-auto" />
             </div>
           </Link>
 
@@ -79,13 +47,23 @@ export default function Header() {
             <button onClick={() => setIsSearchOpen(true)}>
               <Search size={20} className="text-gray-700" />
             </button>
-            <a
-              href="/login"
-
-              className="inline-block bg-[#28B083] font-semibold px-6 py-1 rounded-full text-white hover:bg-green-700 transition-colors"
-            >
-              Login/Register
-            </a>
+            {user ? (
+              // <div className="flex flex-col justify-center items-center">
+              //   <div className="inline-block bg-[#28B083] font-semibold p-1 rounded-full text-white hover:bg-green-700 transition-colors shadow">
+              //     <User className="w-5 h-5" />
+              //   </div>
+              //   <span className="text-xs font-semibold  max-w-[50px]  truncate">
+              //     {user.name || "User"}
+              //   </span>
+                <ProfileDropdown user={user}/>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-block bg-[#28B083] font-semibold px-6 py-1 rounded-full text-white hover:bg-green-700 transition-colors"
+              >
+                Login/Register
+              </Link>
+            )}
             {/* <a
               href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
               target="_blank"

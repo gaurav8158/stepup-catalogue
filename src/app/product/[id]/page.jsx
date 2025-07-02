@@ -42,7 +42,7 @@ export default function ProductDetails() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-6">
-        <div>
+        <div className="pb-4">
           <BackBtn text="Back To Shop" link="/" />
         </div>
         <div className="grid md:grid-cols-2 gap-6">

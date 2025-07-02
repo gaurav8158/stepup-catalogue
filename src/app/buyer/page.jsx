@@ -31,11 +31,11 @@ const dummyOrders = [
       },
     ],
   },
-  // You can add more orders here
+ 
 ];
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState(dummyOrders); // Make this empty to test NoOrder.svg
+  const [orders, setOrders] = useState(dummyOrders); 
 
   return (
    

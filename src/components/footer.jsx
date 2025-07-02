@@ -34,20 +34,20 @@ const Footer = () => {
           <div className="flex gap-4 mt-4">
             <a
               href="https://facebook.com/wordpress.slider.revolution"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600 shadow-md hover:bg-green-600 hover:text-white transform transition duration-300 ease-in-out hover:scale-110"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600 shadow-sm hover:bg-green-600 hover:text-white transform transition duration-300 ease-in-out hover:scale-110"
             >
               <FaFacebookF />
             </a>
             <a
               href="https://x.com/revslider"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600 shadow-md hover:bg-green-600 hover:text-white transform transition duration-300 ease-in-out hover:scale-110"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600 shadow-sm hover:bg-green-600 hover:text-white transform transition duration-300 ease-in-out hover:scale-110"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="12"
                 height="12"
                 fill="currentColor"
-                class="bi bi-twitter-x"
+                className="bi bi-twitter-x"
                 viewBox="0 0 16 16"
               >
                 <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
@@ -55,7 +55,7 @@ const Footer = () => {
             </a>
             <a
               href="https://youtube.com/user/ThemePunch"
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600 shadow-md hover:bg-green-600 hover:text-white transform transition duration-300 ease-in-out hover:scale-110"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600 shadow-sm hover:bg-green-600 hover:text-white transform transition duration-300 ease-in-out hover:scale-110"
             >
               <FaYoutube />
             </a>

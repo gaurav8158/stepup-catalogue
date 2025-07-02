@@ -1,6 +1,7 @@
 "use client";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const RegisterUserForm = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ const RegisterUserForm = () => {
     password: "",
     role: "",
   });
-
+  const router = useRouter();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -19,8 +20,12 @@ const RegisterUserForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const url = process.env.NEXT_PUBLIC_BASE_URL;
+
+    console.log(formData);
+
     try {
-      const res = await fetch("/api/register-user", {
+      const res = await fetch(`${url}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,8 +34,19 @@ const RegisterUserForm = () => {
       });
 
       const data = await res.json();
+
       if (res.ok) {
-        alert("User registered successfully!");
+        toast.success("User registered successfully!");
+        console.log(data);
+        //  Saving token and user to localStorage
+        localStorage.setItem("usertoken", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        if (data.user.role === "Buyer") {
+          router.push("/buyer");
+        } else if (data.user.role === "Seller") {
+          router.push("/seller-doner");
+        }
+        //  Reset form
         setFormData({
           name: "",
           mobile: "",
@@ -40,11 +56,11 @@ const RegisterUserForm = () => {
           role: "Buyer",
         });
       } else {
-        alert(data?.message || "Registration failed");
+        toast.error(data?.error || "Registration failed");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -146,6 +162,7 @@ const RegisterUserForm = () => {
             </label>
             <select
               name="role"
+              required
               value={formData.role}
               onChange={handleChange}
               className="mt-2 w-full custom-input-class"
@@ -159,14 +176,12 @@ const RegisterUserForm = () => {
 
           {/* Submit */}
           <div className="md:col-span-2">
-            <Link href="seller-doner">
-              <button
-                type="submit"
-                className="w-full mt-4 rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-500 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-              >
-                Register
-              </button>{" "}
-            </Link>
+            <button
+              type="submit"
+              className="w-full mt-4 rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-500 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+            >
+              Register
+            </button>{" "}
           </div>
         </form>
 
