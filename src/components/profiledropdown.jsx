@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Headset, LogOut, User, UserRoundPen } from "lucide-react";
+import { Headset, LogOut, ScrollText, User, UserRoundPen } from "lucide-react";
 
 export function ProfileDropdown({ user }) {
   const router = useRouter();
@@ -25,7 +25,10 @@ export function ProfileDropdown({ user }) {
   const handleSupport = () => {
     router.push("/buyer/support");
   };
-
+  const handleMyorder = () => {
+    if (user.role === "Buyer") router.push("/buyer");
+    if (user.role === "Seller") router.push("/seller-doner");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -52,6 +55,12 @@ export function ProfileDropdown({ user }) {
             Support
             <DropdownMenuShortcut>
               <Headset />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleMyorder}>
+            My Orders
+            <DropdownMenuShortcut>
+              <ScrollText />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const RegisterProductForm = () => {
   const [step, setStep] = useState(1);
@@ -19,6 +20,64 @@ const RegisterProductForm = () => {
     senderMobile: "",
     senderAddress: "",
   });
+  const [schoolData, setSchoolData] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [filteredGenders, setFilteredGenders] = useState([]);
+  const [filteredItemCategories, setFilteredItemCategories] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredSizes, setFilteredSizes] = useState([]);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  useEffect(() => {
+    const selectedSchool = schoolData.find(
+      (s) => s.schoolName === formData.schoolName
+    );
+    setFilteredCategories(selectedSchool?.uniformCategories || []);
+  }, [formData.schoolName]);
+
+  useEffect(() => {
+    const category = filteredCategories.find(
+      (c) => c.uniformCategory === formData.uniformCategory
+    );
+    setFilteredGenders(category?.genders || []);
+  }, [formData.uniformCategory, filteredCategories]);
+
+  useEffect(() => {
+    const genderObj = filteredGenders.find((g) => g.gender === formData.gender);
+    setFilteredItemCategories(genderObj?.categories || []);
+  }, [formData.gender, filteredGenders]);
+
+  useEffect(() => {
+    const itemObj = filteredItemCategories.find(
+      (c) => c.itemCategory === formData.productCategory
+    );
+    setFilteredProducts(itemObj?.products || []);
+  }, [formData.productCategory, filteredItemCategories]);
+
+  useEffect(() => {
+    const productObj = filteredProducts.find(
+      (p) => p.productName === formData.productName
+    );
+    setFilteredSizes(productObj?.sizes || []);
+  }, [formData.productName, filteredProducts]);
+  // ✅ Fetch all quotes from API
+  const fetchSchoolDress = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/schoolDress`);
+      const data = await res.json();
+      if (res.ok) {
+        console.log(data.data);
+        setSchoolData(data.data);
+      } else {
+        console.error("Fetch failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching quotes:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchoolDress();
+  }, []);
 
   const [newImageUrl, setNewImageUrl] = useState("");
 
@@ -51,24 +110,58 @@ const RegisterProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await fetch("/api/register-product", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      if (!user || !user.id) {
+        alert("User not found or not logged in.");
+        return;
+      }
+
+      const payload = {
+        ...formData,
+        userId: user.id, // take userId from localStorage
+      };
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/products/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const result = await res.json();
 
       if (res.ok) {
-        alert("Product registered successfully");
-        setFormData({});
+        toast.success("Product registered successfully!");
+        setFormData({
+          schoolName: "",
+          uniformCategory: "",
+          gender: "",
+          productCategory: "",
+          productName: "",
+          size: "",
+          condition: "",
+          isDefectInProduct: "",
+          defectDescription: "",
+          isDonated: "",
+          images: [],
+          senderName: "",
+          senderMobile: "",
+          senderAddress: "",
+        });
         setStep(1);
       } else {
-        const data = await res.json();
-        alert(data.message || "Registration failed");
+        toast.error(result?.message || "Failed to register product.");
       }
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      console.error("Product registration error:", err);
+      toast.error("Something went wrong while registering the product.");
     }
   };
 
@@ -91,8 +184,11 @@ const RegisterProductForm = () => {
               className="custom-input-class"
             >
               <option value="">Select School Name</option>
-              <option value="DPS">Delhi Public School</option>
-              <option value="KV">Kendriya Vidyalaya</option>
+              {schoolData.map((item) => (
+                <option key={item._id} value={item.schoolName}>
+                  {item.schoolName}
+                </option>
+              ))}
             </select>
 
             {/* Uniform Category */}
@@ -104,9 +200,11 @@ const RegisterProductForm = () => {
               className="custom-input-class"
             >
               <option value="">Select Uniform Category</option>
-              <option value="Core">Core Uniform</option>
-              <option value="Winter">Winter Wear</option>
-              <option value="Sports">Sports</option>
+              {filteredCategories.map((uc, idx) => (
+                <option key={idx} value={uc.uniformCategory}>
+                  {uc.uniformCategory}
+                </option>
+              ))}
             </select>
 
             {/* Gender */}
@@ -118,9 +216,11 @@ const RegisterProductForm = () => {
               className="custom-input-class"
             >
               <option value="">Select Gender</option>
-              <option value="Boy">Boy</option>
-              <option value="Girl">Girl</option>
-              <option value="Unisex">Unisex</option>
+              {filteredGenders.map((g, idx) => (
+                <option key={idx} value={g.gender}>
+                  {g.gender}
+                </option>
+              ))}
             </select>
 
             {/* Product Category */}
@@ -132,10 +232,11 @@ const RegisterProductForm = () => {
               className="custom-input-class"
             >
               <option value="">Select Product Category</option>
-              <option value="Shirt">Shirt</option>
-              <option value="Skirt">Skirt</option>
-              <option value="Trousers">Trousers</option>
-              <option value="T-Shirt">T-Shirt</option>
+              {filteredItemCategories.map((cat, idx) => (
+                <option key={idx} value={cat.itemCategory}>
+                  {cat.itemCategory}
+                </option>
+              ))}
             </select>
 
             {/* Product Name */}
@@ -147,9 +248,11 @@ const RegisterProductForm = () => {
               className="custom-input-class"
             >
               <option value="">Select Product Name</option>
-              <option value="Half Sleeve Shirt">Half Sleeve Shirt</option>
-              <option value="Blazer">Blazer</option>
-              <option value="Track Suit">Track Suit</option>
+              {filteredProducts.map((prod, idx) => (
+                <option key={idx} value={prod.productName}>
+                  {prod.productName}
+                </option>
+              ))}
             </select>
 
             {/* Size */}
@@ -161,11 +264,11 @@ const RegisterProductForm = () => {
               className="custom-input-class"
             >
               <option value="">Select Size</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
+              {filteredSizes.map((size, idx) => (
+                <option key={idx} value={size}>
+                  {size}
+                </option>
+              ))}
             </select>
 
             {/* Condition */}
