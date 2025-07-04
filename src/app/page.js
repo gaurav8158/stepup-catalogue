@@ -7,7 +7,7 @@ import React from 'react'
 const page = () => {
   return (
 
-    <div className='bg-green-50 pb-12 sm:pb-0'>
+    <div className='bg-white pb-12 sm:pb-0'>
       <Header />
       <ProductGrid />
       <Footer />

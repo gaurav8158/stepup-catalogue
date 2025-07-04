@@ -1,10 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import toast from "react-hot-toast";
+import TermsAndConditionsDialog from "./TermsAndConditionsDialog";
 
 const RegisterProductForm = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [schoolData, setSchoolData] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [filteredGenders, setFilteredGenders] = useState([]);
+  const [filteredItemCategories, setFilteredItemCategories] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredSizes, setFilteredSizes] = useState([]);
+  const [newImageUrl, setNewImageUrl] = useState("");
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+  // Initial form values
+  const initialValues = {
     schoolName: "",
     uniformCategory: "",
     gender: "",
@@ -19,47 +32,50 @@ const RegisterProductForm = () => {
     senderName: "",
     senderMobile: "",
     senderAddress: "",
+    policyOptIn: false,
+  };
+
+  // Validation schema for step 1
+  const validationSchemaStep1 = Yup.object({
+    schoolName: Yup.string().required("School name is required"),
+    uniformCategory: Yup.string().required("Uniform category is required"),
+    gender: Yup.string().required("Gender is required"),
+    productCategory: Yup.string().required("Product category is required"),
+    productName: Yup.string().required("Product name is required"),
+    size: Yup.string().required("Size is required"),
+    condition: Yup.string().required("Condition is required"),
+    isDefectInProduct: Yup.string().required(
+      "Please specify if there's any defect"
+    ),
+    defectDescription: Yup.string().when("isDefectInProduct", {
+      is: "Yes",
+      then: (schema) => schema.required("Please describe the defect"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    isDonated: Yup.string().required("Please specify if this is donated"),
+    images: Yup.array().min(1, "At least one image is required"),
   });
-  const [schoolData, setSchoolData] = useState([]);
-  const [filteredCategories, setFilteredCategories] = useState([]);
-  const [filteredGenders, setFilteredGenders] = useState([]);
-  const [filteredItemCategories, setFilteredItemCategories] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [filteredSizes, setFilteredSizes] = useState([]);
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  useEffect(() => {
-    const selectedSchool = schoolData.find(
-      (s) => s.schoolName === formData.schoolName
-    );
-    setFilteredCategories(selectedSchool?.uniformCategories || []);
-  }, [formData.schoolName]);
 
-  useEffect(() => {
-    const category = filteredCategories.find(
-      (c) => c.uniformCategory === formData.uniformCategory
-    );
-    setFilteredGenders(category?.genders || []);
-  }, [formData.uniformCategory, filteredCategories]);
+  // Validation schema for step 2
+  const validationSchemaStep2 = Yup.object({
+    senderName: Yup.string()
+      .min(2, "Name must be at least 2 characters")
+      .required("Name is required"),
+    senderMobile: Yup.string().required("Mobile number is required"),
+    senderAddress: Yup.string()
+      .min(10, "Address must be at least 10 characters")
+      .required("Address is required"),
+    policyOptIn: Yup.boolean().oneOf(
+      [true],
+      "You must accept the terms and conditions"
+    ),
+  });
 
-  useEffect(() => {
-    const genderObj = filteredGenders.find((g) => g.gender === formData.gender);
-    setFilteredItemCategories(genderObj?.categories || []);
-  }, [formData.gender, filteredGenders]);
+  // Combined validation schema
+  const validationSchema =
+    step === 1 ? validationSchemaStep1 : validationSchemaStep2;
 
-  useEffect(() => {
-    const itemObj = filteredItemCategories.find(
-      (c) => c.itemCategory === formData.productCategory
-    );
-    setFilteredProducts(itemObj?.products || []);
-  }, [formData.productCategory, filteredItemCategories]);
-
-  useEffect(() => {
-    const productObj = filteredProducts.find(
-      (p) => p.productName === formData.productName
-    );
-    setFilteredSizes(productObj?.sizes || []);
-  }, [formData.productName, filteredProducts]);
-  // ✅ Fetch all quotes from API
+  // Fetch school data
   const fetchSchoolDress = async () => {
     try {
       const res = await fetch(`${BASE_URL}/schoolDress`);
@@ -79,82 +95,85 @@ const RegisterProductForm = () => {
     fetchSchoolDress();
   }, []);
 
-  const [newImageUrl, setNewImageUrl] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (name === "isDefectInProduct" && value === "No") {
-      setFormData((prev) => ({ ...prev, defectDescription: "" }));
-    }
+  // Filter categories based on school selection
+  const updateFilteredCategories = (schoolName) => {
+    const selectedSchool = schoolData.find((s) => s.schoolName === schoolName);
+    setFilteredCategories(selectedSchool?.uniformCategories || []);
   };
 
-  const handleAddImage = () => {
+  // Filter genders based on category selection
+  const updateFilteredGenders = (uniformCategory) => {
+    const category = filteredCategories.find(
+      (c) => c.uniformCategory === uniformCategory
+    );
+    setFilteredGenders(category?.genders || []);
+  };
+
+  // Filter item categories based on gender selection
+  const updateFilteredItemCategories = (gender) => {
+    const genderObj = filteredGenders.find((g) => g.gender === gender);
+    setFilteredItemCategories(genderObj?.categories || []);
+  };
+
+  // Filter products based on category selection
+  const updateFilteredProducts = (productCategory) => {
+    const itemObj = filteredItemCategories.find(
+      (c) => c.itemCategory === productCategory
+    );
+    setFilteredProducts(itemObj?.products || []);
+  };
+
+  // Filter sizes based on product selection
+  const updateFilteredSizes = (productName) => {
+    const productObj = filteredProducts.find(
+      (p) => p.productName === productName
+    );
+    setFilteredSizes(productObj?.sizes || []);
+  };
+
+  // Handle image addition
+  const handleAddImage = (setFieldValue, images) => {
     if (newImageUrl.trim() !== "") {
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, newImageUrl.trim()],
-      }));
+      setFieldValue("images", [...images, newImageUrl.trim()]);
       setNewImageUrl("");
     }
   };
 
-  const handleRemoveImage = (index) => {
-    const updated = formData.images.filter((_, i) => i !== index);
-    setFormData((prev) => ({ ...prev, images: updated }));
+  // Handle image removal
+  const handleRemoveImage = (index, setFieldValue, images) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    setFieldValue("images", updatedImages);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  // Handle form submission
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
 
       if (!user || !user.id) {
-        alert("User not found or not logged in.");
+        toast.error("User not found or not logged in.");
+        setSubmitting(false);
         return;
       }
 
       const payload = {
-        ...formData,
-        userId: user.id, // take userId from localStorage
+        ...values,
+        userId: user.id,
       };
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/products/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/products/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       const result = await res.json();
 
       if (res.ok) {
         toast.success("Product registered successfully!");
-        setFormData({
-          schoolName: "",
-          uniformCategory: "",
-          gender: "",
-          productCategory: "",
-          productName: "",
-          size: "",
-          condition: "",
-          isDefectInProduct: "",
-          defectDescription: "",
-          isDonated: "",
-          images: [],
-          senderName: "",
-          senderMobile: "",
-          senderAddress: "",
-        });
+        resetForm();
         setStep(1);
       } else {
         toast.error(result?.message || "Failed to register product.");
@@ -162,267 +181,542 @@ const RegisterProductForm = () => {
     } catch (err) {
       console.error("Product registration error:", err);
       toast.error("Something went wrong while registering the product.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Handle next step
+  const handleNextStep = async (validateForm, values, setTouched) => {
+    const errors = await validateForm(values);
+    if (Object.keys(errors).length === 0) {
+      setStep(2);
+    } else {
+      // Mark all fields as touched to show validation errors
+      const touchedFields = {};
+      Object.keys(errors).forEach((field) => {
+        touchedFields[field] = true;
+      });
+      setTouched(touchedFields);
+
+      // Show toast message for better UX
+      toast.error("Please fill in all required fields before proceeding.");
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto ">
-      <h1 className="text-2xl font-semibold mb-6">Register Product</h1>
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-xl sm:text-2xl font-semibold mb-6">
+        Register Product
+      </h1>
 
-      <form
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        className="space-y-6 bg-gray-50 p-6 rounded-2xl"
+        enableReinitialize={true}
       >
-        {step === 1 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* School Name */}
-            <select
-              name="schoolName"
-              value={formData.schoolName}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select School Name</option>
-              {schoolData.map((item) => (
-                <option key={item._id} value={item.schoolName}>
-                  {item.schoolName}
-                </option>
-              ))}
-            </select>
+        {({
+          values,
+          setFieldValue,
+          isSubmitting,
+          validateForm,
+          errors,
+          touched,
+          setTouched,
+        }) => (
+          <Form className="space-y-6 bg-gray-50 p-3 sm:p-6 rounded-2xl">
+            {step === 1 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* School Name */}
+                <div>
+                  <label
+                    htmlFor="schoolName"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    School Name *
+                  </label>
+                  <Field
+                    as="select"
+                    id="schoolName"
+                    name="schoolName"
+                    className="custom-input-class"
+                    onChange={(e) => {
+                      setFieldValue("schoolName", e.target.value);
+                      setFieldValue("uniformCategory", "");
+                      setFieldValue("gender", "");
+                      setFieldValue("productCategory", "");
+                      setFieldValue("productName", "");
+                      setFieldValue("size", "");
+                      updateFilteredCategories(e.target.value);
+                    }}
+                  >
+                    <option value="">Select School Name</option>
+                    {schoolData.map((item) => (
+                      <option key={item._id} value={item.schoolName}>
+                        {item.schoolName}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="schoolName"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Uniform Category */}
-            <select
-              name="uniformCategory"
-              value={formData.uniformCategory}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select Uniform Category</option>
-              {filteredCategories.map((uc, idx) => (
-                <option key={idx} value={uc.uniformCategory}>
-                  {uc.uniformCategory}
-                </option>
-              ))}
-            </select>
+                {/* Uniform Category */}
+                <div>
+                  <label
+                    htmlFor="uniformCategory"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Uniform Category *
+                  </label>
+                  <Field
+                    as="select"
+                    id="uniformCategory"
+                    name="uniformCategory"
+                    className="custom-input-class"
+                    onChange={(e) => {
+                      setFieldValue("uniformCategory", e.target.value);
+                      setFieldValue("gender", "");
+                      setFieldValue("productCategory", "");
+                      setFieldValue("productName", "");
+                      setFieldValue("size", "");
+                      updateFilteredGenders(e.target.value);
+                    }}
+                  >
+                    <option value="">Select Uniform Category</option>
+                    {filteredCategories.map((uc, idx) => (
+                      <option key={idx} value={uc.uniformCategory}>
+                        {uc.uniformCategory}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="uniformCategory"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Gender */}
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select Gender</option>
-              {filteredGenders.map((g, idx) => (
-                <option key={idx} value={g.gender}>
-                  {g.gender}
-                </option>
-              ))}
-            </select>
+                {/* Gender */}
+                <div>
+                  <label
+                    htmlFor="gender"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Gender *
+                  </label>
+                  <Field
+                    as="select"
+                    id="gender"
+                    name="gender"
+                    className="custom-input-class"
+                    onChange={(e) => {
+                      setFieldValue("gender", e.target.value);
+                      setFieldValue("productCategory", "");
+                      setFieldValue("productName", "");
+                      setFieldValue("size", "");
+                      updateFilteredItemCategories(e.target.value);
+                    }}
+                  >
+                    <option value="">Select Gender</option>
+                    {filteredGenders.map((g, idx) => (
+                      <option key={idx} value={g.gender}>
+                        {g.gender}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="gender"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Product Category */}
-            <select
-              name="productCategory"
-              value={formData.productCategory}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select Product Category</option>
-              {filteredItemCategories.map((cat, idx) => (
-                <option key={idx} value={cat.itemCategory}>
-                  {cat.itemCategory}
-                </option>
-              ))}
-            </select>
+                {/* Product Category */}
+                <div>
+                  <label
+                    htmlFor="productCategory"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Product Category *
+                  </label>
+                  <Field
+                    as="select"
+                    id="productCategory"
+                    name="productCategory"
+                    className="custom-input-class"
+                    onChange={(e) => {
+                      setFieldValue("productCategory", e.target.value);
+                      setFieldValue("productName", "");
+                      setFieldValue("size", "");
+                      updateFilteredProducts(e.target.value);
+                    }}
+                  >
+                    <option value="">Select Product Category</option>
+                    {filteredItemCategories.map((cat, idx) => (
+                      <option key={idx} value={cat.itemCategory}>
+                        {cat.itemCategory}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="productCategory"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Product Name */}
-            <select
-              name="productName"
-              value={formData.productName}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select Product Name</option>
-              {filteredProducts.map((prod, idx) => (
-                <option key={idx} value={prod.productName}>
-                  {prod.productName}
-                </option>
-              ))}
-            </select>
+                {/* Product Name */}
+                <div>
+                  <label
+                    htmlFor="productName"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Product Name *
+                  </label>
+                  <Field
+                    as="select"
+                    id="productName"
+                    name="productName"
+                    className="custom-input-class"
+                    onChange={(e) => {
+                      setFieldValue("productName", e.target.value);
+                      setFieldValue("size", "");
+                      updateFilteredSizes(e.target.value);
+                    }}
+                  >
+                    <option value="">Select Product Name</option>
+                    {filteredProducts.map((prod, idx) => (
+                      <option key={idx} value={prod.productName}>
+                        {prod.productName}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="productName"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Size */}
-            <select
-              name="size"
-              value={formData.size}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select Size</option>
-              {filteredSizes.map((size, idx) => (
-                <option key={idx} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
+                {/* Size */}
+                <div>
+                  <label
+                    htmlFor="size"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Size *
+                  </label>
+                  <Field
+                    as="select"
+                    id="size"
+                    name="size"
+                    className="custom-input-class"
+                  >
+                    <option value="">Select Size</option>
+                    {filteredSizes.map((size, idx) => (
+                      <option key={idx} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="size"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Condition */}
-            <select
-              name="condition"
-              value={formData.condition}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Select Condition</option>
-              <option value="Like New">Like New</option>
-              <option value="Good">Good</option>
-              <option value="Fair">Fair</option>
-            </select>
+                {/* Condition */}
+                <div>
+                  <label
+                    htmlFor="condition"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Condition *
+                  </label>
+                  <Field
+                    as="select"
+                    id="condition"
+                    name="condition"
+                    className="custom-input-class"
+                  >
+                    <option value="">Select Condition</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                  </Field>
+                  <ErrorMessage
+                    name="condition"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Is Defect */}
-            <select
-              name="isDefectInProduct"
-              value={formData.isDefectInProduct}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Is there any defect?</option>
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
+                {/* Is Defect */}
+                <div>
+                  <label
+                    htmlFor="isDefectInProduct"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Any Defect in Product? *
+                  </label>
+                  <Field
+                    as="select"
+                    id="isDefectInProduct"
+                    name="isDefectInProduct"
+                    className="custom-input-class"
+                    onChange={(e) => {
+                      setFieldValue("isDefectInProduct", e.target.value);
+                      if (e.target.value === "No") {
+                        setFieldValue("defectDescription", "");
+                      }
+                    }}
+                  >
+                    <option value="">Select Option</option>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </Field>
+                  <ErrorMessage
+                    name="isDefectInProduct"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            {/* Defect Description */}
-            {formData.isDefectInProduct === "Yes" && (
-              <textarea
-                name="defectDescription"
-                value={formData.defectDescription}
-                onChange={handleChange}
-                placeholder="Describe the defect"
-                required
-                className="custom-input-class md:col-span-2"
-              />
+                {/* Defect Description */}
+                {values.isDefectInProduct === "Yes" && (
+                  <div className="md:col-span-2">
+                    <label
+                      htmlFor="defectDescription"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Defect Description *
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="defectDescription"
+                      name="defectDescription"
+                      placeholder="Please describe the defect in detail"
+                      className="custom-input-class"
+                    />
+                    <ErrorMessage
+                      name="defectDescription"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
+                )}
+
+                {/* Is Donated */}
+                <div>
+                  <label
+                    htmlFor="isDonated"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Is this donated? *
+                  </label>
+                  <Field
+                    as="select"
+                    id="isDonated"
+                    name="isDonated"
+                    className="custom-input-class"
+                  >
+                    <option value="">Select Option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </Field>
+                  <ErrorMessage
+                    name="isDonated"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Image URL input */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Image URLs *
+                  </label>
+                  <div className="flex  flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      placeholder="Paste image URL"
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                      className="flex-1 custom-input-class"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAddImage(setFieldValue, values.images)
+                      }
+                      className="px-4 py-2 text-sm text-green-700 border border-green-700 bg-green-50 rounded-full hover:bg-green-100"
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {values.images.length > 0 && (
+                    <div className="flex gap-3 mt-4 flex-wrap">
+                      {values.images.map((url, idx) => (
+                        <div key={idx} className="relative">
+                          <img
+                            src={url}
+                            alt={`Product image ${idx + 1}`}
+                            className="w-20 h-20 object-cover border rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleRemoveImage(
+                                idx,
+                                setFieldValue,
+                                values.images
+                              )
+                            }
+                            className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <ErrorMessage
+                    name="images"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                <div className="md:col-span-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleNextStep(validateForm, values, setTouched)
+                    }
+                    className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             )}
 
-            {/* Is Donated */}
-            <select
-              name="isDonated"
-              value={formData.isDonated}
-              onChange={handleChange}
-              required
-              className="custom-input-class"
-            >
-              <option value="">Is this donated?</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-
-            {/* Image URL input */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Image URLs
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Paste image URL"
-                  value={newImageUrl}
-                  onChange={(e) => setNewImageUrl(e.target.value)}
-                  className="flex-1 custom-input-class"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddImage}
-                  className="px-4 py-2 text-sm text-green-700 border border-green-700 bg-green-50 rounded-full hover:bg-green-100"
-                >
-                  Add
-                </button>
-              </div>
-
-              {formData.images.length > 0 && (
-                <div className="flex gap-3 mt-4 flex-wrap">
-                  {formData.images.map((url, idx) => (
-                    <div key={idx} className="relative">
-                      <img
-                        src={url}
-                        className="w-20 h-20 object-cover border rounded"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(idx)}
-                        className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
+            {step === 2 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Sender Name */}
+                <div>
+                  <label
+                    htmlFor="senderName"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Full Name *
+                  </label>
+                  <Field
+                    id="senderName"
+                    name="senderName"
+                    placeholder="Enter your full name"
+                    className="custom-input-class"
+                  />
+                  <ErrorMessage
+                    name="senderName"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
-              )}
-            </div>
 
-            <div className="md:col-span-2 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+                {/* Sender Mobile */}
+                <div>
+                  <label
+                    htmlFor="senderMobile"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Mobile Number *
+                  </label>
+                  <Field
+                    id="senderMobile"
+                    name="senderMobile"
+                    placeholder="Enter 10-digit mobile number"
+                    className="custom-input-class"
+                  />
+                  <ErrorMessage
+                    name="senderMobile"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Sender Address */}
+                <div className="md:col-span-2">
+                  <label
+                    htmlFor="senderAddress"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Complete Address *
+                  </label>
+                  <Field
+                    as="textarea"
+                    id="senderAddress"
+                    name="senderAddress"
+                    placeholder="Enter your complete address with pincode"
+                    className="custom-input-class"
+                    rows="3"
+                  />
+                  <ErrorMessage
+                    name="senderAddress"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Terms and Conditions */}
+                <div className="md:col-span-2">
+                  <div className="flex items-center gap-2">
+                    <Field
+                      type="checkbox"
+                      id="policyOptIn"
+                      name="policyOptIn"
+                      className="w-4 h-4"
+                    />
+                    <label htmlFor="policyOptIn" className="text-sm">
+                      I Agree to the Terms and Conditions.{" "}
+                      <TermsAndConditionsDialog />
+                    </label>
+                  </div>
+                  <ErrorMessage
+                    name="policyOptIn"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                <div className="md:col-span-2 flex justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="bg-gray-50 text-gray-800 shadow px-6 py-2 rounded-full hover:bg-gray-100"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500 disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </Form>
         )}
-
-        {step === 2 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input
-              name="senderName"
-              value={formData.senderName}
-              onChange={handleChange}
-              placeholder="Name"
-              required
-              className="custom-input-class"
-            />
-            <input
-              name="senderMobile"
-              value={formData.senderMobile}
-              onChange={handleChange}
-              placeholder="Mobile"
-              required
-              className="custom-input-class"
-            />
-            <textarea
-              name="senderAddress"
-              value={formData.senderAddress}
-              onChange={handleChange}
-              placeholder="Address"
-              required
-              className="custom-input-class md:col-span-2"
-            />
-
-            <div className="md:col-span-2 flex justify-between">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="bg-gray-50 text-gray-800 shadow px-6 py-2 rounded-full hover:bg-gray-100"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        )}
-      </form>
+      </Formik>
     </div>
   );
 };

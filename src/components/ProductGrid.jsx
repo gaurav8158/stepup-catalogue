@@ -213,7 +213,7 @@ export default function ProductGrid() {
 
         <FilterDrawer onApply={applyFilters} />
       </div>
-      <div className="p-4 bg-green-50 container mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="p-4  container mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((item) => (
             <ProductCard key={item.id} product={item} />
