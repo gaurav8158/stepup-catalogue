@@ -31,7 +31,7 @@ export default function ProductDetails() {
         id: product._id,
         title: product.title,
         price: product.price,
-        image: product.image,
+        image: product.images,
         description: product.description,
         stock: product.stock,
         category: product.category,
@@ -39,6 +39,7 @@ export default function ProductDetails() {
       });
     }
   };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-6">

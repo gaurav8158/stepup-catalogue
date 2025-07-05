@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout";
 import SellerOrderCard from "@/components/Seller/SellerOrder";
 import BackBtn from "@/components/BackBtn";
@@ -26,7 +26,38 @@ const dummyOrders = [
 ];
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState(dummyOrders); // Make this empty to test NoOrder.svg
+  const [orders, setOrders] = useState([]); // start with empty array
+
+  useEffect(() => {
+   
+    fetchOrders();
+  }, []);
+   const fetchOrders = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user?.id || user?._id;
+
+        if (!userId) {
+          console.error("User ID not found in localStorage");
+          return;
+        }
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/user/${userId}`
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+          console.log("Fetched products:", data.products);
+          setOrders(data.products);
+        } else {
+          console.error("Failed to fetch buyers:", data.error || data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching buyers:", error);
+      }
+    };
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -62,7 +93,8 @@ const OrdersPage = () => {
       ) : (
         <div className="space-y-6">
           {orders.map((order, index) => (
-            <SellerOrderCard key={index} order={order} />
+         
+           <SellerOrderCard key={index} order={order} fetchOrders={fetchOrders}/>
           ))}
         </div>
       )}
