@@ -7,8 +7,11 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/layout";
+import { useCart } from "@/context/CartContext";
+import axios from "axios";
 
 const CartPage = () => {
+  const { cart } = useCart();
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -19,28 +22,38 @@ const CartPage = () => {
     pincode: "",
   });
 
-  const [cartItems] = useState([
-    {
-      id: 1,
-      name: "Standard Cotton Linen Casual Shirt",
-      image: "/Dress.png",
-      deliveryDate: "30 Jun 2025",
-      price: 949,
-      mrp: 2499,
-      discount: 1550,
-      platformFee: 20,
-    },
-    {
-      id: 2,
-      name: "Solid Slim Fit Shirt",
-      image: "/Dress.png",
-      deliveryDate: "3 Jul 2025",
-      price: 899,
-      mrp: 2199,
-      discount: 1300,
-      platformFee: 20,
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  React.useEffect(() => {
+    if (!cart || cart.length === 0) {
+      setCartItems([]);
+      return;
+    }
+    const fetchCartItems = async () => {
+      try {
+        const productDetails = await Promise.all(
+          cart.map(async (cartItem) => {
+            const response = await axios.get(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/products/${cartItem._id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
+                },
+              }
+            );
+            return {
+              ...response.data.product,
+              quantity: cartItem.quantity || 1,
+              deliveryDate: cartItem.deliveryDate || "3 days from now",
+            };
+          })
+        );
+        setCartItems(productDetails);
+      } catch (error) {
+        setCartItems([]);
+      }
+    };
+    fetchCartItems();
+  }, [cart]);
   const router = useRouter();
   const totalMRP = cartItems.reduce((sum, item) => sum + item.mrp, 0);
   const totalDiscount = cartItems.reduce((sum, item) => sum + item.discount, 0);
@@ -51,17 +64,34 @@ const CartPage = () => {
   const totalAmount =
     cartItems.reduce((sum, item) => sum + item.price, 0) + platformFee;
 
+  // Variable containing all cart item _id values
+  const cartItemIds = cartItems.map(item => item._id);
+  // console.log("cart ", cartItemIds);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     toast.success("Order Placed Successfully!");
-    router.push("/");
     console.log("Form Data:", form);
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/order/place`, {
+        buyerName: form.fullName,
+        buyerEmail: form.email,
+        buyerMobile: form.mobile,
+        buyerAddress: form.address,
+        orderDate: new Date(),
+        comment: "ss",
+        cartItems: cartItemIds,
+      })
+      console.log("Order Response:", response.data);
+    } catch (error) {
+      console.log(error)
+    }
     console.log("Cart Items:", cartItems);
     setForm({});
+    router.push("/");
   };
 
   if (cartItems.length === 0) {
@@ -176,6 +206,7 @@ const CartPage = () => {
 
               <button
                 type="submit"
+
                 className="bg-green-600  text-white w-full py-3 rounded font-medium hover:bg-green-700 transition"
               >
                 Place Order & Pay on Delivery
@@ -191,19 +222,19 @@ const CartPage = () => {
               </h2>
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3">
+                  <div key={item._id || item.id} className="flex items-center gap-3">
                     <Image
-                      src={item.image}
-                      alt={item.name}
+                      src={item.images ? item.images[0] : item.image}
+                      alt={item.productName || item.name}
                       width={40}
                       height={50}
                     />
                     <div>
                       <p className="text-sm font-medium truncate">
-                        {item.name}
+                        {item.productName || item.name}
                       </p>
                       <p className="text-xs text-gray-500">
-                        delivery by{" "}
+                        delivery by {" "}
                         <span className="font-semibold">
                           {item.deliveryDate}
                         </span>
@@ -214,25 +245,25 @@ const CartPage = () => {
               </div>
 
               <h2 className="text-lg font-semibold mb-2  text-gray-600">
-                Price Details ({cartItems.length} Items)
+                Price Details ({cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)} Items)
               </h2>
               <div className="text-sm space-y-2">
                 <div className="flex justify-between">
                   <span>Total MRP</span>
-                  <span>₹{totalMRP}</span>
+                  <span>₹{cartItems.reduce((sum, item) => sum + ((item.mrp || item.priceToBuyer) * (item.quantity || 1)), 0)}</span>
                 </div>
                 <div className="flex justify-between text-green-600">
                   <span>Discount on MRP</span>
-                  <span>- ₹{totalDiscount}</span>
+                  <span>- ₹{cartItems.reduce((sum, item) => sum + (item.discount || 0) * (item.quantity || 1), 0)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Platform Fee</span>
-                  <span>₹{platformFee}</span>
+                  <span>₹{cartItems.reduce((sum, item) => sum + (item.platformFee || 0), 0)}</span>
                 </div>
                 <hr className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
                   <span>Total Amount</span>
-                  <span>₹{totalAmount}</span>
+                  <span>₹{cartItems.reduce((sum, item) => sum + ((item.priceToBuyer || item.price) * (item.quantity || 1)), 0) + cartItems.reduce((sum, item) => sum + (item.platformFee || 0), 0)}</span>
                 </div>
               </div>
             </div>{" "}

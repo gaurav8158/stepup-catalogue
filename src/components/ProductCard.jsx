@@ -3,8 +3,9 @@ import { Heart, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
+
   return (
-    <Link href={`/product/${product.id}`} className="no-underline">
+    <Link href={`/product/${product._id}`} className="no-underline">
       <div className="bg-white group rounded-xl overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
         {/* Image */}
         <div className="relative">

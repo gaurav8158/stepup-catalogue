@@ -8,7 +8,7 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
       className="flex  relative gap-4 border p-4 rounded-md mb-4 bg-gray-50"
     >
       <button
-        onClick={() => removeItem(item.id)}
+        onClick={() => removeItem(item._id || item.id)}
         className="text-red-500 absolute -top-2 right-0 hover:text-red-700 p-2 mt-2"
         title="Remove item"
       >
@@ -16,8 +16,8 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
       </button>
 
       <img
-        src={item.image}
-        alt={item.name}
+        src={item.images[0]}
+        alt={item.productName}
         className="w-28 h-36 object-cover rounded"
       />
 
@@ -27,9 +27,9 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
             NEW
           </span> */}
           <h3 className="text-base font-semibold  font-sans text-sm">
-            {item.school}
+            {item.schoolName}
           </h3>
-          <p className="text-sm text-gray-600">{item.name}</p>
+          <p className="text-sm text-gray-600">{item.productName}</p>
         </div>
 
         <div className="flex gap-4 mt-2">
@@ -56,13 +56,13 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
 
         <div className="mt-2">
           <p className="text-lg font-bold text-black">
-            ₹{item.price}
-            <span className="line-through ml-2 text-gray-400 text-[10px]">
+            ₹{item.priceToBuyer}
+            {/* <span className="line-through ml-2 text-gray-400 text-[10px]">
               ₹{item.mrp}
             </span>
             <span className="text-[#FF6800] text-xs ml-2">
               ₹{item.discount} OFF
-            </span>
+            </span> */}
           </p>
           <p className="text-sm text-gray-700 flex items-center mt-1">
             <Undo2 className="2-4 h-4" />{" "}

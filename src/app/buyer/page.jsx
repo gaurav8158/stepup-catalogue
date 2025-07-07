@@ -31,43 +31,43 @@ const dummyOrders = [
       },
     ],
   },
- 
+
 ];
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState(dummyOrders); 
+  const [orders, setOrders] = useState(dummyOrders);
 
   return (
-   
-      <div className="container mx-auto px-4 py-6">
-        <Link href="/buyer/support">
-          <Button
-            variant="secondary"
-            size="icon"
-            className="size-8 fixed bottom-4 right-4 border  border-green-800 text-green-800"
-          >
-            <Headphones />
-          </Button>
-        </Link>
-        <div className="flex items-center gap-2 mb-6">
-          {" "}
-          <BackBtn text="Back" link="/" />{" "}
-          <h1 className="text-2xl font-semibold ">My Orders</h1>
-        </div>
-        {orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center mt-20 text-center">
-            <img src="/NoOrder.svg" alt="No Orders" className="w-60 mb-4" />
-            <p className="text-gray-600">You have no orders yet</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {orders.map((order, index) => (
-              <OrderCard key={index} order={order} />
-            ))}
-          </div>
-        )}
+
+    <div className="container mx-auto px-4 py-6">
+      <Link href="/buyer/support">
+        <Button
+          variant="secondary"
+          size="icon"
+          className="size-8 fixed bottom-4 right-4 border  border-green-800 text-green-800"
+        >
+          <Headphones />
+        </Button>
+      </Link>
+      <div className="flex items-center gap-2 mb-6">
+        {" "}
+        <BackBtn text="Back" link="/" />{" "}
+        <h1 className="text-2xl font-semibold ">My Orders</h1>
       </div>
-   
+      {orders.length === 0 ? (
+        <div className="flex flex-col items-center justify-center mt-20 text-center">
+          <img src="/NoOrder.svg" alt="No Orders" className="w-60 mb-4" />
+          <p className="text-gray-600">You have no orders yet</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {orders.map((order, index) => (
+            <OrderCard key={index} order={order} />
+          ))}
+        </div>
+      )}
+    </div>
+
   );
 };
 

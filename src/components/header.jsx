@@ -4,12 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ProfileDropdown } from "./profiledropdown";
-
+import { useCart } from "@/context/CartContext";
 export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
-
+  const { cart } = useCart();
+  const cartItemlength = cart.length;
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -55,7 +56,7 @@ export default function Header() {
               //   <span className="text-xs font-semibold  max-w-[50px]  truncate">
               //     {user.name || "User"}
               //   </span>
-                <ProfileDropdown user={user}/>
+              <ProfileDropdown user={user} />
             ) : (
               <Link
                 href="/login"
@@ -89,7 +90,7 @@ export default function Header() {
             <Link href="/cart" className="flex justify-center items-center">
               <button className="relative">
                 <span className="bg-orange-500 w-5 h-5 flex items-center justify-center rounded-full -top-2 p-1 text-xs -right-2 font-bold absolute text-white">
-                  3
+                  {cartItemlength}
                 </span>
                 <ShoppingBag size={20} className="text-gray-700" />
               </button>
@@ -148,7 +149,7 @@ export default function Header() {
                         key={term}
                         onClick={() => {
                           setSearchQuery(term);
-                          handleSearchSubmit({ preventDefault: () => {} });
+                          handleSearchSubmit({ preventDefault: () => { } });
                         }}
                         className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
                       >

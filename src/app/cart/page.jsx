@@ -1,84 +1,69 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cartitem from "./cartitem";
 import { ShoppingBag, ShoppingCart } from "lucide-react";
 import Layout from "@/components/layout";
+import { useCart } from "@/context/CartContext";
+import axios from "axios";
 
 const CartPage = () => {
-  const [form, setForm] = useState({
-    country: "India",
-    fullName: "",
-    mobile: "",
-    pincode: "",
-    flat: "",
-    area: "",
-    landmark: "",
-    city: "",
-    state: "",
-  });
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Standard Cotton Linen Casual Shirt",
-      school: "Gems Modern Academy",
-      size: 40,
-      price: 949,
-      mrp: 2499,
-      discount: 1550,
-      quantity: 1,
-      image: "/Dress.png",
-      platformFee: 20,
-    },
-    {
-      id: 2,
-      name: "Solid Slim Fit Shirt",
-      school: "Gems World Academy",
-      size: 42,
-      price: 899,
-      mrp: 2199,
-      discount: 1300,
-      quantity: 1,
-      image: "/Dress.png",
-      platformFee: 20,
-    },
-  ]);
+  const { cart, updateQuantity, removeFromCart } = useCart();
+  const [productDetails, setProductDetails] = React.useState([]);
 
-  const updateQuantity = (id, type) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity:
-                type === "inc"
-                  ? item.quantity + 1
-                  : Math.max(1, item.quantity - 1),
-            }
-          : item
-      )
-    );
-  };
+  React.useEffect(() => {
+    if (!cart || cart.length === 0) {
+      setProductDetails([]);
+      return;
+    }
+    const fetchDetails = async () => {
+      try {
+        const details = await Promise.all(
+          cart.map(async (cartItem) => {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${cartItem._id}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
+              },
+            });
+            return {
+              ...response.data.product,
+              quantity: cartItem.quantity || 1,
+            };
+          })
+        );
+        setProductDetails(details);
+      } catch (error) {
+        setProductDetails([]);
+      }
+    };
+    fetchDetails();
+  }, [cart]);
 
-  const removeItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
-
-  const totalMRP = cartItems.reduce(
-    (acc, item) => acc + item.mrp * item.quantity,
+  // const totalMRP = cartItems2.reduce(
+  //   (acc, item) => acc + item.priceToBuyer,
+  //   0
+  // );
+  // Use empty array if cartItems2 is undefined
+  const safeCartItems2 = productDetails || [];
+  const totalMRP = safeCartItems2.reduce(
+    (acc, item) => acc + (item.priceToBuyer * (item.quantity || 1)),
     0
   );
-  const totalDiscount = cartItems.reduce(
-    (acc, item) => acc + item.discount * item.quantity,
+  const totalDiscount = safeCartItems2.reduce(
+    (acc, item) => acc + item.priceToBuyer,
     0
   );
-  const platformFee = cartItems.reduce(
-    (acc, item) => acc + item.platformFee,
-    0
-  );
+  const platformFee = 40
+  // const platformFee = cartItems.reduce(
+  //   (acc, item) => acc + item.platformFee,
+  //   0
+  // );
   const totalAmount =
-    cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
+    safeCartItems2.reduce((acc, item) => acc + (item.priceToBuyer * (item.quantity || 1)), 0) +
     platformFee;
+  // const totalAmount =
+  //   cartItems.reduce((acc, item) => acc + item.priceToBuyer * item.quantity, 0) +
+  //   platformFee;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -90,28 +75,29 @@ const CartPage = () => {
     console.log("Submitted Data:", form);
     console.log("Cart Items:", cartItems);
   };
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return (
-      <div className="p-4  font-sans md:p-8 bg-gray-50 min-h-screen">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-white p-8 rounded-md shadow">
-            <div className="flex justify-center mb-6">
-              <ShoppingCart className="w-20 h-20" />
-            </div>
-
-            <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
-            <p className="text-gray-600 mb-6">Add some items to get started!</p>
-            <div className="flex justify-center">
-              <Link
-                href="/"
-                className="bg-orange-600 flex items-center hover:bg-orange-600 text-white px-6 py-2 rounded-md transition-all duration-300 gap-2 font-semibold"
-              >
-                <ShoppingBag className="w-5 h-5" /> Continue Shopping
-              </Link>{" "}
+      <Layout>
+        <div className="p-4 font-sans md:p-8 bg-gray-50 min-h-screen">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="bg-white p-8 rounded-md shadow">
+              <div className="flex justify-center mb-6">
+                <ShoppingCart className="w-20 h-20" />
+              </div>
+              <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+              <p className="text-gray-600 mb-6">Add some items to get started!</p>
+              <div className="flex justify-center">
+                <Link
+                  href="/"
+                  className="bg-orange-600 flex items-center hover:bg-orange-600 text-white px-6 py-2 rounded-md transition-all duration-300 gap-2 font-semibold"
+                >
+                  <ShoppingBag className="w-5 h-5" /> Continue Shopping
+                </Link>{" "}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Layout>
     );
   }
   return (
@@ -126,13 +112,26 @@ const CartPage = () => {
                 Shopping Cart
               </h2>
             </div>
-
+            {/* 
             {cartItems.map((item) => (
               <Cartitem
                 key={item.id}
                 item={item}
                 removeItem={removeItem}
                 updateQuantity={updateQuantity}
+              />
+            ))} */}
+            {safeCartItems2.map((item) => (
+              <Cartitem
+                key={item._id || item.id}
+                item={item}
+                removeItem={() => removeFromCart(item._id)}
+                updateQuantity={(id, type) => {
+                  const cartItem = cart.find(c => c._id === item._id);
+                  if (!cartItem) return;
+                  const newQty = type === "inc" ? cartItem.quantity + 1 : Math.max(1, cartItem.quantity - 1);
+                  updateQuantity(item._id, newQty);
+                }}
               />
             ))}
           </div>
@@ -141,7 +140,7 @@ const CartPage = () => {
           <div className="w-full md:w-1/3  p-4 sm:border-l">
             <h2 className="font-bold text-lg pb-2 border-b mb-4">
               Price Details (
-              {cartItems.reduce((acc, item) => acc + item.quantity, 0)} Items)
+              {safeCartItems2.reduce((acc, item) => acc + (item.quantity || 1), 0)} Items)
             </h2>
 
             <div className="space-y-2 text-sm">
@@ -149,10 +148,10 @@ const CartPage = () => {
                 <span>Total MRP</span>
                 <span>₹{totalMRP}</span>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span>Discount on MRP</span>
                 <span className="text-green-600">- ₹{totalDiscount}</span>
-              </div>
+              </div> */}
 
               <div className="flex justify-between">
                 <span>Delivery Fee</span>

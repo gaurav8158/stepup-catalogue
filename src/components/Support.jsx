@@ -1,25 +1,27 @@
 "use client";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const SupportPage = () => {
   const [queryText, setQueryText] = useState("");
-  const [queries, setQueries] = useState([
-    {
-      id: 1,
-      query: "I received the wrong size uniform.",
-      status: "Resolved",
-      adminReply:
-        "We’re sorry! Please send it back and we’ll ship the correct one.",
-    },
-    {
-      id: 2,
-      query: "When will my order be delivered?",
-      status: "Pending",
-      adminReply: "",
-    },
-  ]);
-
-  const handleSubmit = (e) => {
+  // const [queries, setQueries] = useState([
+  //   {
+  //     id: 1,
+  //     query: "I received the wrong size uniform.",
+  //     status: "Resolved",
+  //     adminReply:
+  //       "We’re sorry! Please send it back and we’ll ship the correct one.",
+  //   },
+  //   {
+  //     id: 2,
+  //     query: "When will my order be delivered?",
+  //     status: "Pending",
+  //     adminReply: "",
+  //   },
+  // ]);
+  const [queries, setQueries] = useState([]);
+  const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!queryText.trim()) return;
 
@@ -29,11 +31,41 @@ const SupportPage = () => {
       status: "Pending",
       adminReply: "",
     };
-
     setQueries([newQuery, ...queries]);
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userdata = JSON.parse(user);
+      console.log("User data", userdata)
+      try {
+        const res = await axios.post(`${BaseUrl}/support`, {
+
+          userId: userdata.id,
+          query: queryText.trim(),
+
+        })
+        console.log("REs ", res);
+      } catch (err) {
+        console.log("Error  ", err);
+      }
+
+    }
+
+    console.log("Query ", newQuery);
     setQueryText("");
   };
+  useEffect(() => {
+    const fetchQueries = async () => {
 
+      try {
+        const response = await axios.get(`${BaseUrl}/support`);
+        console.log("Res ", response.data)
+        setQueries(response.data);
+      } catch (error) {
+        console.log("Error ", error);
+      }
+    }
+    fetchQueries();
+  }, [])
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold mb-4">Support & Queries</h1>
@@ -66,7 +98,7 @@ const SupportPage = () => {
         ) : (
           queries.map((q) => (
             <div
-              key={q.id}
+              key={q.id || q._id}
               className="border border-gray-200 p-4 rounded-2xl bg-white shadow-sm"
             >
               <div className="flex justify-between items-center mb-2">
@@ -74,18 +106,17 @@ const SupportPage = () => {
                   {q.query}
                 </span>
                 <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    q.status === "Resolved"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
+                  className={`text-xs px-2 py-1 rounded-full ${q.currentStatus === "Resolved"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-yellow-100 text-yellow-700"
+                    }`}
                 >
-                  {q.status}
+                  {q.currentStatus || "Pending"}
                 </span>
               </div>
-              {q.status === "Resolved" && q.adminReply && (
+              {q.currentStatus === "Resolved" && q.actionByAdmin && (
                 <div className="mt-2 text-sm text-gray-600">
-                  <strong>Admin:</strong> {q.adminReply}
+                  <strong>Admin:</strong> {q.actionByAdmin}
                 </div>
               )}
             </div>
