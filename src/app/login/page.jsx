@@ -38,11 +38,7 @@ const Page = () => {
         localStorage.setItem("usertoken", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         toast.success("Login successful!");
-        if (data.user.role === "Buyer") {
-          router.push("/buyer");
-        } else if (data.user.role === "Seller") {
-          router.push("/seller-doner");
-        }
+          router.push("/user");
 
         // Redirect to your protected route
       } else {

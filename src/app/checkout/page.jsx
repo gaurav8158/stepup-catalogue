@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCart, ShoppingBag, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Layout from "@/components/layout";
 import { useCart } from "@/context/CartContext";
 import axios from "axios";
+import BuyTermsAndConditionsAlert from "./TermsAndConditionsDialog";
 
 const CartPage = () => {
   const { cart } = useCart();
@@ -17,13 +18,13 @@ const CartPage = () => {
     email: "",
     mobile: "",
     address: "",
-    city: "",
-    state: "",
-    pincode: "",
+    comment: "",
+
+    policyOptIn: false,
   });
 
   const [cartItems, setCartItems] = useState([]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (!cart || cart.length === 0) {
       setCartItems([]);
       return;
@@ -43,7 +44,7 @@ const CartPage = () => {
             return {
               ...response.data.product,
               quantity: cartItem.quantity || 1,
-              deliveryDate: cartItem.deliveryDate || "3 days from now",
+              deliveryDate: cartItem.deliveryDate || "7 days from now",
             };
           })
         );
@@ -54,6 +55,22 @@ const CartPage = () => {
     };
     fetchCartItems();
   }, [cart]);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+
+      setForm({
+        fullName: user?.name || "",
+        email: user.email || "",
+        mobile: user?.mobile || "",
+        address: user?.address || "",
+        comment: "",
+        policyOptIn: false,
+      });
+    }
+  }, []);
   const router = useRouter();
   const totalMRP = cartItems.reduce((sum, item) => sum + item.mrp, 0);
   const totalDiscount = cartItems.reduce((sum, item) => sum + item.discount, 0);
@@ -65,7 +82,7 @@ const CartPage = () => {
     cartItems.reduce((sum, item) => sum + item.price, 0) + platformFee;
 
   // Variable containing all cart item _id values
-  const cartItemIds = cartItems.map(item => item._id);
+  const cartItemIds = cartItems.map((item) => item._id);
   // console.log("cart ", cartItemIds);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -73,21 +90,34 @@ const CartPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      toast.error("please login to place order");
+      router.push("/login");
+      return;
+    }
+    if (!form.policyOptIn) {
+      toast.error("please Agree to the Terms and Conditions");
+    }
     toast.success("Order Placed Successfully!");
     console.log("Form Data:", form);
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/order/place`, {
-        buyerName: form.fullName,
-        buyerEmail: form.email,
-        buyerMobile: form.mobile,
-        buyerAddress: form.address,
-        orderDate: new Date(),
-        comment: "ss",
-        cartItems: cartItemIds,
-      })
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/order/place`,
+        {
+          userId: JSON.parse(storedUser).id,
+          buyerName: form.fullName,
+          buyerEmail: form.email,
+          buyerMobile: form.mobile,
+          buyerAddress: form.address,
+          orderDate: new Date(),
+          comment: form.comment,
+          cartItems: cartItemIds,
+        }
+      );
       console.log("Order Response:", response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
     console.log("Cart Items:", cartItems);
     setForm({});
@@ -167,32 +197,14 @@ const CartPage = () => {
 
                 <input
                   type="text"
-                  name="city"
-                  placeholder="City"
-                  value={form.city}
+                  name="comment"
+                  placeholder="comment"
+                  value={form.comment}
                   onChange={handleChange}
                   required
                   className="custom-input-class w-full"
                 />
-                <input
-                  type="text"
-                  name="state"
-                  placeholder="State"
-                  value={form.state}
-                  onChange={handleChange}
-                  required
-                  className="custom-input-class w-full"
-                />
-                <input
-                  type="text"
-                  name="pincode"
-                  placeholder="Pincode"
-                  value={form.pincode}
-                  onChange={handleChange}
-                  pattern="[0-9]{6}"
-                  required
-                  className="custom-input-class w-full"
-                />
+
                 <textarea
                   type="text"
                   name="address"
@@ -203,10 +215,23 @@ const CartPage = () => {
                   className="custom-input-class col-span-2 w-full"
                 />
               </div>
-
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="policyOptIn"
+                  value={form.policyOptIn}
+                  onChange={handleChange}
+                  name="policyOptIn"
+                  className="w-4 h-4"
+                  required
+                />
+                <label htmlFor="policyOptIn" className="text-sm">
+                  I Agree to the Terms and Conditions.{" "}
+                  <BuyTermsAndConditionsAlert />
+                </label>
+              </div>
               <button
                 type="submit"
-
                 className="bg-green-600  text-white w-full py-3 rounded font-medium hover:bg-green-700 transition"
               >
                 Place Order & Pay on Delivery
@@ -222,7 +247,10 @@ const CartPage = () => {
               </h2>
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
-                  <div key={item._id || item.id} className="flex items-center gap-3">
+                  <div
+                    key={item._id || item.id}
+                    className="flex items-center gap-3"
+                  >
                     <Image
                       src={item.images ? item.images[0] : item.image}
                       alt={item.productName || item.name}
@@ -234,7 +262,7 @@ const CartPage = () => {
                         {item.productName || item.name}
                       </p>
                       <p className="text-xs text-gray-500">
-                        delivery by {" "}
+                        delivery by{" "}
                         <span className="font-semibold">
                           {item.deliveryDate}
                         </span>
@@ -245,25 +273,61 @@ const CartPage = () => {
               </div>
 
               <h2 className="text-lg font-semibold mb-2  text-gray-600">
-                Price Details ({cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)} Items)
+                Price Details (
+                {cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)}{" "}
+                Items)
               </h2>
               <div className="text-sm space-y-2">
                 <div className="flex justify-between">
                   <span>Total MRP</span>
-                  <span>₹{cartItems.reduce((sum, item) => sum + ((item.mrp || item.priceToBuyer) * (item.quantity || 1)), 0)}</span>
+                  <span>
+                    ₹
+                    {cartItems.reduce(
+                      (sum, item) =>
+                        sum +
+                        (item.mrp || item.priceToBuyer) * (item.quantity || 1),
+                      0
+                    )}
+                  </span>
                 </div>
-                <div className="flex justify-between text-green-600">
+                {/* <div className="flex justify-between text-green-600">
                   <span>Discount on MRP</span>
-                  <span>- ₹{cartItems.reduce((sum, item) => sum + (item.discount || 0) * (item.quantity || 1), 0)}</span>
-                </div>
-                <div className="flex justify-between">
+                  <span>
+                    - ₹
+                    {cartItems.reduce(
+                      (sum, item) =>
+                        sum + (item.discount || 0) * (item.quantity || 1),
+                      0
+                    )}
+                  </span>
+                </div> */}
+                {/* <div className="flex justify-between">
                   <span>Platform Fee</span>
-                  <span>₹{cartItems.reduce((sum, item) => sum + (item.platformFee || 0), 0)}</span>
-                </div>
+                  <span>
+                    ₹
+                    {cartItems.reduce(
+                      (sum, item) => sum + (item.platformFee || 0),
+                      0
+                    )}
+                  </span>
+                </div> */}
                 <hr className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
                   <span>Total Amount</span>
-                  <span>₹{cartItems.reduce((sum, item) => sum + ((item.priceToBuyer || item.price) * (item.quantity || 1)), 0) + cartItems.reduce((sum, item) => sum + (item.platformFee || 0), 0)}</span>
+                  <span>
+                    ₹
+                    {cartItems.reduce(
+                      (sum, item) =>
+                        sum +
+                        (item.priceToBuyer || item.price) *
+                          (item.quantity || 1),
+                      0
+                    ) +
+                      cartItems.reduce(
+                        (sum, item) => sum + (item.platformFee || 0),
+                        0
+                      )}
+                  </span>
                 </div>
               </div>
             </div>{" "}

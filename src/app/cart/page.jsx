@@ -6,11 +6,13 @@ import { ShoppingBag, ShoppingCart } from "lucide-react";
 import Layout from "@/components/layout";
 import { useCart } from "@/context/CartContext";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const CartPage = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const [productDetails, setProductDetails] = React.useState([]);
-
+  const route = useRouter();
   React.useEffect(() => {
     if (!cart || cart.length === 0) {
       setProductDetails([]);
@@ -20,11 +22,14 @@ const CartPage = () => {
       try {
         const details = await Promise.all(
           cart.map(async (cartItem) => {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${cartItem._id}`, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
-              },
-            });
+            const response = await axios.get(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/products/${cartItem._id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
+                },
+              }
+            );
             return {
               ...response.data.product,
               quantity: cartItem.quantity || 1,
@@ -46,34 +51,29 @@ const CartPage = () => {
   // Use empty array if cartItems2 is undefined
   const safeCartItems2 = productDetails || [];
   const totalMRP = safeCartItems2.reduce(
-    (acc, item) => acc + (item.priceToBuyer * (item.quantity || 1)),
+    (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
     0
   );
   const totalDiscount = safeCartItems2.reduce(
     (acc, item) => acc + item.priceToBuyer,
     0
   );
-  const platformFee = 40
-  // const platformFee = cartItems.reduce(
-  //   (acc, item) => acc + item.platformFee,
-  //   0
-  // );
+  const platformFee = 40;
+
   const totalAmount =
-    safeCartItems2.reduce((acc, item) => acc + (item.priceToBuyer * (item.quantity || 1)), 0) +
-    platformFee;
-  // const totalAmount =
-  //   cartItems.reduce((acc, item) => acc + item.priceToBuyer * item.quantity, 0) +
-  //   platformFee;
+    safeCartItems2.reduce(
+      (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
+      0
+    ) + platformFee;
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Order Placed Successfully!");
-    console.log("Submitted Data:", form);
-    console.log("Cart Items:", cartItems);
+  const handleCheckout = () => {
+    const userData = localStorage.getItem("user");
+    if (!userData || userData?.id) {
+      toast.error("please login before place order");
+      route.push("/login");
+      return;
+    }
+    route.push("/checkout");
   };
   if (cart.length === 0) {
     return (
@@ -85,7 +85,9 @@ const CartPage = () => {
                 <ShoppingCart className="w-20 h-20" />
               </div>
               <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
-              <p className="text-gray-600 mb-6">Add some items to get started!</p>
+              <p className="text-gray-600 mb-6">
+                Add some items to get started!
+              </p>
               <div className="flex justify-center">
                 <Link
                   href="/"
@@ -127,9 +129,12 @@ const CartPage = () => {
                 item={item}
                 removeItem={() => removeFromCart(item._id)}
                 updateQuantity={(id, type) => {
-                  const cartItem = cart.find(c => c._id === item._id);
+                  const cartItem = cart.find((c) => c._id === item._id);
                   if (!cartItem) return;
-                  const newQty = type === "inc" ? cartItem.quantity + 1 : Math.max(1, cartItem.quantity - 1);
+                  const newQty =
+                    type === "inc"
+                      ? cartItem.quantity + 1
+                      : Math.max(1, cartItem.quantity - 1);
                   updateQuantity(item._id, newQty);
                 }}
               />
@@ -140,7 +145,11 @@ const CartPage = () => {
           <div className="w-full md:w-1/3  p-4 sm:border-l">
             <h2 className="font-bold text-lg pb-2 border-b mb-4">
               Price Details (
-              {safeCartItems2.reduce((acc, item) => acc + (item.quantity || 1), 0)} Items)
+              {safeCartItems2.reduce(
+                (acc, item) => acc + (item.quantity || 1),
+                0
+              )}{" "}
+              Items)
             </h2>
 
             <div className="space-y-2 text-sm">
@@ -153,10 +162,10 @@ const CartPage = () => {
                 <span className="text-green-600">- ₹{totalDiscount}</span>
               </div> */}
 
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span>Delivery Fee</span>
                 <span>₹{platformFee}</span>
-              </div>
+              </div> */}
               <hr />
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total Amount</span>
@@ -165,11 +174,12 @@ const CartPage = () => {
               <hr />
 
               <div>
-                <Link href="/checkout" className="no-underline">
-                  <button className="mt-4 w-full bg-green-600 hover:bg-green-700 transition-all  text-white py-[10px] rounded">
-                    Proceed to Buy
-                  </button>{" "}
-                </Link>
+                <button
+                  onClick={handleCheckout}
+                  className="mt-4 w-full bg-green-600 hover:bg-green-700 transition-all  text-white py-[10px] rounded"
+                >
+                  Proceed to Buy
+                </button>{" "}
                 <Link href="/" className="no-underline">
                   <button className="mt-4 w-full border border-green-600 hover:bg-green-700  hover:text-white transition-all  text-green-600 py-[10px] rounded">
                     Continue Shopping{" "}

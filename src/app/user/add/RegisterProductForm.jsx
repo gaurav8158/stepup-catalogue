@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import TermsAndConditionsDialog from "./TermsAndConditionsDialog";
+import { useRouter } from "next/navigation";
 
 const RegisterProductForm = () => {
   const [step, setStep] = useState(1);
@@ -15,25 +16,33 @@ const RegisterProductForm = () => {
   const [filteredSizes, setFilteredSizes] = useState([]);
   const [newImageUrl, setNewImageUrl] = useState("");
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const [initialValues, setInitialValues] = useState(null);
+  const route = useRouter();
 
-  // Initial form values
-  const initialValues = {
-    schoolName: "",
-    uniformCategory: "",
-    gender: "",
-    productCategory: "",
-    productName: "",
-    size: "",
-    condition: "",
-    isDefectInProduct: "",
-    defectDescription: "",
-    isDonated: "",
-    images: [],
-    senderName: "",
-    senderMobile: "",
-    senderAddress: "",
-    policyOptIn: false,
-  };
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+
+      setInitialValues({
+        schoolName: "",
+        uniformCategory: "",
+        gender: "",
+        productCategory: "",
+        productName: "",
+        size: "",
+        condition: "",
+        isDefectInProduct: "",
+        defectDescription: "",
+        isDonated: "",
+        images: [],
+        senderName: user?.name || "",
+        senderMobile: user?.mobile || "",
+        senderAddress: user?.address || "",
+        policyOptIn: false,
+      });
+    }
+  }, []);
 
   // Validation schema for step 1
   const validationSchemaStep1 = Yup.object({
@@ -141,7 +150,7 @@ const RegisterProductForm = () => {
 
   // Handle image removal
   const handleRemoveImage = (index, setFieldValue, images) => {
-    const updatedImages = images.filter((_, i) => i !== index);
+    const updatedImages = images?.filter((_, i) => i !== index);
     setFieldValue("images", updatedImages);
   };
 
@@ -175,6 +184,7 @@ const RegisterProductForm = () => {
         toast.success("Product registered successfully!");
         resetForm();
         setStep(1);
+        route.push("/user");
       } else {
         toast.error(result?.message || "Failed to register product.");
       }
@@ -489,7 +499,7 @@ const RegisterProductForm = () => {
                 </div>
 
                 {/* Defect Description */}
-                {values.isDefectInProduct === "Yes" && (
+                {values?.isDefectInProduct === "Yes" && (
                   <div className="md:col-span-2">
                     <label
                       htmlFor="defectDescription"
@@ -561,9 +571,9 @@ const RegisterProductForm = () => {
                     </button>
                   </div>
 
-                  {values.images.length > 0 && (
+                  {values?.images?.length > 0 && (
                     <div className="flex gap-3 mt-4 flex-wrap">
-                      {values.images.map((url, idx) => (
+                      {values.images?.map((url, idx) => (
                         <div key={idx} className="relative">
                           <img
                             src={url}

@@ -23,10 +23,8 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
 
       <div className="flex flex-col justify-between flex-1">
         <div>
-          {/* <span className="text-xs  bg-green-200 text-green-800 font-bold px-2 py-0.5 rounded-full mr-2">
-            NEW
-          </span> */}
-          <h3 className="text-base font-semibold  font-sans text-sm">
+          
+          <h3 className="font-semibold  font-sans text-sm">
             {item.schoolName}
           </h3>
           <p className="text-sm text-gray-600">{item.productName}</p>
@@ -36,7 +34,7 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
           <p className="text-sm font-medium">
             Size: <span className="font-bold">{item.size}</span>
           </p>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Qty:</span>
             <button
               onClick={() => updateQuantity(item.id, "dec")}
@@ -51,7 +49,7 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
             >
               +
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-2">

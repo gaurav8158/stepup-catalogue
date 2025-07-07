@@ -133,12 +133,7 @@ export default function ProductDetails() {
             {/* Price */}
             <div className="mt-3 text-2xl font-bold text-green-700">
               ₹{activeProduct?.priceToBuyer}{" "}
-              {/* <span className="text-gray-500 line-through text-lg ml-2">
-                ₹{product.originalPrice}
-              </span>{" "}
-              <span className="text-green-600 text-base font-medium ml-2">
-                -{product.discount}%
-              </span> */}
+          
             </div>
 
             {/* Condition */}
@@ -191,7 +186,7 @@ export default function ProductDetails() {
 
             {/* Buttons */}
             <div className="mt-6 flex gap-4 items-center">
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <button
                   className="px-3 py-1 bg-gray-200 rounded text-lg font-bold"
                   onClick={() => setQuantity(q => Math.max(1, q - 1))}
@@ -207,7 +202,7 @@ export default function ProductDetails() {
                 >
                   +
                 </button>
-              </div>
+              </div> */}
               <button
                 onClick={handleAddToCart}
                 className="flex-1 py-2 flex justify-center bg-green-700 text-white rounded-md font-semibold"

@@ -47,7 +47,7 @@ export function FilterDrawer({ onApply }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <button className="w-1/2 flex items-center justify-center gap-1 py-4 hover:text-green-800 transition">
+        <button className=" md:py-1   border-1 border-gray md:shadow-sm md:rounded-md w-1/2 flex items-center justify-center gap-1 py-4 hover:text-green-800 transition">
           <SlidersHorizontal size={16} />
           Filter
         </button>

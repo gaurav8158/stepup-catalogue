@@ -10,9 +10,10 @@ const RegisterUserForm = () => {
     email: "",
     address: "",
     password: "",
-    role: "",
   });
+
   const router = useRouter();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -21,8 +22,6 @@ const RegisterUserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = process.env.NEXT_PUBLIC_BASE_URL;
-
-    console.log(formData);
 
     try {
       const res = await fetch(`${url}/users/register`, {
@@ -37,23 +36,18 @@ const RegisterUserForm = () => {
 
       if (res.ok) {
         toast.success("User registered successfully!");
-        console.log(data);
-        //  Saving token and user to localStorage
         localStorage.setItem("usertoken", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        if (data.user.role === "Buyer") {
-          router.push("/buyer");
-        } else if (data.user.role === "Seller") {
-          router.push("/seller-doner");
-        }
-        //  Reset form
+
+        router.push("/user");
+
+        // Reset form
         setFormData({
           name: "",
           mobile: "",
           email: "",
           address: "",
           password: "",
-          role: "Buyer",
         });
       } else {
         toast.error(data?.error || "Registration failed");
@@ -80,7 +74,7 @@ const RegisterUserForm = () => {
       <div className="mt-10 max-w-2xl mx-auto w-full px-4 sm:px-6 lg:px-8">
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-x-6  gap-y-3 md:gap-y-6"
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 md:gap-y-6"
         >
           {/* Name */}
           <div>
@@ -125,21 +119,6 @@ const RegisterUserForm = () => {
               className="mt-2 w-full custom-input-class"
             />
           </div>
-
-          {/* Address */}
-          <div>
-            <label className="block text-sm font-medium text-gray-900">
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="mt-2 w-full custom-input-class"
-            />
-          </div>
-
           {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-900">
@@ -154,24 +133,17 @@ const RegisterUserForm = () => {
               className="mt-2 w-full custom-input-class"
             />
           </div>
-
-          {/* Role */}
-          <div>
+          {/* Address */}
+          <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-900">
-              Role <span className="text-red-600">*</span>
+              Address
             </label>
-            <select
-              name="role"
-              required
-              value={formData.role}
+            <textarea
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               className="mt-2 w-full custom-input-class"
-            >
-              {" "}
-              <option value="">Select Role</option>
-              <option value="Buyer">Buyer</option>
-              <option value="Seller">Seller</option>
-            </select>
+            />
           </div>
 
           {/* Submit */}
@@ -181,7 +153,7 @@ const RegisterUserForm = () => {
               className="w-full mt-4 rounded-md bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-500 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
               Register
-            </button>{" "}
+            </button>
           </div>
         </form>
 

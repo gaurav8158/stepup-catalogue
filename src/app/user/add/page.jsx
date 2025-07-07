@@ -7,7 +7,7 @@ const page = () => {
     <div className="container mx-auto w-full px-4 py-6">
       {" "}
       <div>
-        <BackBtn text="Back To Home" link="/seller-doner" />
+        <BackBtn text="Back To Home" link="/user" />
       </div>
       <RegisterProductForm />;
     </div>

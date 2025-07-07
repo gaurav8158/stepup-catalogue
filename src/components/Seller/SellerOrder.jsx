@@ -26,8 +26,19 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
           ) : (
             ""
           )}
-
-          <span className="bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 text-sm font-medium px-4 py-2 rounded-full border border-orange-200">
+          <span
+            className={`text-sm font-medium px-4 py-2 rounded-full border
+    ${
+      order.sellerProductStage === "Under Review"
+        ? "bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 border-orange-200"
+        : order.sellerProductStage === "Approved"
+        ? "bg-gradient-to-r from-green-100 to-green-50 text-green-700 border-green-200"
+        : order.sellerProductStage === "Reject"
+        ? "bg-gradient-to-r from-red-100 to-red-50 text-red-700 border-red-200"
+        : "bg-gray-100 text-gray-600 border-gray-300"
+    }
+  `}
+          >
             {order.sellerProductStage}
           </span>
         </div>
@@ -74,12 +85,14 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
               </h5>
               <p className="text-sm text-gray-500 mt-1">Size: {order.size}</p>
             </div>
-            <div className="flex flex-col mt-2">
-              <span className="text-sm text-gray-500">Total Amount</span>
-              <span className="text-lg font-bold text-gray-900">
-                AMD {order.priceToSeller}
-              </span>
-            </div>
+            {order.priceToSeller && (
+              <div className="flex flex-col mt-2">
+                <span className="text-sm text-gray-500">Total Amount</span>
+                <span className="text-lg font-bold text-gray-900">
+                  AMD {order.priceToSeller}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

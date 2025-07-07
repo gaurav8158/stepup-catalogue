@@ -40,7 +40,7 @@ const OrdersPage = () => {
   return (
 
     <div className="container mx-auto px-4 py-6">
-      <Link href="/buyer/support">
+      <Link href="/user/support">
         <Button
           variant="secondary"
           size="icon"

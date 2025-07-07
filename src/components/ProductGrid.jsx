@@ -180,8 +180,7 @@ export default function ProductGrid() {
         itemCategory.includes(product.itemCategory);
       const matchesSubCategory =
         subCategory.length === 0 || subCategory.includes(product.subCategory);
-      const matchesSize =
-        sizes.length === 0 || sizes.includes(product.size); // assuming product.size is a string
+      const matchesSize = sizes.length === 0 || sizes.includes(product.size); // assuming product.size is a string
 
       return (
         matchesSchool &&
@@ -213,9 +212,7 @@ export default function ProductGrid() {
   };
 
   const filteredBySearch = filteredProducts.filter((product) =>
-    product.productName
-      ?.toLowerCase()
-      .includes(searchText.trim().toLowerCase())
+    product.productName?.toLowerCase().includes(searchText.trim().toLowerCase())
   );
 
   return (
@@ -230,14 +227,14 @@ export default function ProductGrid() {
           className="border border-gray-300 rounded px-4 py-2 w-full sm:max-w-sm"
         />
 
-        <div className="flex w-full sm:w-auto justify-between sm:justify-end gap-2">
+        <div className="fixed bottom-0 z-50 border-t sm:border-none    bg-white md:static flex w-full sm:w-auto sm:min-w-[170px]  justify-between sm:justify-end md:gap-2 ">
           <SortDrawer onApplySort={handleSort} />
           <FilterDrawer onApply={applyFilters} />
         </div>
       </div>
 
       {/* Product Grid */}
-      <div className="p-4 container mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="p-4 container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
         {filteredBySearch.length > 0 ? (
           filteredBySearch.map((item) => (
             <ProductCard key={item._id} product={item} />

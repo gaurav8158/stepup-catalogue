@@ -23,11 +23,10 @@ export function ProfileDropdown({ user }) {
   };
 
   const handleSupport = () => {
-    router.push("/buyer/support");
+    router.push("/user/support");
   };
   const handleMyorder = () => {
-    if (user.role === "Buyer") router.push("/buyer");
-    if (user.role === "Seller") router.push("/seller-doner");
+    router.push("/user");
   };
   return (
     <DropdownMenu>
