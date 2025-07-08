@@ -11,6 +11,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import toast from "react-hot-toast";
 
 export function ConveyDialogue({ orderId, fetchOrders, amount }) {
   const [open, setOpen] = useState(false);
@@ -44,7 +46,34 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
       setLoading(false);
     }
   };
+  const handleReject = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/products/catalogue/${orderId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sellerProductStage: "Reject By Seller",
+          }),
+        }
+      );
 
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message);
+        fetchOrders();
+        setOpen(false);
+      } else {
+        toast.error("failed to move", data.error);
+      }
+    } catch (err) {
+      toast.error("Request failed:", err);
+    }
+  };
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
@@ -65,13 +94,15 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <Button onClick={handleReject} disabled={loading} variant="outline">
+            Reject
+          </Button>
           <button
             onClick={handleConfirm}
             disabled={loading}
             className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 disabled:opacity-50"
           >
-            {loading ? "Processing..." : "Confirm"}
+            Confirm
           </button>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,24 +1,10 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import BackBtn from "./BackBtn";
 
 const SupportPage = () => {
   const [queryText, setQueryText] = useState("");
-  // const [queries, setQueries] = useState([
-  //   {
-  //     id: 1,
-  //     query: "I received the wrong size uniform.",
-  //     status: "Resolved",
-  //     adminReply:
-  //       "We’re sorry! Please send it back and we’ll ship the correct one.",
-  //   },
-  //   {
-  //     id: 2,
-  //     query: "When will my order be delivered?",
-  //     status: "Pending",
-  //     adminReply: "",
-  //   },
-  // ]);
   const [queries, setQueries] = useState([]);
   const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const handleSubmit = async (e) => {
@@ -67,9 +53,16 @@ const SupportPage = () => {
     fetchQueries();
   }, [])
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold mb-4">Support & Queries</h1>
-
+    <div className="max-w-4xl mx-auto px-4 py-6">
+      
+ <div className="flex justify-between mb-6 ">
+        <div className="flex items-center gap-2">
+          {" "}
+          <BackBtn text="Back" link="/user" />
+          <h1 className="text-2xl font-semibold ">Support & Queries</h1>
+        </div>
+       
+      </div>
       {/* Add Query Form */}
       <form onSubmit={handleSubmit} className="space-y-4 mb-10">
         <label className="block text-sm font-medium text-gray-700">

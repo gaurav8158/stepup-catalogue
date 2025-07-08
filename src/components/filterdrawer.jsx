@@ -12,16 +12,18 @@ import {
 } from "@/components/ui/drawer";
 import { SlidersHorizontal } from "lucide-react";
 
-const filters = {
-  schoolName: ["DPS", "St. Xavier's", "GD Goenka", "Ryan Intl."],
-  uniformCategory: ["Core Uniform", "PE Uniform", "Winterwear"],
-  gender: ["Boy", "Girl", "Unisex"],
-  itemCategory: ["Tshirt", "Skirt", "Trouser", "Shirt", "Dress", "Skort"],
-  subCategory: ["Full Sleeve", "Half Sleeve", "Sleeveless"],
-  sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-};
-
 export function FilterDrawer({ onApply }) {
+  const filters = {
+    schoolName: ["DPS", "St. Xavier's", "GD Goenka", "Ryan Intl."],
+    uniformCategory: ["Core Uniform", "PE Uniform", "Winterwear"],
+    gender: ["Boy", "Girl", "Unisex"],
+    // itemCategory: ["Tshirt", "Skirt", "Trouser", "Shirt", "Dress", "Skort"],
+    // subCategory: ["Full Sleeve", "Half Sleeve", "Sleeveless"],
+    sizes: [
+      2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
+    ],
+  };
+
   const filterKeys = Object.keys(filters);
   const [selectedTab, setSelectedTab] = React.useState(filterKeys[0]);
   const [selected, setSelected] = React.useState(
@@ -88,7 +90,7 @@ export function FilterDrawer({ onApply }) {
             </div>
 
             {/* Right Checkboxes */}
-            <div className="w-2/3 p-4 overflow-y-auto">
+            <div className="w-2/3 p-4 pb-20 overflow-y-auto">
               {filters[selectedTab].map((item, index) => (
                 <label
                   key={index}

@@ -64,7 +64,7 @@ const CartPage = () => {
     safeCartItems2.reduce(
       (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
       0
-    ) + platformFee;
+    ) ;
 
   const handleCheckout = () => {
     const userData = localStorage.getItem("user");

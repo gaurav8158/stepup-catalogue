@@ -1,128 +1,6 @@
-// "use client";
-// import ProductCard from "./ProductCard";
-// import { FilterDrawer } from "./filterdrawer";
-// import { SortDrawer } from "./sortdrawer";
-// import { useEffect, useState } from "react";
-
-// export default function ProductGrid() {
-//   const [filteredProducts, setFilteredProducts] = useState([]);
-//   const [sortBy, setSortBy] = useState("recommended");
-//   const [searchText, setSearchText] = useState("");
-//   useEffect(() => {
-//     fetchSchoolDress();
-//   }, []);
-
-//   const fetchSchoolDress = async () => {
-//     try {
-//       const res = await fetch(
-//         `${process.env.NEXT_PUBLIC_BASE_URL}/products/catalogue`
-//       );
-
-//       if (!res.ok) {
-//         throw new Error("Failed to fetch school dress data");
-//       }
-
-//       const resData = await res.json();
-//       console.log(resData);
-//       setFilteredProducts(resData.products);
-//     } catch (error) {
-//       console.error("Fetch error:", error);
-//       return []; // fallback if error
-//     }
-//   };
-//   const applyFilters = (filters) => {
-//     const {
-//       schoolName,
-//       uniformCategory,
-//       gender,
-//       itemCategory,
-//       subCategory,
-//       sizes,
-//     } = filters;
-
-//     const result = allProducts.filter((product) => {
-//       const matchesSchool =
-//         schoolName.length === 0 || schoolName.includes(product.schoolName);
-
-//       const matchesCategory =
-//         uniformCategory.length === 0 ||
-//         uniformCategory.includes(product.uniformCategory);
-
-//       const matchesGender =
-//         gender.length === 0 || gender.includes(product.gender);
-
-//       const matchesItemCategory =
-//         itemCategory.length === 0 ||
-//         itemCategory.includes(product.itemCategory);
-
-//       const matchesSubCategory =
-//         subCategory.length === 0 || subCategory.includes(product.subCategory);
-
-//       const matchesSize =
-//         sizes.length === 0 ||
-//         product.sizes.some((size) => sizes.includes(size));
-
-//       return (
-//         matchesSchool &&
-//         matchesCategory &&
-//         matchesGender &&
-//         matchesItemCategory &&
-//         matchesSubCategory &&
-//         matchesSize
-//       );
-//     });
-
-//     setFilteredProducts(sortProducts(result, sortBy));
-//   };
-//   const handleSort = (selectedSort) => {
-//     setSortBy(selectedSort);
-//     setFilteredProducts((prev) => sortProducts([...prev], selectedSort));
-//   };
-
-//   const sortProducts = (products, sortType) => {
-//     if (sortType === "lowToHigh") {
-//       return products.sort((a, b) => a.price - b.price);
-//     } else if (sortType === "highToLow") {
-//       return products.sort((a, b) => b.price - a.price);
-//     } else {
-//       return products; // "recommended"
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <div>
-//         <input
-//           type="text"
-//           value={searchText}
-//           onChange={(e) => setSearchText(e.target.value)}
-//         />
-
-//         <div className="fixed sm:relative   w-full   bottom-0 right-0 left-0 z-50 sm:z-40 flex  divide-x border-y border-gray-200 bg-white text-sm text-gray-800 font-medium">
-//           {/* Sort by */}
-//           <SortDrawer onApplySort={handleSort} />
-//           {/* Filter */}
-
-//           <FilterDrawer onApply={applyFilters} />
-//         </div>
-//       </div>
-//       <div className="p-4  container mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
-//         {filteredProducts.length > 0 ? (
-//           filteredProducts?.map((item) => (
-//             <ProductCard key={item._id} product={item} />
-//           ))
-//         ) : (
-//           <p className="col-span-full text-center text-gray-500">
-//             No products found.
-//           </p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
+import { Search } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { FilterDrawer } from "./filterdrawer";
 import { SortDrawer } from "./sortdrawer";
@@ -171,25 +49,19 @@ export default function ProductGrid() {
       const matchesSchool =
         schoolName.length === 0 || schoolName.includes(product.schoolName);
       const matchesCategory =
-        uniformCategory.length === 0 ||
-        uniformCategory.includes(product.uniformCategory);
+        uniformCategory?.length === 0 ||
+        uniformCategory?.includes(product.uniformCategory);
       const matchesGender =
         gender.length === 0 || gender.includes(product.gender);
-      const matchesItemCategory =
-        itemCategory.length === 0 ||
-        itemCategory.includes(product.itemCategory);
-      const matchesSubCategory =
-        subCategory.length === 0 || subCategory.includes(product.subCategory);
-      const matchesSize = sizes.length === 0 || sizes.includes(product.size); // assuming product.size is a string
+      // const matchesItemCategory =
+      //   itemCategory?.length === 0 ||
+      //   itemCategory?.includes(product.itemCategory);
+      console.log(typeof product.size, product.size);
+      const matchesSize =
+        sizes.length === 0 || sizes.map(String).includes(String(product.size));
 
-      return (
-        matchesSchool &&
-        matchesCategory &&
-        matchesGender &&
-        matchesItemCategory &&
-        matchesSubCategory &&
-        matchesSize
-      );
+   
+      return matchesSchool && matchesCategory && matchesGender && matchesSize;
     });
 
     setFilteredProducts(sortProducts(result, sortBy));
@@ -203,9 +75,9 @@ export default function ProductGrid() {
   const sortProducts = (products, sortType) => {
     const sorted = [...products];
     if (sortType === "lowToHigh") {
-      return sorted.sort((a, b) => a.price - b.price);
+      return sorted.sort((a, b) => a.priceToBuyer - b.priceToBuyer);
     } else if (sortType === "highToLow") {
-      return sorted.sort((a, b) => b.price - a.price);
+      return sorted.sort((a, b) => b.priceToBuyer - a.priceToBuyer);
     } else {
       return sorted; // "recommended"
     }
@@ -219,14 +91,23 @@ export default function ProductGrid() {
     <div>
       {/* Top Bar */}
       <div className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <input
+        {/* <input
           type="text"
           placeholder="Search products..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           className="border border-gray-300 rounded px-4 py-2 w-full sm:max-w-sm"
-        />
-
+        /> */}
+        <div className="relative w-full sm:max-w-sm">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 text-sm"
+          />
+        </div>
         <div className="fixed bottom-0 z-50 border-t sm:border-none    bg-white md:static flex w-full sm:w-auto sm:min-w-[170px]  justify-between sm:justify-end md:gap-2 ">
           <SortDrawer onApplySort={handleSort} />
           <FilterDrawer onApply={applyFilters} />
