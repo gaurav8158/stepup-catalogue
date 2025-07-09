@@ -18,7 +18,9 @@ const OrderCard = ({ order, fetchOrders }) => {
       {/* Header Section */}
       <div className="flex flex-col gap-3 sm:flex-row justify-between items-start">
         <div className="flex flex-col gap-1">
-          <span className="font-bold text-lg text-gray-900">#{order._id}</span>
+          <span className="font-bold text-lg text-gray-900">
+            Order No. #{order._id}
+          </span>
           <span className="text-sm text-gray-500">
             Order Date: {formatDate(order.orderDate)}
           </span>
@@ -51,7 +53,7 @@ const OrderCard = ({ order, fetchOrders }) => {
           </div>
           <div className="flex-1 space-y-1">
             <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">
-              Buyer Information
+              Delivery Address
             </h4>
             <div className="space-y-1 text-sm text-gray-700">
               <p className="font-medium">{order.buyerName}</p>

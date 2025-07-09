@@ -121,6 +121,7 @@ const CartPage = () => {
     }
     console.log("Cart Items:", cartItems);
     setForm({});
+    localStorage.removeItem("cart")
     router.push("/");
   };
 
@@ -320,7 +321,7 @@ const CartPage = () => {
                       (sum, item) =>
                         sum +
                         (item.priceToBuyer || item.price) *
-                          (item.quantity || 1),
+                          ( 1),
                       0
                     ) +
                       cartItems.reduce(

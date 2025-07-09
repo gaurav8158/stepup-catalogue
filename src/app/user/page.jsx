@@ -4,7 +4,7 @@ import Layout from "@/components/layout";
 import SellerOrderCard from "@/components/Seller/SellerOrder";
 import BackBtn from "@/components/BackBtn";
 import Link from "next/link";
-import { Headphones } from "lucide-react";
+import { Headphones, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OrderCard from "@/components/OrderCard";
 
@@ -63,7 +63,7 @@ const OrdersPage = () => {
         console.log("Fetched products:", data.orders);
         setBuyOrders(data.orders);
       } else {
-        console.error("Failed to fetch buyers:", data.error || data.message);
+        console.log("Failed to fetch buyers:", data.error || data.message);
       }
     } catch (error) {
       console.error("Error fetching buyers:", error);
@@ -74,22 +74,21 @@ const OrdersPage = () => {
       <Link href="/user/support">
         <Button
           variant="secondary"
-          size="icon"
-          className="size-8 fixed bottom-4 right-4 border  border-green-800 text-green-800"
+          className="fixed bottom-4 right-4 border  border-green-800 text-green-800"
         >
-          <Headphones />
+          Help<Headphones />
         </Button>
       </Link>
 
-      <div className="flex justify-between mb-6 mt-4">
+      <div className="flex justify-between flex-col md:flex-row gap-2 md:gap-0 mb-4 ">
         <div className="flex items-center gap-2">
           {" "}
           <BackBtn text="Back" link="/" />
           <h1 className="text-2xl font-semibold ">My Orders</h1>
         </div>
         <Link href="/user/add">
-          <button className="text-sm text-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold ">
-            Sell/Donate Product
+          <button className="text-sm flex gap-2 items-center text-green-700 border border-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold ">
+            <Plus className="w-4 h-4" /> Sell/Donate Product
           </button>{" "}
         </Link>
       </div>

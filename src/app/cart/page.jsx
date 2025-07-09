@@ -13,6 +13,7 @@ const CartPage = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const [productDetails, setProductDetails] = React.useState([]);
   const route = useRouter();
+  console.log(cart);
   React.useEffect(() => {
     if (!cart || cart.length === 0) {
       setProductDetails([]);
@@ -32,7 +33,7 @@ const CartPage = () => {
             );
             return {
               ...response.data.product,
-              quantity: cartItem.quantity || 1,
+              quantity: 1,
             };
           })
         );
@@ -60,11 +61,10 @@ const CartPage = () => {
   );
   const platformFee = 40;
 
-  const totalAmount =
-    safeCartItems2.reduce(
-      (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
-      0
-    ) ;
+  const totalAmount = safeCartItems2.reduce(
+    (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
+    0
+  );
 
   const handleCheckout = () => {
     const userData = localStorage.getItem("user");
@@ -82,11 +82,13 @@ const CartPage = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-white p-8 rounded-md shadow">
               <div className="flex justify-center mb-6">
-                <ShoppingCart className="w-20 h-20" />
+                <ShoppingCart className="w-20 h-20 text-orange-600" />
               </div>
-              <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                Hey, it feels so light!
+              </h2>
               <p className="text-gray-600 mb-6">
-                Add some items to get started!
+                There is nothing in your bag. Let's add some items.
               </p>
               <div className="flex justify-center">
                 <Link

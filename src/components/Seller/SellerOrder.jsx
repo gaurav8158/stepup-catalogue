@@ -4,15 +4,28 @@ import { HiLocationMarker } from "react-icons/hi";
 import { ConveyDialogue } from "./ConveyDialogue";
 
 const SellerOrderCard = ({ order, fetchOrders }) => {
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 space-y-6 hover:shadow-xl transition-shadow duration-300">
       {/* Header Section */}
       <div className="flex  flex-col gap-3 sm:flex-row justify-between items-start">
         <div className="flex flex-col gap-1">
           <span className="font-bold text-lg text-gray-900">
-            #{order.productcode}
+            Order No. #{order._id}
           </span>
-          <span className="text-sm text-gray-500">Order Details</span>
+
+          <span className="text-sm text-gray-500">
+            Order Date: {formatDate(order?.createdAt)}
+          </span>
         </div>
         <div className="flex gap-2 ">
           {order.isConvey === "Pending" ? (
@@ -52,7 +65,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
           </div>
           <div className="flex-1 space-y-1">
             <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">
-              Seller Information
+              Seller Address
             </h4>
             <div className="space-y-1 text-sm text-gray-700">
               <p className="font-medium">{order.senderName}</p>

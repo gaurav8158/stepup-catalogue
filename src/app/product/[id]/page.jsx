@@ -33,12 +33,15 @@ export default function ProductDetails() {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`, {
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("usertoken")}`
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
+            },
           }
-        });
-        console.log("response ", response.data.product)
+        );
+        console.log("response ", response.data.product);
         if (response.data.product) {
           setActiveProduct(response.data.product);
           setActiveImage(response.data.product.images[0]);
@@ -47,9 +50,9 @@ export default function ProductDetails() {
       } catch (error) {
         console.log("Error ", error);
       }
-    }
+    };
     fetchProductDetails();
-  }, [])
+  }, []);
   const handleAddToCart = () => {
     if (!activeProduct.inStock) {
       toast.error("Product is out of stock");
@@ -58,14 +61,11 @@ export default function ProductDetails() {
     if (product) {
       addToCart({
         _id: activeProduct?._id,
-        title: activeProduct?.title,
-        price: activeProduct?.priceToBuyer,
-        image: product.images,
+
         stock: product.stock,
-        category: activeProduct?.productCategory,
-        quantity: quantity, // send selected quantity
+
+        quantity: quantity,
       });
-      toast.success("Product added to cart");
     }
   };
 
@@ -92,8 +92,9 @@ export default function ProductDetails() {
                   src={img}
                   alt=""
                   onClick={() => setActiveImage(img)}
-                  className={`w-16 h-20 object-cover rounded border cursor-pointer ${activeImage === img ? "ring-2 ring-green-700" : ""
-                    }`}
+                  className={`w-16 h-20 object-cover rounded border cursor-pointer ${
+                    activeImage === img ? "ring-2 ring-green-700" : ""
+                  }`}
                 />
               ))}
             </div>
@@ -108,20 +109,18 @@ export default function ProductDetails() {
               {activeProduct?.productName}
             </h1>
 
-
             <div>
               <span
                 className={`text-xs px-2 py-1 rounded-full font-semibold 
-      ${activeProduct?.inStock
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                  }`}
+      ${
+        activeProduct?.inStock
+          ? "bg-green-100 text-green-700"
+          : "bg-red-100 text-red-700"
+      }`}
               >
                 {activeProduct?.inStock ? "In Stock" : "Out of Stock"}
               </span>
             </div>
-
-
 
             {/* Rating */}
             {/* <div className="flex items-center text-sm mt-2 text-green-700 font-medium">
@@ -133,24 +132,26 @@ export default function ProductDetails() {
             {/* Price */}
             <div className="mt-3 text-2xl font-bold text-green-700">
               ₹{activeProduct?.priceToBuyer}{" "}
-          
             </div>
 
             {/* Condition */}
             <div className="mt-6">
               <h4 className="text-sm font-medium text-gray-800 mb-2">
-                Condition : <span className="text-green-700"> {activeProduct?.condition}</span>
+                Condition :{" "}
+                <span className="text-green-700">
+                  {" "}
+                  {activeProduct?.condition}
+                </span>
                 {/* Select Size */}
               </h4>
-
             </div>
             {/* Gender */}
             <div className="mt-6">
               <h4 className="text-sm font-medium text-gray-800 mb-2">
-                Gender : <span className="text-green-700"> {activeProduct?.gender}</span>
+                Gender :{" "}
+                <span className="text-green-700"> {activeProduct?.gender}</span>
                 {/* Select Size */}
               </h4>
-
             </div>
 
             {/* Size Selection */}
@@ -223,20 +224,28 @@ export default function ProductDetails() {
                 Product Description
               </h3>
               <div className="text-sm text-gray-600 mb-2">
-                <span className="font-medium text-gray-800">Product Category:</span>{" "}
+                <span className="font-medium text-gray-800">
+                  Product Category:
+                </span>{" "}
                 {activeProduct?.productCategory || "N/A"}
               </div>
               <div className="text-sm text-gray-600 mb-2">
-                <span className="font-medium text-gray-800">Uniform Category:</span>{" "}
+                <span className="font-medium text-gray-800">
+                  Uniform Category:
+                </span>{" "}
                 {activeProduct?.uniformCategory || "N/A"}
               </div>
               <div className="text-sm text-gray-600 mb-2">
-                <span className="font-medium text-gray-800">Defect In Product:</span>{" "}
-                {activeProduct?.isDefectInProduct ? "Yes" : "No"}
+                <span className="font-medium text-gray-800">
+                  Defect In Product:
+                </span>{" "}
+                {activeProduct?.isDefectInProduct}
               </div>
-              {activeProduct?.isDefectInProduct && (
+              {activeProduct?.isDefectInProduct === "Yes" && (
                 <div className="text-sm text-gray-600 mb-2">
-                  <span className="font-medium text-gray-800">Defect Description:</span>{" "}
+                  <span className="font-medium text-gray-800">
+                    Defect Description:
+                  </span>{" "}
                   {activeProduct?.defectDescription || "N/A"}
                 </div>
               )}

@@ -216,10 +216,6 @@ const RegisterProductForm = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-xl sm:text-2xl font-semibold mb-6">
-        Register Product
-      </h1>
-
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
