@@ -19,7 +19,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
       {/* Header Section */}
       <div className="flex  flex-col gap-3 sm:flex-row justify-between items-start">
         <div className="flex flex-col gap-1">
-          <span className="font-bold text-lg text-gray-900">
+          <span className="font-bold text-sm md:text-lg text-gray-900">
             Order No. #{order._id}
           </span>
 
@@ -27,7 +27,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
             Order Date: {formatDate(order?.createdAt)}
           </span>
         </div>
-        <div className="flex gap-2 ">
+        <div className="flex gap-2 flex-wrap items-center">
           {order.isConvey === "Pending" ? (
             <div className="flex-shrink-0">
               <ConveyDialogue

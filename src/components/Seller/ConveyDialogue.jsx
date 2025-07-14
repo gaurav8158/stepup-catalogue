@@ -81,28 +81,30 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
           onClick={() => setOpen(true)}
           className="text-sm text-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold hover:bg-green-100 transition"
         >
-          Convey Price
+          Do You Accept Our Offered Price?
         </button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Confirm: Convey the price?</AlertDialogTitle>
+          <AlertDialogTitle>Do You Accept Our Offered Price?</AlertDialogTitle>
           <AlertDialogDescription>
-            The order, valued at AMD {amount}, will be marked as{" "}
-            <strong>"Confirmed"</strong> for conveyance.
+            <p className="text-sm text-gray-700">
+              Offered Seling Price :<strong> AMD {amount}</strong>
+            </p>
+          
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <Button onClick={handleReject} disabled={loading} variant="outline">
-            Reject
+            No
           </Button>
           <button
             onClick={handleConfirm}
             disabled={loading}
             className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 disabled:opacity-50"
           >
-            Confirm
+            Yes
           </button>
         </AlertDialogFooter>
       </AlertDialogContent>

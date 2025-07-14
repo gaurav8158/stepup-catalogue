@@ -8,28 +8,13 @@ import BackBtn from "@/components/BackBtn";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
-const product = {
-  id: 1,
-  title: "Soft Cotton Striped Straight Black Kurta Set",
-  brand: "Gems Modern Academy",
-  images: ["/Dress.png", "/Shirt.png"],
-  price: 1847,
-  originalPrice: 3997,
-  discount: 53,
-  rating: 4.8,
-  reviews: 622,
-  sizes: ["M", "L", "XL", "2XL", "3XL", "4XL"],
-  description:
-    "A premium cotton blend kurta set with intricate patterns and breathable fabric. Ideal for school wear and formal occasions.",
-};
 
 export default function ProductDetails() {
-  const [selectedSize, setSelectedSize] = useState(null);
   const { addToCart } = useCart();
   const [activeProduct, setActiveProduct] = useState();
   const { id } = useParams();
   const [activeImage, setActiveImage] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -45,7 +30,6 @@ export default function ProductDetails() {
         if (response.data.product) {
           setActiveProduct(response.data.product);
           setActiveImage(response.data.product.images[0]);
-          // setSelectedSize(response.data.product.sizes[0]);
         }
       } catch (error) {
         console.log("Error ", error);
@@ -58,15 +42,14 @@ export default function ProductDetails() {
       toast.error("Product is out of stock");
       return;
     }
-    if (product) {
-      addToCart({
-        _id: activeProduct?._id,
-
-        stock: product.stock,
-
-        quantity: quantity,
-      });
+    if (!activeProduct.inStock) {
+      toast.error("Product is out of stock");
+      return;
     }
+
+    addToCart({
+      _id: activeProduct?._id,
+    });
   };
 
   return (
@@ -169,41 +152,10 @@ export default function ProductDetails() {
               >
                 {activeProduct?.size}
               </button>
-              {/* <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-3 py-1 border rounded text-sm ${selectedSize === size
-                      ? "bg-green-700 text-white border-green-700"
-                      : "border-gray-300 text-gray-700"
-                      }`}
-                  >
-                    {size} 
-                  </button>
-                ))}
-              </div> */}
             </div>
 
             {/* Buttons */}
             <div className="mt-6 flex gap-4 items-center">
-              {/* <div className="flex items-center gap-2">
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded text-lg font-bold"
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  aria-label="Decrease quantity"
-                >
-                  -
-                </button>
-                <span className="px-3 py-1 border rounded bg-white">{quantity}</span>
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded text-lg font-bold"
-                  onClick={() => setQuantity(q => q + 1)}
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-              </div> */}
               <button
                 onClick={handleAddToCart}
                 className="flex-1 py-2 flex justify-center bg-green-700 text-white rounded-md font-semibold"

@@ -27,9 +27,9 @@ export const CartProvider = ({ children }) => {
     setTotal(newTotal);
   }, [cart]);
 
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = (product) => {
     if (!product._id) {
-      console.error("Product missing _id:", product);
+      console.error("Product missing _id:");
       return;
     }
 
@@ -43,7 +43,7 @@ export const CartProvider = ({ children }) => {
       } else {
         // Add new item
         toast.success("Item added to cart.");
-        return [...prevCart, { ...product, quantity }];
+        return [...prevCart, { ...product }];
       }
     });
   };

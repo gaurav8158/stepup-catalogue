@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import TermsAndConditionsDialog from "./TermsAndConditionsDialog";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const RegisterProductForm = () => {
   const [step, setStep] = useState(1);
@@ -17,6 +18,7 @@ const RegisterProductForm = () => {
   const [newImageUrl, setNewImageUrl] = useState("");
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [initialValues, setInitialValues] = useState(null);
+  const [quotes, setQuotes] = useState("");
   const route = useRouter();
 
   useEffect(() => {
@@ -62,7 +64,10 @@ const RegisterProductForm = () => {
       otherwise: (schema) => schema.notRequired(),
     }),
     isDonated: Yup.string().required("Please specify if this is donated"),
-    images: Yup.array().min(1, "At least one image is required"),
+
+    images: Yup.array()
+      .min(1, "At least one image is required")
+      .max(4, "You can upload a maximum of 4 images only"),
   });
 
   // Validation schema for step 2
@@ -99,8 +104,30 @@ const RegisterProductForm = () => {
       console.error("Error fetching quotes:", err);
     }
   };
+  const fetchQuotes = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/quotes`);
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log(data);
+
+        // Find the quote with tag === "For Seller"
+        const sellerQuote = data.find((item) => item.tag === "For Seller");
+
+        if (sellerQuote) {
+          setQuotes(sellerQuote.quoteText);
+        }
+      } else {
+        console.error("Fetch failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching quotes:", err);
+    }
+  };
 
   useEffect(() => {
+    fetchQuotes();
     fetchSchoolDress();
   }, []);
 
@@ -216,6 +243,14 @@ const RegisterProductForm = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
+      {quotes && (
+        <div className="my-6 rounded-xl bg-blue-50 border border-blue-200 p-6 shadow-sm">
+          <h2 className="md:text-lg font-semibold text-blue-800 mb-2">
+            {quotes}
+          </h2>
+        </div>
+      )}
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -519,7 +554,21 @@ const RegisterProductForm = () => {
                 )}
 
                 {/* Is Donated */}
+
                 <div>
+                  <div className="flex items-center gap-3 mb-4 bg-orange-50 px-4 py-2 rounded-lg shadow-sm">
+                    <Image
+                      src="/humanity.png"
+                      alt="humanity"
+                      height={28}
+                      width={28}
+                      className="min-w-[28px]"
+                    />
+                    <p className="text-lg md:text-xl font-semibold text-orange-600">
+                      Be the Helping Hands for Humanity
+                    </p>
+                  </div>
+
                   <label
                     htmlFor="isDonated"
                     className="block text-sm font-medium text-gray-700 mb-2"
@@ -557,6 +606,7 @@ const RegisterProductForm = () => {
                       className="flex-1 custom-input-class"
                     />
                     <button
+                      disabled={values?.images?.length >= 4}
                       type="button"
                       onClick={() =>
                         handleAddImage(setFieldValue, values.images)
@@ -566,7 +616,10 @@ const RegisterProductForm = () => {
                       Add
                     </button>
                   </div>
-
+                  <p className="text-green-500">
+                    {" "}
+                    *You can upload a maximum of 4 pictures.
+                  </p>
                   {values?.images?.length > 0 && (
                     <div className="flex gap-3 mt-4 flex-wrap">
                       {values.images?.map((url, idx) => (
@@ -664,7 +717,7 @@ const RegisterProductForm = () => {
                     htmlFor="senderAddress"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Complete Address *
+                    Pickup Address *
                   </label>
                   <Field
                     as="textarea"

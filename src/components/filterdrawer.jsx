@@ -13,22 +13,23 @@ import {
 import { SlidersHorizontal } from "lucide-react";
 
 export function FilterDrawer({ onApply }) {
-  const filters = {
+  const [filters, setFilters] = React.useState({
     schoolName: ["DPS", "St. Xavier's", "GD Goenka", "Ryan Intl."],
     uniformCategory: ["Core Uniform", "PE Uniform", "Winterwear"],
     gender: ["Boy", "Girl", "Unisex"],
-    // itemCategory: ["Tshirt", "Skirt", "Trouser", "Shirt", "Dress", "Skort"],
-    // subCategory: ["Full Sleeve", "Half Sleeve", "Sleeveless"],
+
     sizes: [
       2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
     ],
-  };
-
+  });
   const filterKeys = Object.keys(filters);
   const [selectedTab, setSelectedTab] = React.useState(filterKeys[0]);
   const [selected, setSelected] = React.useState(
     Object.fromEntries(filterKeys.map((key) => [key, []]))
   );
+  React.useEffect(() => {
+    fetchSchoolDress();
+  }, []);
 
   const handleToggle = (key, value) => {
     setSelected((prev) => {
@@ -44,6 +45,28 @@ export function FilterDrawer({ onApply }) {
 
   const handleClear = () => {
     setSelected(Object.fromEntries(filterKeys.map((key) => [key, []])));
+  };
+  const fetchSchoolDress = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/schoolDress`
+      );
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log(data.data);
+
+        const schoolNames = data.data.map((item) => item.schoolName);
+        setFilters((prev) => ({
+          ...prev,
+          schoolName: schoolNames,
+        }));
+      } else {
+        console.error("Fetch failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching school dress data:", err);
+    }
   };
 
   return (

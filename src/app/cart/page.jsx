@@ -45,11 +45,7 @@ const CartPage = () => {
     fetchDetails();
   }, [cart]);
 
-  // const totalMRP = cartItems2.reduce(
-  //   (acc, item) => acc + item.priceToBuyer,
-  //   0
-  // );
-  // Use empty array if cartItems2 is undefined
+
   const safeCartItems2 = productDetails || [];
   const totalMRP = safeCartItems2.reduce(
     (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
@@ -129,7 +125,7 @@ const CartPage = () => {
               <Cartitem
                 key={item._id || item.id}
                 item={item}
-                removeItem={() => removeFromCart(item._id)}
+                removeItem={removeFromCart}
                 updateQuantity={(id, type) => {
                   const cartItem = cart.find((c) => c._id === item._id);
                   if (!cartItem) return;
