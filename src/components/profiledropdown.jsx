@@ -44,22 +44,23 @@ export function ProfileDropdown({ user }) {
       <DropdownMenuContent className="w-40" align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             Profile
             <DropdownMenuShortcut>
               <UserRoundPen />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem> */}
+
+          <DropdownMenuItem onClick={handleMyorder}>
+            My Orders
+            <DropdownMenuShortcut>
+              <ScrollText />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleSupport}>
             Support
             <DropdownMenuShortcut>
               <Headset />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleMyorder}>
-            My Orders
-            <DropdownMenuShortcut>
-              <ScrollText />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>

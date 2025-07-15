@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 const CartPage = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const [productDetails, setProductDetails] = React.useState([]);
+  const [quotes, setQuotes] = useState("");
   const route = useRouter();
   console.log(cart);
   React.useEffect(() => {
@@ -44,8 +45,30 @@ const CartPage = () => {
     };
     fetchDetails();
   }, [cart]);
+  useEffect(() => {
+    fetchQuotes();
+  }, []);
+  const fetchQuotes = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/quotes`);
+      const data = await res.json();
 
+      if (res.ok) {
+        console.log(data);
 
+        // Find the quote with tag === "For Seller"
+        const sellerQuote = data.find((item) => item.tag === "For Add to Cart");
+
+        if (sellerQuote) {
+          setQuotes(sellerQuote.quoteText);
+        }
+      } else {
+        console.error("Fetch failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching quotes:", err);
+    }
+  };
   const safeCartItems2 = productDetails || [];
   const totalMRP = safeCartItems2.reduce(
     (acc, item) => acc + item.priceToBuyer * (item.quantity || 1),
@@ -112,15 +135,13 @@ const CartPage = () => {
                 Shopping Cart
               </h2>
             </div>
-            {/* 
-            {cartItems.map((item) => (
-              <Cartitem
-                key={item.id}
-                item={item}
-                removeItem={removeItem}
-                updateQuantity={updateQuantity}
-              />
-            ))} */}
+            {quotes && (
+                <div className="mb-4 rounded-xl bg-blue-50 border border-blue-200 p-4 shadow-sm">
+                  <h2 className="md:text-lg font-semibold text-blue-800 mb">
+                    {quotes}
+                  </h2>
+                </div>
+              )}
             {safeCartItems2.map((item) => (
               <Cartitem
                 key={item._id || item.id}
@@ -153,7 +174,7 @@ const CartPage = () => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Total MRP</span>
-                <span>₹{totalMRP}</span>
+                <span>AMD {totalMRP}</span>
               </div>
               {/* <div className="flex justify-between">
                 <span>Discount on MRP</span>
@@ -167,7 +188,7 @@ const CartPage = () => {
               <hr />
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total Amount</span>
-                <span>₹{totalAmount}</span>
+                <span>AMD {totalAmount}</span>
               </div>
               <hr />
 

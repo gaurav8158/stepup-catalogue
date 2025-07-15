@@ -22,7 +22,7 @@ const CartPage = () => {
 
     policyOptIn: false,
   });
-
+  const [quotes, setQuotes] = useState("");
   const [cartItems, setCartItems] = useState([]);
   useEffect(() => {
     if (!cart || cart.length === 0) {
@@ -44,7 +44,6 @@ const CartPage = () => {
             return {
               ...response.data.product,
               quantity: cartItem.quantity || 1,
-              deliveryDate: cartItem.deliveryDate || "7 days from now",
             };
           })
         );
@@ -54,8 +53,29 @@ const CartPage = () => {
       }
     };
     fetchCartItems();
+    fetchQuotes();
   }, [cart]);
+  const fetchQuotes = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/quotes`);
+      const data = await res.json();
 
+      if (res.ok) {
+        console.log(data);
+
+        // Find the quote with tag === "For Seller"
+        const sellerQuote = data.find((item) => item.tag === "For Buyer");
+
+        if (sellerQuote) {
+          setQuotes(sellerQuote.quoteText);
+        }
+      } else {
+        console.error("Fetch failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching quotes:", err);
+    }
+  };
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -121,7 +141,7 @@ const CartPage = () => {
     }
     console.log("Cart Items:", cartItems);
     setForm({});
-    localStorage.removeItem("cart")
+    localStorage.removeItem("cart");
     router.push("/");
   };
 
@@ -164,6 +184,13 @@ const CartPage = () => {
               onSubmit={handleSubmit}
               className="space-y-4 bg-white p-6  rounded shadow"
             >
+              {quotes && (
+                <div className="mb-4 rounded-xl bg-blue-50 border border-blue-200 p-4 shadow-sm">
+                  <h2 className="md:text-lg font-semibold text-blue-800 mb">
+                    {quotes}
+                  </h2>
+                </div>
+              )}
               <h2 className="text-xl font-bold mb-4">
                 Select Delivery Address
               </h2>
@@ -244,7 +271,7 @@ const CartPage = () => {
           <div>
             <div className="bg-white p-6 sticky top-0 rounded shadow">
               <h2 className=" font-semibold text-gray-500 text-sm mb-4">
-                Delivery Estimates
+               Items
               </h2>
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
@@ -263,10 +290,7 @@ const CartPage = () => {
                         {item.productName || item.name}
                       </p>
                       <p className="text-xs text-gray-500">
-                        delivery by{" "}
-                        <span className="font-semibold">
-                          {item.deliveryDate}
-                        </span>
+                        {item.priceToBuyer} AMD
                       </p>
                     </div>
                   </div>
@@ -282,7 +306,7 @@ const CartPage = () => {
                 <div className="flex justify-between">
                   <span>Total MRP</span>
                   <span>
-                    ₹
+                    AMD
                     {cartItems.reduce(
                       (sum, item) =>
                         sum +
@@ -316,12 +340,10 @@ const CartPage = () => {
                 <div className="flex justify-between font-semibold text-base">
                   <span>Total Amount</span>
                   <span>
-                    ₹
+                    AMD
                     {cartItems.reduce(
                       (sum, item) =>
-                        sum +
-                        (item.priceToBuyer || item.price) *
-                          ( 1),
+                        sum + (item.priceToBuyer || item.price) * 1,
                       0
                     ) +
                       cartItems.reduce(

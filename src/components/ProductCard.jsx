@@ -3,9 +3,11 @@ import { Heart, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
-
   return (
-    <Link href={`/product/${product._id}`} className="no-underline">
+    <Link
+      href={product?.inStock ? `/product/${product._id}` : "#"}
+      className={`no-underline ${product?.inStock ? "" : "opacity-60"}`}
+    >
       <div className="bg-white group rounded-xl overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
         {/* Image */}
         <div className="relative">
@@ -27,26 +29,49 @@ export default function ProductCard({ product }) {
           <div className="font-semibold text-green-800 truncate">
             {product.school}
           </div>
-          <div className="text-[12px] text-gray-600 truncate">
-            {product?.uniformCategory}
+          <div className="flex items-center justify-between mt-1">
+            <div className="text-[12px] text-gray-600 truncate">
+              {product?.uniformCategory}
+            </div>
+            {!product?.inStock && (
+              <div className="text-[11px] text-gray-500">
+                <span
+                  className={`${
+                    product?.inStock
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  } text-green-600 px-2 rounded-3xl font-semibold`}
+                >
+                  {product?.inStock ? "In Stock" : "Out of Stock"}
+                </span>
+              </div>
+            )}
           </div>
-
           <div className="flex items-center justify-between mt-1">
             <span className="text-[13px] font-medium text-gray-800">
               {product.productName}
             </span>
             <div className="text-right">
               <div className="text-[14px] font-semibold text-gray-800">
-                ₹{product.priceToBuyer}
+                AMD {product.priceToBuyer}
               </div>
               {/* <div className="text-[11px] text-gray-500">
-                <span className="line-through mr-1">
-                  ₹{product.originalPrice}
-                </span>
+               
                 <span className="text-green-600 font-semibold">
-                  -{product.discount}%
+                 {product?.inStock ? "In Stock" : "Out of Stock"}
                 </span>
               </div> */}
+
+              {/* <span
+                className={`text-xs px-2 py-1 rounded-full font-semibold 
+      ${
+        product?.inStock
+          ? "bg-green-100 text-green-700"
+          : "bg-red-100 text-red-700"
+      }`}
+              >
+                {product?.inStock ? "In Stock" : "Out of Stock"}
+              </span> */}
             </div>
           </div>
 
