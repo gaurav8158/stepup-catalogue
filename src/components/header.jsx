@@ -30,37 +30,27 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="no-underline">
             <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="stepup Logo" className="h-10 w-auto" />
+              <img
+                src="/logo.png"
+                alt="stepup Logo"
+                className="h-8 md:h-10 w-auto"
+              />
             </div>
           </Link>
 
           {/* Icons */}
           <div className="flex items-center gap-4">
             {user ? (
-              // <div className="flex flex-col justify-center items-center">
-              //   <div className="inline-block bg-[#28B083] font-semibold p-1 rounded-full text-white hover:bg-green-700 transition-colors shadow">
-              //     <User className="w-5 h-5" />
-              //   </div>
-              //   <span className="text-xs font-semibold  max-w-[50px]  truncate">
-              //     {user.name || "User"}
-              //   </span>
               <ProfileDropdown user={user} />
             ) : (
               <Link
                 href="/login"
-                className="inline-block bg-[#28B083] font-semibold px-6 py-1 rounded-full text-white hover:bg-green-700 transition-colors"
+                className="inline-block bg-[#28B083] font-semibold px-4 md:px-6 py-1 text-sm md:text-base rounded-full text-white hover:bg-green-700 transition-colors"
               >
                 Login/Register
               </Link>
             )}
-            {/* <a
-              href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-orange-600 font-semibold px-6 py-1 rounded-full text-white hover:bg-orange-700 transition-colors"
-            >
-              Sell/Donate
-            </a> */}
+
             <a
               href="https://api.whatsapp.com/send?phone=971523717837&text=Hi"
               target="_blank"

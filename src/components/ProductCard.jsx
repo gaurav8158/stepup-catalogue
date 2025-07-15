@@ -33,6 +33,23 @@ export default function ProductCard({ product }) {
             <div className="text-[12px] text-gray-600 truncate">
               {product?.uniformCategory}
             </div>
+          </div>
+          <div className="flex items-center justify-between mt-1">
+            <span className="text-[13px] font-medium text-gray-800">
+              {product.productName}
+            </span>
+            <div className="text-right">
+              <div className="text-[14px] font-semibold text-gray-800">
+                AMD {product.priceToBuyer}
+              </div>
+          
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-between gap-1 mt-2">
+            <span className="border text-gray-700 px-2 py-[2px] text-[11px] rounded bg-white">
+              {product?.size}
+            </span>
             {!product?.inStock && (
               <div className="text-[11px] text-gray-500">
                 <span
@@ -46,39 +63,6 @@ export default function ProductCard({ product }) {
                 </span>
               </div>
             )}
-          </div>
-          <div className="flex items-center justify-between mt-1">
-            <span className="text-[13px] font-medium text-gray-800">
-              {product.productName}
-            </span>
-            <div className="text-right">
-              <div className="text-[14px] font-semibold text-gray-800">
-                AMD {product.priceToBuyer}
-              </div>
-              {/* <div className="text-[11px] text-gray-500">
-               
-                <span className="text-green-600 font-semibold">
-                 {product?.inStock ? "In Stock" : "Out of Stock"}
-                </span>
-              </div> */}
-
-              {/* <span
-                className={`text-xs px-2 py-1 rounded-full font-semibold 
-      ${
-        product?.inStock
-          ? "bg-green-100 text-green-700"
-          : "bg-red-100 text-red-700"
-      }`}
-              >
-                {product?.inStock ? "In Stock" : "Out of Stock"}
-              </span> */}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-1 mt-2">
-            <span className="border text-gray-700 px-2 py-[2px] text-[11px] rounded bg-white">
-              {product?.size}
-            </span>
           </div>
         </div>
       </div>{" "}

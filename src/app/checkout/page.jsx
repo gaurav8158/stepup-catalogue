@@ -271,7 +271,7 @@ const CartPage = () => {
           <div>
             <div className="bg-white p-6 sticky top-0 rounded shadow">
               <h2 className=" font-semibold text-gray-500 text-sm mb-4">
-               Items
+                Items
               </h2>
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
@@ -279,16 +279,20 @@ const CartPage = () => {
                     key={item._id || item.id}
                     className="flex items-center gap-3"
                   >
-                    <Image
-                      src={item.images ? item.images[0] : item.image}
-                      alt={item.productName || item.name}
-                      width={40}
-                      height={50}
-                    />
-                    <div>
+                    <div className="w-8 h-8 relative">
+                      <Image
+                        className="object-cover w-full h-full rounded"
+                        src={item.images ? item.images[0] : item.image}
+                        alt={item.productName || item.name}
+                        width={40}
+                        height={50}
+                      />
+                    </div>
+                    <div className="w-full">
                       <p className="text-sm font-medium truncate">
-                        {item.productName || item.name}
+                        {item.productName?.slice(0, 20) || item.name}{" "}
                       </p>
+
                       <p className="text-xs text-gray-500">
                         {item.priceToBuyer} AMD
                       </p>
@@ -303,7 +307,7 @@ const CartPage = () => {
                 Items)
               </h2>
               <div className="text-sm space-y-2">
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span>Total MRP</span>
                   <span>
                     AMD
@@ -314,7 +318,7 @@ const CartPage = () => {
                       0
                     )}
                   </span>
-                </div>
+                </div> */}
                 {/* <div className="flex justify-between text-green-600">
                   <span>Discount on MRP</span>
                   <span>

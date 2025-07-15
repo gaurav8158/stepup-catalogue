@@ -8,6 +8,7 @@ import BackBtn from "@/components/BackBtn";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function ProductDetails() {
   const { addToCart } = useCart();
@@ -62,10 +63,12 @@ export default function ProductDetails() {
           {/* Left: Image section */}
           <div>
             <div className="w-full rounded overflow-hidden">
-              <img
-                src={activeImage}
+              <Image
+                height={400}
+                width={300}
+                src={activeImage || "/loadimg.png"}
                 alt="Product"
-                className="w-full object-cover aspect-[3/4] rounded-lg border"
+                className="w-full  object-cover aspect-[3/4] rounded-lg border"
               />
             </div>
             <div className="flex gap-2 mt-4">
@@ -92,18 +95,20 @@ export default function ProductDetails() {
               {activeProduct?.productName}
             </h1>
 
-            <div>
-              <span
-                className={`text-xs px-2 py-1 rounded-full font-semibold 
+            {activeProduct?.inStock && (
+              <div>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full font-semibold 
       ${
         activeProduct?.inStock
           ? "bg-green-100 text-green-700"
           : "bg-red-100 text-red-700"
       }`}
-              >
-                {activeProduct?.inStock ? "In Stock" : "Out of Stock"}
-              </span>
-            </div>
+                >
+                  {activeProduct?.inStock ? "In Stock" : ""}
+                </span>
+              </div>
+            )}
 
             {/* Rating */}
             {/* <div className="flex items-center text-sm mt-2 text-green-700 font-medium">
