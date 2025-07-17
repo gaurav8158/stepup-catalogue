@@ -16,11 +16,12 @@ const OrderCard = ({ order, fetchOrders }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 space-y-6 hover:shadow-xl transition-shadow duration-300">
       {/* Header Section */}
-      <div className="flex flex-col gap-3 sm:flex-row justify-between items-start">
+      <div className="flex flex-col gap-3 sm:flex-row items-start">
         <div className="flex flex-col gap-1">
-          <span className="font-bold text-lg text-gray-900">
-            Order No. #{order._id}
+          <span className="font-semibold text-sm md:text-lg text-gray-900">
+            Order No. {order._id}
           </span>
+
           <span className="text-sm text-gray-500">
             Order Date: {formatDate(order.orderDate)}
           </span>

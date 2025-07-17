@@ -88,7 +88,7 @@ const OrdersPage = () => {
         </div>
         <Link href="/user/add">
           <button className="text-sm flex gap-2 items-center text-green-700 border border-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold ">
-            <Plus className="w-4 h-4" /> Sell/Donate Product
+             Sell/Donate Uniform
           </button>{" "}
         </Link>
       </div>

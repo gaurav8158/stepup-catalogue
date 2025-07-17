@@ -15,17 +15,18 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 space-y-6 hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white  rounded-xl shadow-lg border border-gray-100 p-6 space-y-6 hover:shadow-xl transition-shadow duration-300">
       {/* Header Section */}
-      <div className="flex  flex-col gap-3 sm:flex-row justify-between items-start">
-        <div className="flex flex-col gap-1">
+      <div className="flex  flex-col gap-3 sm:flex-row  items-start">
+        <div className="flex flex-col  gap-1">
           <span className="font-bold text-sm md:text-lg text-gray-900">
-            Order No. #{order._id}
+            Product Code : {order?.productcode}
           </span>
 
           <span className="text-sm text-gray-500">
             Order Date: {formatDate(order?.createdAt)}
           </span>
+          <span className="ext-sm text-gray-500">Order No. {order._id}</span>
         </div>
         <div className="flex gap-2 flex-wrap items-center">
           {order.isConvey === "Pending" ? (
@@ -40,7 +41,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
             ""
           )}
           <span
-            className={`text-sm font-medium px-4 py-2 rounded-full border
+            className={`text-sm font-bold px-4 py-2 rounded-full border
     ${
       order.sellerProductStage === "Under Review"
         ? "bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 border-orange-200"
@@ -48,15 +49,24 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
         ? "bg-gradient-to-r from-green-100 to-green-50 text-green-700 border-green-200"
         : order.sellerProductStage === "Reject"
         ? "bg-gradient-to-r from-red-100 to-red-50 text-red-700 border-red-200"
-        : "bg-gray-100 text-gray-600 border-gray-300"
+        : "bg-red-500 hover:bg-red-600 text-white border-transparent shadow-sm transition duration-200"
     }
   `}
           >
-            {order.sellerProductStage}
+            {order.sellerProductStage === "Reject By Seller"
+              ? "Price Rejected by Seller"
+              : order.sellerProductStage}
           </span>
         </div>
       </div>
-
+      {order.sellerProductStage === "Reject By Seller" && (
+        <div className="w-full">
+          <span className="bg-red-100 inline-block rounded-xl px-4  text-xs sm:text-sm py-2 text-red-800">
+            As per agreed T&C, please get the Uniform picked up from our office
+            within two working days.
+          </span>
+        </div>
+      )}
       {/* Seller Information Section */}
       <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
         <div className="flex items-start gap-3">
@@ -65,7 +75,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
           </div>
           <div className="flex-1 space-y-1">
             <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">
-              Seller Address
+              Pickup Address
             </h4>
             <div className="space-y-1 text-sm text-gray-700">
               <p className="font-medium">{order.senderName}</p>

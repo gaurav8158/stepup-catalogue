@@ -1,15 +1,15 @@
-function formatDateTime(isoString) {
+export function formatDateTime(isoString) {
   const date = new Date(isoString);
 
-  const options = {
-    year: 'numeric',
-    month: 'long', // use '2-digit' or 'short' for different formats
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true, // or false for 24-hour format
-  };
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = date.toLocaleString('default', { month: 'long' }); // "July"
+  const year = date.getFullYear();
 
-  return date.toLocaleString(undefined, options);
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12 || 12; // convert 0 to 12 for 12-hour format
+
+  return `${day} ${month}, ${year} ${hours}:${minutes} ${ampm}`;
 }

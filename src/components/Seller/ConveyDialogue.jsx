@@ -64,7 +64,7 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success(data.message);
+        toast.success("This order has been rejected by Seller");
         fetchOrders();
         setOpen(false);
       } else {
@@ -92,7 +92,6 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
             <p className="text-sm text-gray-700">
               Offered Seling Price :<strong> AMD {amount}</strong>
             </p>
-          
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

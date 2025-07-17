@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import toast from "react-hot-toast";
+import { formatDateTime } from "@/utils/formateTime";
 const SupportPage = () => {
   const [queryText, setQueryText] = useState("");
   const [queries, setQueries] = useState([]);
@@ -161,7 +162,7 @@ const SupportPage = () => {
                           >
                             <p>{msg.message}</p>
                             <p className="text-xs text-gray-500 mt-1 text-right">
-                              {new Date(msg.timestamp).toLocaleString()}
+                              {formatDateTime(msg.timestamp)}
                             </p>
                           </div>
                         ))}
