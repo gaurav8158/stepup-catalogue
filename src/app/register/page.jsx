@@ -1,6 +1,7 @@
 "use client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const RegisterUserForm = () => {
@@ -11,25 +12,51 @@ const RegisterUserForm = () => {
     address: "",
     password: "",
   });
-
   const router = useRouter();
-
+  // const [allcountry, setAllcountry] = useState([]);
+  // useEffect(() => {
+  //   fetchcountry();
+  // }, []);
+  // const fetchcountry = async () => {
+  //   const data = await axios.get(
+  //     "https://restcountries.com/v3.1/all?fields=name,idd"
+  //   );
+  //   console.log(data);
+  //   setAllcountry(data?.data);
+  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  function isValidUaeMobile(mobile) {
+    const regex = /^[0-9]{9}$/;
+    return regex.test(mobile);
+  }
+
+  // Usage
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = process.env.NEXT_PUBLIC_BASE_URL;
-
+    if (!isValidUaeMobile(formData.mobile)) {
+      toast.error("Invalid mobile number. Must be 9 digits.");
+    }
+    const Newmobile = "971" + formData.mobile;
+    console.log(formData);
+    return;
     try {
       const res = await fetch(`${url}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          mobile: Newmobile,
+          email: formData.email,
+          address: formData.address,
+          password: formData.password,
+        }),
       });
 
       const data = await res.json();
@@ -96,14 +123,18 @@ const RegisterUserForm = () => {
             <label className="block text-sm font-medium text-gray-900">
               Mobile <span className="text-red-600">*</span>
             </label>
-            <input
-              type="tel"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-              required
-              className="mt-2 w-full custom-input-class"
-            />
+            <div className=" w-full relative">
+              <p className="absolute left-2 top-4">+971</p>
+              <input
+                type="tel"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                required
+                className="mt-2 w-full custom-input-class "
+                style={{ paddingLeft: "50px" }}
+              />
+            </div>
           </div>
 
           {/* Email */}

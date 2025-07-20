@@ -68,7 +68,7 @@ export default function ProductDetails() {
                 width={300}
                 src={activeImage || "/loadimg.png"}
                 alt="Product"
-                className="w-full  object-cover aspect-[3/4] rounded-lg border"
+                className="w-full  object-cover aspect-1 rounded-lg border"
               />
             </div>
             <div className="flex gap-2 mt-4">

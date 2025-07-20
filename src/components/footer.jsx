@@ -1,7 +1,4 @@
-import {
-  FaFacebookF,
-  FaYoutube,
-} from "react-icons/fa";
+import { FaFacebookF, FaYoutube } from "react-icons/fa";
 import Link from "next/link";
 
 const Footer = () => {
@@ -67,16 +64,16 @@ const Footer = () => {
           <h2 className="text-lg font-semibold mb-3">Things To Do</h2>
           <ul className="space-y-2 text-gray/90">
             <li>
+              <a href="/" className="hover:underline">
+                Buy Uniforms
+              </a>
+            </li>
+            <li>
               <a
                 href="https://api.whatsapp.com/send/?phone=971523717837&text=Hi&type=phone_number&app_absent=0"
                 className="hover:underline"
               >
-                Sell Uniforms
-              </a>
-            </li>
-            <li>
-              <a href="/" className="hover:underline">
-                Buy Uniforms
+                Sell/Donate Uniforms
               </a>
             </li>
             <li>

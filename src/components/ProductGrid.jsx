@@ -87,9 +87,9 @@ export default function ProductGrid() {
   );
 
   return (
-    <div>
+    <div className="">
       {/* Top Bar */}
-      <div className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="container mx-auto p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:max-w-md">
           {/* Search Icon */}
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />

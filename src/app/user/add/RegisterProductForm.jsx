@@ -652,6 +652,84 @@ const RegisterProductForm = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
+{/* <div className="md:col-span-2">
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Upload Images (Max 4) *
+  </label>
+
+
+  <div className="flex flex-col sm:flex-row gap-2">
+    <input
+      type="file"
+      accept="image/*"
+      disabled={values?.images?.length >= 4}
+      onChange={async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("product", file);
+
+        try {
+          const res = await fetch(`${BASE_URL}/images/upload`, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) throw new Error("Upload failed");
+
+          const data = await res.json(); // expect { url: "https://..." }
+          const imageUrl = data.url;
+
+          if (values.images.length < 4) {
+            setFieldValue("images", [...values.images, imageUrl]);
+          }
+        } catch (err) {
+          console.error("Image upload error:", err);
+          alert("Failed to upload image");
+        }
+
+        // reset the file input value so user can re-upload same file if needed
+        e.target.value = "";
+      }}
+      className="flex-1 text-sm border border-gray-300 rounded p-2 bg-white"
+    />
+  </div>
+
+  <p className="text-green-500 mt-1">
+    *You can upload a maximum of 4 pictures.
+  </p>
+
+ 
+  {values?.images?.length > 0 && (
+    <div className="flex gap-3 mt-4 flex-wrap">
+      {values.images.map((url, idx) => (
+        <div key={idx} className="relative">
+          <img
+            src={url}
+            alt={`Uploaded ${idx + 1}`}
+            className="w-20 h-20 object-cover border rounded"
+          />
+          <button
+            type="button"
+            onClick={() =>
+              handleRemoveImage(idx, setFieldValue, values.images)
+            }
+            className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <ErrorMessage
+    name="images"
+    component="div"
+    className="text-red-500 text-sm mt-1"
+  />
+</div> */}
 
                 <div className="md:col-span-2 flex justify-end">
                   <button

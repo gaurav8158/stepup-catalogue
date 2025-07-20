@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
         {/* Info */}
         <div className="p-3 space-y-1">
           <div className="font-semibold text-green-800 truncate">
-            {product.school}
+            {product.schoolName}
           </div>
           <div className="flex items-center justify-between mt-1">
             <div className="text-[12px] text-gray-600 truncate">
