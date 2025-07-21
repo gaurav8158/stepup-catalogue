@@ -5,33 +5,38 @@ import ProductCard from "./ProductCard";
 import { FilterDrawer } from "./filterdrawer";
 import { SortDrawer } from "./sortdrawer";
 import { useEffect, useState } from "react";
+import { Skeleton } from "./ui/skeleton";
 
 export default function ProductGrid() {
   const [allProducts, setAllProducts] = useState([]); // master list
   const [filteredProducts, setFilteredProducts] = useState([]); // for filter + search
   const [sortBy, setSortBy] = useState("recommended");
   const [searchText, setSearchText] = useState("");
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchSchoolDress();
   }, []);
 
   const fetchSchoolDress = async () => {
+    setLoading(true);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/products/catalogue`
       );
 
       if (!res.ok) {
+        setLoading(false);
         throw new Error("Failed to fetch school dress data");
       }
 
       const resData = await res.json();
-      console.log(resData);
+      setLoading(false);
+
       setAllProducts(resData.products);
       setFilteredProducts(sortProducts(resData.products, sortBy));
     } catch (error) {
       console.error("Fetch error:", error);
+      setLoading(false);
     }
   };
 
@@ -47,18 +52,32 @@ export default function ProductGrid() {
 
     const result = allProducts.filter((product) => {
       const matchesSchool =
-        schoolName.length === 0 || schoolName.includes(product.schoolName);
-      const matchesCategory =
-        uniformCategory?.length === 0 ||
-        uniformCategory?.includes(product.uniformCategory);
+        schoolName.length === 0 ||
+        schoolName
+          .map((name) => name.toLowerCase())
+          .includes(product.schoolName.toLowerCase());
+      // const matchesCategory =
+      //   uniformCategory?.length === 0 ||
+      //   uniformCategory
+      //     .map((cat) => cat.toLowerCase())
+      //     .includes(product.uniformCategory.toLowerCase());
+
+      // const matchesCategory =
+      //   uniformCategory?.length === 0 ||
+      //   uniformCategory?.includes(product.uniformCategory);
       const matchesGender =
         gender.length === 0 || gender.includes(product.gender);
- 
-      console.log(typeof product.size, product.size);
-      const matchesSize =
-        sizes.length === 0 || sizes.map(String).includes(String(product.size));
 
-      return matchesSchool && matchesCategory && matchesGender && matchesSize;
+      console.log(typeof product.size, product.size);
+      //       const matchesSize =
+      //         sizes.length === 0 || sizes.map(String).includes(String(product.size));
+      // sizes
+      const matchesSize =
+        sizes.length === 0 ||
+        sizes
+          .map((size) => String(size).toLowerCase())
+          .includes(String(product.size).toLowerCase());
+      return matchesSchool && matchesGender && matchesSize;
     });
 
     setFilteredProducts(sortProducts(result, sortBy));
@@ -109,7 +128,17 @@ export default function ProductGrid() {
 
       {/* Product Grid */}
       <div className="p-2 sm:p-4 container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
-        {filteredBySearch.length > 0 ? (
+        {loading ? (
+          [...Array(12)].map((_, idx) => (
+            <div key={idx} className="flex flex-col space-y-3">
+              <Skeleton className="h-[125px] w-full sm:w-[250px] rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full sm:w-[250px]" />
+                <Skeleton className="h-4 w-[80%] sm:w-[200px]" />
+              </div>
+            </div>
+          ))
+        ) : filteredBySearch.length > 0 ? (
           filteredBySearch.map((item) => (
             <ProductCard key={item._id} product={item} />
           ))

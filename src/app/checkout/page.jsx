@@ -107,7 +107,10 @@ const CartPage = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  function isValidUaeMobile(mobile) {
+    const regex = /^[0-9]{9}$/;
+    return regex.test(mobile);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     const storedUser = localStorage.getItem("user");
@@ -119,8 +122,12 @@ const CartPage = () => {
     if (!form.policyOptIn) {
       toast.error("please Agree to the Terms and Conditions");
     }
-    toast.success("Order Placed Successfully!");
-    console.log("Form Data:", form);
+    if (!isValidUaeMobile(form.mobile)) {
+      toast.error("Invalid mobile number. Must be 9 digits.");
+    }
+
+    const buyerMobile = "+971" + form.mobile;
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/order/place`,
@@ -128,7 +135,7 @@ const CartPage = () => {
           userId: JSON.parse(storedUser).id,
           buyerName: form.fullName,
           buyerEmail: form.email,
-          buyerMobile: form.mobile,
+          buyerMobile: buyerMobile,
           buyerAddress: form.address,
           orderDate: new Date(),
           comment: form.comment,
@@ -136,12 +143,14 @@ const CartPage = () => {
         }
       );
       console.log("Order Response:", response.data);
+      toast.success(response.data?.message || "Order Placed successfully");
     } catch (error) {
       console.log(error);
     }
-    console.log("Cart Items:", cartItems);
-    setForm({});
     localStorage.removeItem("cart");
+
+    setForm({});
+
     router.push("/");
   };
 
@@ -204,15 +213,19 @@ const CartPage = () => {
                   required
                   className="custom-input-class w-full"
                 />
-                <input
-                  type="tel"
-                  name="mobile"
-                  placeholder="Mobile Number"
-                  value={form.mobile}
-                  onChange={handleChange}
-                  required
-                  className="custom-input-class w-full"
-                />
+                <div className=" w-full relative">
+                  <p className="absolute left-2 top-4">+971</p>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    placeholder="Mobile Number"
+                    value={form.mobile}
+                    onChange={handleChange}
+                    required
+                    className="mt-2 w-full custom-input-class "
+                    style={{ paddingLeft: "50px" }}
+                  />
+                </div>
                 <input
                   type="tel"
                   name="email"
@@ -307,44 +320,10 @@ const CartPage = () => {
                 Items)
               </h2>
               <div className="text-sm space-y-2">
-                {/* <div className="flex justify-between">
-                  <span>Total MRP</span>
-                  <span>
-                    AED
-                    {cartItems.reduce(
-                      (sum, item) =>
-                        sum +
-                        (item.mrp || item.priceToBuyer) * (item.quantity || 1),
-                      0
-                    )}
-                  </span>
-                </div> */}
-                {/* <div className="flex justify-between text-green-600">
-                  <span>Discount on MRP</span>
-                  <span>
-                    - ₹
-                    {cartItems.reduce(
-                      (sum, item) =>
-                        sum + (item.discount || 0) * (item.quantity || 1),
-                      0
-                    )}
-                  </span>
-                </div> */}
-                {/* <div className="flex justify-between">
-                  <span>Platform Fee</span>
-                  <span>
-                    ₹
-                    {cartItems.reduce(
-                      (sum, item) => sum + (item.platformFee || 0),
-                      0
-                    )}
-                  </span>
-                </div> */}
                 <hr className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
                   <span>Total Amount</span>
                   <span>
-                    
                     {cartItems.reduce(
                       (sum, item) =>
                         sum + (item.priceToBuyer || item.price) * 1,
@@ -353,7 +332,8 @@ const CartPage = () => {
                       cartItems.reduce(
                         (sum, item) => sum + (item.platformFee || 0),
                         0
-                      )} AED
+                      )}{" "}
+                    AED
                   </span>
                 </div>
               </div>

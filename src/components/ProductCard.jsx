@@ -34,21 +34,24 @@ export default function ProductCard({ product }) {
               {product?.uniformCategory}
             </div>
           </div>
-          <div className="flex items-center justify-between mt-1">
+          <div className="flex items-center justify-between mt-1 gap-3">
             <span className="text-[13px] font-medium text-gray-800">
               {product.productName}
             </span>
             <div className="text-right">
               <div className="text-[13px] font-semibold text-gray-800">
-                {product.priceToBuyer} AED
+             100   {product.priceToBuyer} AED
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap justify-between gap-1 mt-2">
-            <span className="border text-gray-700 px-2 py-[2px] text-[11px] rounded bg-white">
-              {product?.size}
-            </span>
+            <div className="flex flex-col">
+              <span>Size</span>{" "}
+              <span className="border bg-green-700 text-gray-50 px-2 py-[2px] text-[11px] rounded ">
+                {product?.size}
+              </span>{" "}
+            </div>
             {!product?.inStock && (
               <div className="text-[11px] text-gray-500">
                 <span

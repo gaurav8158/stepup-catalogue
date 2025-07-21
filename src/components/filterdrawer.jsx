@@ -15,12 +15,12 @@ import { SlidersHorizontal } from "lucide-react";
 export function FilterDrawer({ onApply }) {
   const [filters, setFilters] = React.useState({
     schoolName: ["DPS", "St. Xavier's", "GD Goenka", "Ryan Intl."],
-    uniformCategory: ["Core Uniform", "PE Uniform", "Winterwear"],
+    // uniformCategory: ["Core Uniform", "PE Uniform", "Winterwear"],
     gender: ["Boy", "Girl", "Unisex"],
 
     sizes: [
-      2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
-      40,
+      2, 4, 6,7, 8, 10, 12, 14, 16, 18,19, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
+      40,"M","XS","28WX24L","2-3","156","158"
     ],
   });
   const filterKeys = Object.keys(filters);

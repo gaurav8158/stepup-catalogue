@@ -41,9 +41,8 @@ const RegisterUserForm = () => {
     if (!isValidUaeMobile(formData.mobile)) {
       toast.error("Invalid mobile number. Must be 9 digits.");
     }
-    const Newmobile = "971" + formData.mobile;
-    console.log(formData);
-    return;
+    const Newmobile = "+971" + formData.mobile;
+ 
     try {
       const res = await fetch(`${url}/users/register`, {
         method: "POST",

@@ -76,7 +76,13 @@ const RegisterProductForm = () => {
     senderName: Yup.string()
       .min(2, "Name must be at least 2 characters")
       .required("Name is required"),
-    senderMobile: Yup.string().required("Mobile number is required"),
+    senderMobile: Yup.string()
+      .required("Mobile number is required")
+      .matches(
+        /^(?:50|51|52|54|55|56|58)\d{7}$/,
+        "Enter a valid mobile number"
+      ),
+
     senderAddress: Yup.string()
       .min(10, "Address must be at least 10 characters")
       .required("Address is required"),
@@ -196,8 +202,9 @@ const RegisterProductForm = () => {
       const payload = {
         ...values,
         userId: user.id,
+        senderMobile: "+971" + values.senderMobile,
       };
-
+     
       const res = await fetch(`${BASE_URL}/products/register`, {
         method: "POST",
         headers: {
@@ -806,12 +813,17 @@ const RegisterProductForm = () => {
                   >
                     Mobile Number *
                   </label>
-                  <Field
-                    id="senderMobile"
-                    name="senderMobile"
-                    placeholder="Enter 10-digit mobile number"
-                    className="custom-input-class"
-                  />
+                  <div className=" w-full relative">
+                    <p className="absolute left-2 top-4">+971</p>
+                    <Field
+                      id="senderMobile"
+                      name="senderMobile"
+                      placeholder="Enter 10-digit mobile number"
+                      className="mt-2 w-full custom-input-class"
+                      style={{ paddingLeft: "50px" }}
+                    />
+                  </div>
+
                   <ErrorMessage
                     name="senderMobile"
                     component="div"

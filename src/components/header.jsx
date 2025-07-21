@@ -33,7 +33,7 @@ export default function Header() {
               <img
                 src="/logo.png"
                 alt="stepup Logo"
-                className="h-8 md:h-10 w-auto"
+                className="h-9 md:h-10 w-auto"
               />
             </div>
           </Link>
