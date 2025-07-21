@@ -294,7 +294,7 @@ const CartPage = () => {
                       </p>
 
                       <p className="text-xs text-gray-500">
-                        {item.priceToBuyer} AMD
+                        {item.priceToBuyer} AED
                       </p>
                     </div>
                   </div>
@@ -310,7 +310,7 @@ const CartPage = () => {
                 {/* <div className="flex justify-between">
                   <span>Total MRP</span>
                   <span>
-                    AMD
+                    AED
                     {cartItems.reduce(
                       (sum, item) =>
                         sum +
@@ -344,7 +344,7 @@ const CartPage = () => {
                 <div className="flex justify-between font-semibold text-base">
                   <span>Total Amount</span>
                   <span>
-                    AMD
+                    
                     {cartItems.reduce(
                       (sum, item) =>
                         sum + (item.priceToBuyer || item.price) * 1,
@@ -353,7 +353,7 @@ const CartPage = () => {
                       cartItems.reduce(
                         (sum, item) => sum + (item.platformFee || 0),
                         0
-                      )}
+                      )} AED
                   </span>
                 </div>
               </div>

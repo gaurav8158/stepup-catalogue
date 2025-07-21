@@ -119,7 +119,7 @@ export default function ProductDetails() {
 
             {/* Price */}
             <div className="mt-3 text-2xl font-bold text-green-700">
-              AMD {activeProduct?.priceToBuyer}{" "}
+               {activeProduct?.priceToBuyer}{" "} AED
             </div>
 
             {/* Condition */}

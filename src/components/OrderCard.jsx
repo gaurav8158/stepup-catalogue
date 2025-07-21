@@ -109,7 +109,7 @@ const OrderCard = ({ order, fetchOrders }) => {
                     <div className="flex flex-col mt-2">
                       <span className="text-sm text-gray-500">Item Price</span>
                       <span className="text-lg font-bold text-gray-900">
-                        AMD {item.price}
+                         {item.price} AED
                       </span>
                     </div>
                   )}
@@ -131,7 +131,7 @@ const OrderCard = ({ order, fetchOrders }) => {
             Total Amount:
           </span>
           <span className="text-2xl font-bold text-green-600">
-            AMD {order.totalAmount}
+             {order.totalAmount} AED
           </span>
         </div>
       </div>

@@ -174,7 +174,7 @@ const CartPage = () => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Total MRP</span>
-                <span>AMD {totalMRP}</span>
+                <span>{totalMRP} AED</span>
               </div>
               {/* <div className="flex justify-between">
                 <span>Discount on MRP</span>
@@ -188,7 +188,7 @@ const CartPage = () => {
               <hr />
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total Amount</span>
-                <span>AMD {totalAmount}</span>
+                <span>{totalAmount} AED</span>
               </div>
               <hr />
 

@@ -5,17 +5,17 @@ import Link from "next/link";
 export default function ProductCard({ product }) {
   return (
     <Link
-      href={product?.inStock ? `/product/${product._id}` : "#"}
+      href={product?.inStock ? `/product/${product._id}` : ""}
       className={`no-underline ${product?.inStock ? "" : "opacity-60"}`}
     >
-      <div className="bg-white group rounded-xl overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
+      <div className="bg-white group rounded-md overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
         {/* Image */}
         <div className="relative">
           <img
             src={product.images[0]}
             // src="/Dress.png"
             alt={product.images[0]}
-            className="w-full aspect-[3/4] object-cover"
+            className="w-full aspect-[3/4] max-h-[300px] object-cover"
           />
 
           {/* Wishlist */}
@@ -39,10 +39,9 @@ export default function ProductCard({ product }) {
               {product.productName}
             </span>
             <div className="text-right">
-              <div className="text-[14px] font-semibold text-gray-800">
-                AMD {product.priceToBuyer}
+              <div className="text-[13px] font-semibold text-gray-800">
+                {product.priceToBuyer} AED
               </div>
-          
             </div>
           </div>
 

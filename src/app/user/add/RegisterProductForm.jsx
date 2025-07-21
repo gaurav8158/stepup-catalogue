@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import TermsAndConditionsDialog from "./TermsAndConditionsDialog";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Cloudy, Upload, X } from "lucide-react";
 
 const RegisterProductForm = () => {
   const [step, setStep] = useState(1);
@@ -244,8 +245,8 @@ const RegisterProductForm = () => {
   return (
     <div className="max-w-5xl mx-auto">
       {quotes && (
-        <div className="my-6 rounded-xl bg-blue-50 border border-blue-200 p-6 shadow-sm">
-          <h2 className="md:text-lg font-semibold text-blue-800 mb-2">
+        <div className="my-6 rounded-xl bg-blue-50 border border-blue-200 p-2 sm:p-6 shadow-sm">
+          <h2 className="text-sm md:text-lg font-semibold text-blue-800 mb-2">
             {quotes}
           </h2>
         </div>
@@ -562,9 +563,9 @@ const RegisterProductForm = () => {
                       alt="humanity"
                       height={28}
                       width={28}
-                      className="min-w-[28px]"
+                      className="h-7 w-7 sm:h-8 sm:w-8 "
                     />
-                    <p className="text-lg md:text-xl font-semibold text-orange-600">
+                    <p className="text-sm md:text-xl font-semibold text-orange-600">
                       Be the Helping Hands for Humanity
                     </p>
                   </div>
@@ -593,7 +594,7 @@ const RegisterProductForm = () => {
                 </div>
 
                 {/* Image URL input */}
-                <div className="md:col-span-2">
+                {/* <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Image URLs *
                   </label>
@@ -651,85 +652,114 @@ const RegisterProductForm = () => {
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
+                </div> */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Images (Max 4){" "}
+                    <span className="text-red-500">*</span>
+                  </label>
+
+                  <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center border-2 border-dashed border-gray-300 rounded-2xl bg-white transition hover:border-green-500 w-full max-w-md">
+                    <Cloudy />
+
+                    <p className="text-sm font-medium text-gray-700">
+                      Choose a file or drag & drop it here
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      JPEG, JPG, and PNG formats
+                    </p>
+
+                    <label
+                      htmlFor="image-upload"
+                      className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-green-700 cursor-pointer mt-2"
+                    >
+                      <Upload />
+                      Browse File
+                      <input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        disabled={values?.images?.length >= 4}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+
+                          const formData = new FormData();
+                          formData.append("product", file);
+
+                          try {
+                            const res = await fetch(
+                              `${BASE_URL}/images/upload`,
+                              {
+                                method: "POST",
+                                body: formData,
+                              }
+                            );
+
+                            if (!res.ok) throw new Error("Upload failed");
+
+                            const data = await res.json(); // expect { url: "https://..." }
+                            const imageUrl = data.url;
+
+                            if (values.images.length < 4) {
+                              setFieldValue("images", [
+                                ...values.images,
+                                imageUrl,
+                              ]);
+                            }
+                          } catch (err) {
+                            console.error("Image upload error:", err);
+                            alert("Failed to upload image");
+                          }
+
+                          e.target.value = "";
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  <p className="text-green-600 text-sm mt-1">
+                    *You can upload a maximum of 4 images.
+                  </p>
+
+                  {values?.images?.length > 0 && (
+                    <div className="flex flex-wrap  gap-4 mt-4">
+                      {values.images.map((url, idx) => (
+                        <div
+                          key={idx}
+                          className="relative h-24 w-24  sm:h-40 sm:w-40 group"
+                        >
+                          <img
+                            src={url}
+                            alt={`Uploaded ${idx + 1}`}
+                            className="w-full h-full  object-cover rounded-lg shadow"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleRemoveImage(
+                                idx,
+                                setFieldValue,
+                                values.images
+                              )
+                            }
+                            className="absolute top-1 right-1 bg-gray-200 cursor-pointer text-gray-600 p-[2px] rounded-full w-5 h-5 text-xs flex items-center justify-center transition"
+                            title="Remove"
+                          >
+                            <X />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <ErrorMessage
+                    name="images"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
-{/* <div className="md:col-span-2">
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    Upload Images (Max 4) *
-  </label>
-
-
-  <div className="flex flex-col sm:flex-row gap-2">
-    <input
-      type="file"
-      accept="image/*"
-      disabled={values?.images?.length >= 4}
-      onChange={async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append("product", file);
-
-        try {
-          const res = await fetch(`${BASE_URL}/images/upload`, {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!res.ok) throw new Error("Upload failed");
-
-          const data = await res.json(); // expect { url: "https://..." }
-          const imageUrl = data.url;
-
-          if (values.images.length < 4) {
-            setFieldValue("images", [...values.images, imageUrl]);
-          }
-        } catch (err) {
-          console.error("Image upload error:", err);
-          alert("Failed to upload image");
-        }
-
-        // reset the file input value so user can re-upload same file if needed
-        e.target.value = "";
-      }}
-      className="flex-1 text-sm border border-gray-300 rounded p-2 bg-white"
-    />
-  </div>
-
-  <p className="text-green-500 mt-1">
-    *You can upload a maximum of 4 pictures.
-  </p>
-
- 
-  {values?.images?.length > 0 && (
-    <div className="flex gap-3 mt-4 flex-wrap">
-      {values.images.map((url, idx) => (
-        <div key={idx} className="relative">
-          <img
-            src={url}
-            alt={`Uploaded ${idx + 1}`}
-            className="w-20 h-20 object-cover border rounded"
-          />
-          <button
-            type="button"
-            onClick={() =>
-              handleRemoveImage(idx, setFieldValue, values.images)
-            }
-            className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1"
-          >
-            ×
-          </button>
-        </div>
-      ))}
-    </div>
-  )}
-
-  <ErrorMessage
-    name="images"
-    component="div"
-    className="text-red-500 text-sm mt-1"
-  />
-</div> */}
 
                 <div className="md:col-span-2 flex justify-end">
                   <button

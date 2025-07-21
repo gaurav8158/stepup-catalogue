@@ -36,7 +36,7 @@ const Cartitem = ({ item, removeItem, updateQuantity }) => {
         </div>
 
         <div className="mt-2">
-          <p className="text-lg font-bold text-black">AMD {item.priceToBuyer}</p>
+          <p className="text-lg font-bold text-black">{item.priceToBuyer} AED </p>
         </div>
       </div>
     </div>

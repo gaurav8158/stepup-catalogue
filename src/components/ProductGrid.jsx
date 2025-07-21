@@ -53,9 +53,7 @@ export default function ProductGrid() {
         uniformCategory?.includes(product.uniformCategory);
       const matchesGender =
         gender.length === 0 || gender.includes(product.gender);
-      // const matchesItemCategory =
-      //   itemCategory?.length === 0 ||
-      //   itemCategory?.includes(product.itemCategory);
+ 
       console.log(typeof product.size, product.size);
       const matchesSize =
         sizes.length === 0 || sizes.map(String).includes(String(product.size));
@@ -89,7 +87,7 @@ export default function ProductGrid() {
   return (
     <div className="">
       {/* Top Bar */}
-      <div className="container mx-auto p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="container mx-auto p-2 sm:p-4  flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:max-w-md">
           {/* Search Icon */}
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
@@ -110,7 +108,7 @@ export default function ProductGrid() {
       </div>
 
       {/* Product Grid */}
-      <div className="p-4 container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="p-2 sm:p-4 container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
         {filteredBySearch.length > 0 ? (
           filteredBySearch.map((item) => (
             <ProductCard key={item._id} product={item} />

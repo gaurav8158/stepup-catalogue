@@ -90,7 +90,7 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
           <AlertDialogTitle>Do You Accept Our Offered Price?</AlertDialogTitle>
           <AlertDialogDescription>
             <p className="text-sm text-gray-700">
-              Offered Seling Price :<strong> AMD {amount}</strong>
+              Offered Seling Price :<strong>  {amount} AED</strong>
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
