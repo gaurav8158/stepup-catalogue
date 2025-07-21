@@ -40,7 +40,7 @@ export default function ProductCard({ product }) {
             </span>
             <div className="text-right">
               <div className="text-[13px] font-semibold text-gray-800">
-             100   {product.priceToBuyer} AED
+            {product.priceToBuyer} AED
               </div>
             </div>
           </div>
