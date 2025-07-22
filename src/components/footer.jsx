@@ -70,7 +70,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                href="https://api.whatsapp.com/send/?phone=971523717837&text=Hi&type=phone_number&app_absent=0"
+                href="/user/add"
                 className="hover:underline"
               >
                 Sell/Donate Uniforms

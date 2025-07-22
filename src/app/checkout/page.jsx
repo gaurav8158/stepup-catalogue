@@ -24,6 +24,7 @@ const CartPage = () => {
   });
   const [quotes, setQuotes] = useState("");
   const [cartItems, setCartItems] = useState([]);
+    const { clearCart } = useCart();
   useEffect(() => {
     if (!cart || cart.length === 0) {
       setCartItems([]);
@@ -84,7 +85,9 @@ const CartPage = () => {
       setForm({
         fullName: user?.name || "",
         email: user.email || "",
-        mobile: user?.mobile || "",
+        mobile: (user?.mobile || "").replace(/^(\+971)/, ""),
+
+        // mobile: user?.mobile || "",
         address: user?.address || "",
         comment: "",
         policyOptIn: false,
@@ -124,6 +127,7 @@ const CartPage = () => {
     }
     if (!isValidUaeMobile(form.mobile)) {
       toast.error("Invalid mobile number. Must be 9 digits.");
+      return;
     }
 
     const buyerMobile = "+971" + form.mobile;
@@ -147,6 +151,7 @@ const CartPage = () => {
     } catch (error) {
       console.log(error);
     }
+    clearCart();
     localStorage.removeItem("cart");
 
     setForm({});
