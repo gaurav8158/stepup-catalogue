@@ -1,5 +1,3 @@
-// components/ProductCard.jsx
-import { Heart, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
@@ -10,18 +8,12 @@ export default function ProductCard({ product }) {
     >
       <div className="bg-white group rounded-md overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
         {/* Image */}
-        <div className="relative">
+        <div className="relative overflow-hidden rounded-md">
           <img
             src={product.images[0]}
-            // src="/Dress.png"
             alt={product.images[0]}
-            className="w-full aspect-[3/4] max-h-[300px] object-cover"
+            className="w-full aspect-[3/4] max-h-[240px] object-cover transition-transform duration-300 ease-in-out hover:scale-105"
           />
-
-          {/* Wishlist */}
-          {/* <button className="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow">
-            <Heart size={16} className="text-gray-600" />
-          </button> */}
         </div>
 
         {/* Info */}
@@ -40,18 +32,19 @@ export default function ProductCard({ product }) {
             </span>
             <div className="text-right">
               <div className="text-[13px] font-semibold text-gray-800">
-            {product.priceToBuyer} AED
+                {product.priceToBuyer} AED
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap justify-between gap-1 mt-2">
-            <div className="flex flex-col">
-              <span>Size</span>{" "}
-              <span className="border bg-green-700 text-gray-50 px-2 py-[2px] text-[11px] rounded ">
+            <div className="flex items-center gap-2 text-sm text-gray-700">
+              <span className="font-medium">Size</span>
+              <span className="bg-green-600 text-white px-2 py-[2px] rounded text-xs">
                 {product?.size}
-              </span>{" "}
+              </span>
             </div>
+
             {!product?.inStock && (
               <div className="text-[11px] text-gray-500">
                 <span

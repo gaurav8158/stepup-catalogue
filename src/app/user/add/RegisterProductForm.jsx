@@ -81,7 +81,8 @@ const RegisterProductForm = () => {
       .matches(
         /^(?:50|51|52|54|55|56|58)\d{7}$/,
         "Enter a valid mobile number"
-      ),
+      )
+      ,
 
     senderAddress: Yup.string()
       .min(10, "Address must be at least 10 characters")

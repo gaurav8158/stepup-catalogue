@@ -117,7 +117,7 @@ export default function ProductGrid() {
             placeholder="Search products"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="w-full pl-12 pr-4 py-2.5 rounded-full bg-white text-sm text-gray-900 placeholder-gray-400 border border-gray-200 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200"
+            className="w-full pl-12 pr-4 py-2.5 rounded-full bg-white text-sm text-gray-900 placeholder-gray-400 border border-gray-200 shadow-sm focus:border-orange-500 focus:ring-1 focus:ring-orange-500 focus:outline-none transition-all duration-200"
           />
         </div>
         <div className="fixed bottom-0 z-50 border-t sm:border-none    bg-white md:static flex w-full sm:w-auto sm:min-w-[170px]  justify-between sm:justify-end md:gap-2 ">
