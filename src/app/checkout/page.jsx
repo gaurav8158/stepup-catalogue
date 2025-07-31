@@ -85,7 +85,7 @@ const CartPage = () => {
       setForm({
         fullName: user?.name || "",
         email: user.email || "",
-        mobile: (user?.mobile || "").replace(/^(\+971)/, ""),
+        mobile: (user?.mobile.slice(-9) || "").replace(/^(\+971)/, ""),
 
         // mobile: user?.mobile || "",
         address: user?.address || "",
