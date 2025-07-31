@@ -4,20 +4,16 @@ import BackBtn from "@/components/BackBtn";
 
 const page = () => {
   return (
-    <div className="container mx-auto w-full px-4 ">
+    <div className="container mx-auto w-full px-4 pb-10">
       {" "}
-     
       <div className="flex justify-between mb-6 mt-4">
         <div className="flex items-center gap-2">
           {" "}
           <BackBtn text="Back" link="/user" />
-          <h1 className="text-2xl font-semibold ">
-            {" "}
-         Register Product
-          </h1>
+          <h1 className="text-2xl font-semibold "> Register Product</h1>
         </div>
       </div>
-      <RegisterProductForm />;
+      <RegisterProductForm />
     </div>
   );
 };

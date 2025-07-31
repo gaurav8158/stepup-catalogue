@@ -59,8 +59,20 @@ export default function ProductDetails() {
   return (
     <Layout>
       <div className="container min-h-screen mx-auto px-4 py-6">
-        <div className="pb-4">
-          <BackBtn text="Back To Shop" link="/" />
+        {/* <BackBtn text="Back To Shop" link="/" /> */}
+        <div className="text-sm text-gray-500 mb-3">
+          <span>
+            <Link
+              href="/"
+              className="text-green-700 font-semibold hover:underline"
+            >
+              Home
+            </Link>{" "}
+            /{" "}
+          </span>
+          <span className="text-gray-700 font-medium">
+            {activeProduct?.productName || "Loading..."}
+          </span>
         </div>
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -88,170 +100,11 @@ export default function ProductDetails() {
             </div>
           </div>
         ) : (
-          //     <div className="grid md:grid-cols-2 gap-6">
-          //       {/* Left: Image section */}
-          //       <div className="w-full">
-          //         {/* Square Image Box */}
-          //         <div className="aspect-square w-full sm:w-[90%] rounded-lg overflow-hidden border">
-          //           <Image
-          //             src={activeImage || "/loadimg.png"}
-          //             alt="Product"
-          //             width={800}
-          //             height={800}
-          //             className="w-full h-full object-cover"
-          //             priority
-          //           />
-          //         </div>
-
-          //         {/* Thumbnail previews */}
-          //         <div className="flex flex-wrap gap-3 mt-4">
-          //           {activeProduct?.images.map((img, idx) => (
-          //             <button
-          //               key={idx}
-          //               onClick={() => setActiveImage(img)}
-          //               className={`w-16 h-16 rounded overflow-hidden border ${
-          //                 activeImage === img
-          //                   ? "ring-2 ring-green-600"
-          //                   : "hover:ring-1"
-          //               }`}
-          //             >
-          //               <Image
-          //                 src={img}
-          //                 alt={`Thumbnail ${idx}`}
-          //                 width={64}
-          //                 height={64}
-          //                 className="w-full h-full object-cover"
-          //               />
-          //             </button>
-          //           ))}
-          //         </div>
-          //       </div>
-
-          //       {/* Right: Info section */}
-          //       <div>
-          //         <div className="text-green-700 font-bold text-sm">
-          //           {activeProduct?.schoolName}
-          //         </div>
-          //         <h1 className="text-xl font-semibold text-gray-800 mt-1">
-          //           {activeProduct?.productName}
-          //         </h1>
-
-          //         {activeProduct?.inStock && (
-          //           <div>
-          //             <span
-          //               className={`text-xs px-2 py-1 rounded-full font-semibold
-          // ${
-          //   activeProduct?.inStock
-          //     ? "bg-green-100 text-green-700"
-          //     : "bg-red-100 text-red-700"
-          // }`}
-          //             >
-          //               {activeProduct?.inStock ? "In Stock" : ""}
-          //             </span>
-          //           </div>
-          //         )}
-
-          //         {/* Price */}
-          //         <div className="mt-3 text-2xl font-bold text-green-700">
-          //           {activeProduct?.priceToBuyer} AED
-          //         </div>
-
-          //         {/* Condition */}
-          //         <div className="mt-6">
-          //           <h4 className="text-sm font-medium text-gray-800 mb-2">
-          //             Condition :{" "}
-          //             <span className="text-green-700">
-          //               {" "}
-          //               {activeProduct?.condition}
-          //             </span>
-          //             {/* Select Size */}
-          //           </h4>
-          //         </div>
-          //         {/* Gender */}
-          //         <div className="mt-6">
-          //           <h4 className="text-sm font-medium text-gray-800 mb-2">
-          //             Gender :{" "}
-          //             <span className="text-green-700">
-          //               {" "}
-          //               {activeProduct?.gender}
-          //             </span>
-          //             {/* Select Size */}
-          //           </h4>
-          //         </div>
-
-          //         {/* Size Selection */}
-          //         <div className="mt-6">
-          //           <h4 className="text-sm font-medium text-gray-800 mb-2">
-          //             Size
-          //             {/* Select Size */}
-          //           </h4>
-          //           <button
-          //             // key={size}
-          //             // onClick={() => setSelectedSize(size)}
-          //             className={`px-3 py-1 border rounded text-sm
-          //              bg-green-700 text-white border-green-700
-          //             `}
-          //           >
-          //             {activeProduct?.size}
-          //           </button>
-          //         </div>
-
-          //         {/* Buttons */}
-          //         <div className="mt-6 flex gap-4 items-center">
-          //           <button
-          //             onClick={handleAddToCart}
-          //             className="flex-1 py-2 flex justify-center bg-green-700 text-white rounded-md font-semibold"
-          //           >
-          //             Add to Cart
-          //           </button>
-          //           <Link
-          //             href="/cart"
-          //             className="flex-1 flex justify-center py-2 border border-green-700 text-green-700 rounded-md font-semibold"
-          //           >
-          //             <button>Buy Now</button>
-          //           </Link>
-          //         </div>
-
-          //         {/* Description */}
-          //         <div className="mt-6 border-t pt-4">
-          //           <h3 className="text-md font-semibold text-gray-800 mb-2">
-          //             Product Description
-          //           </h3>
-          //           <div className="text-sm text-gray-600 mb-2">
-          //             <span className="font-medium text-gray-800">
-          //               Product Category:
-          //             </span>{" "}
-          //             {activeProduct?.productCategory || "N/A"}
-          //           </div>
-          //           <div className="text-sm text-gray-600 mb-2">
-          //             <span className="font-medium text-gray-800">
-          //               Uniform Category:
-          //             </span>{" "}
-          //             {activeProduct?.uniformCategory || "N/A"}
-          //           </div>
-          //           <div className="text-sm text-gray-600 mb-2">
-          //             <span className="font-medium text-gray-800">
-          //               Defect In Product:
-          //             </span>{" "}
-          //             {activeProduct?.isDefectInProduct}
-          //           </div>
-          //           {activeProduct?.isDefectInProduct === "Yes" && (
-          //             <div className="text-sm text-gray-600 mb-2">
-          //               <span className="font-medium text-gray-800">
-          //                 Defect Description:
-          //               </span>{" "}
-          //               {activeProduct?.defectDescription || "N/A"}
-          //             </div>
-          //           )}
-          //         </div>
-          //       </div>
-          //     </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 md:px-16 gap-5 md:gap-8">
             {/* Left: Image Section */}
-            <div className="w-full max-w-[400px]  space-y-3">
+            <div className="w-full  gap-2 md:gap-10 flex flex-col md:flex-row  space-y-3">
               {/* Main Image */}
-              <div className="md:h-[300px] md:w-[300px]  rounded-lg overflow-hidden border shadow-sm">
+              <div className="md:h-[330px] md:w-[330px]  rounded-lg overflow-hidden border shadow-sm">
                 <Image
                   src={activeImage || "/loadimg.png"}
                   alt="Product"
@@ -263,12 +116,12 @@ export default function ProductDetails() {
               </div>
 
               {/* Thumbnail Images */}
-              <div className="flex gap-2">
+              <div className="flex  flex-row md:flex-col gap-5">
                 {activeProduct?.images.slice(0, 4).map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImage(img)}
-                    className={`w-16 h-16 rounded-md overflow-hidden border transition-all duration-200 ${
+                    className={`w-16 h-16 md:w-20 md:h-20 rounded-md p-1 overflow-hidden border transition-all duration-200 ${
                       activeImage === img
                         ? "ring-2 ring-green-600 scale-105"
                         : "hover:ring-1 hover:scale-105"
@@ -279,6 +132,7 @@ export default function ProductDetails() {
                       alt={`Thumbnail ${idx}`}
                       width={64}
                       height={64}
+                      priority
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -286,88 +140,7 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* Right: Product Info Section */}
-            {/* <div className="space-y-2">
-              <div className="text-green-700 font-semibold text-sm">
-                {activeProduct?.schoolName}
-              </div>
-
-              <h1 className="text-2xl font-bold text-gray-900">
-                {activeProduct?.productName}
-              </h1>
-             
-              {activeProduct?.inStock && (
-                <span className="inline-block text-xs px-4 py-1 rounded-full font-medium bg-green-100 text-green-700">
-                  In Stock
-                </span>
-              )}
-
-              <div className="flex flex-col text-sm text-gray-700 mt-2 gap-2">
-                <div>
-                  <span className="font-medium">Gender:</span>{" "}
-                  <span className="text-green-700">
-                    {activeProduct?.gender}
-                  </span>
-                </div>
-                <div>
-                  <span className="font-medium">Size:</span>{" "}
-                  <span className="inline-block px-2 py-[2px] rounded bg-green-700 text-white text-xs">
-                    {activeProduct?.size}
-                  </span>
-                </div>
-              </div>
-          
-              <div className="text-2xl font-bold text-green-700">
-                {activeProduct?.priceToBuyer} AED
-              </div>
-       
-              <div className="flex gap-4 mt-6">
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-1 py-2 bg-green-700 text-white rounded-md font-semibold hover:bg-green-800 transition"
-                >
-                  Add to Cart
-                </button>
-                <Link
-                  href="/cart"
-                  className="flex-1 py-2 border border-green-700 text-green-700 rounded-md font-semibold hover:bg-green-50 transition text-center"
-                >
-                  Buy Now
-                </Link>
-              </div>
-
-        
-              <div className="mt-6 border-t pt-4 space-y-2 text-sm text-gray-700">
-                <h3 className="text-md font-semibold text-gray-900 mb-2">
-                  Product Description
-                </h3>
-                <p>
-                  <span className="font-medium">Product Category:</span>{" "}
-                  {activeProduct?.productCategory || "N/A"}
-                </p>
-                <p>
-                  <span className="font-medium">Uniform Category:</span>{" "}
-                  {activeProduct?.uniformCategory || "N/A"}
-                </p>
-
-                <p>
-                  <span className="font-medium">Condition:</span>{" "}
-                  {activeProduct?.condition}
-                </p>
-                <p>
-                  <span className="font-medium">Defect in Product:</span>{" "}
-                  {activeProduct?.isDefectInProduct}
-                </p>
-                {activeProduct?.isDefectInProduct === "Yes" && (
-                  <p>
-                    <span className="font-medium">Defect Description:</span>{" "}
-                    {activeProduct?.defectDescription || "N/A"}
-                  </p>
-                )}
-              </div>
-            </div> */}
-
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* School Name */}
               <div className="text-green-700 font-semibold text-sm uppercase tracking-wide">
                 {activeProduct?.schoolName}
@@ -399,27 +172,15 @@ export default function ProductDetails() {
                     {activeProduct?.size}
                   </span>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-800">Condition:</span>{" "}
-                  <span className="text-green-700">
-                    {activeProduct?.condition}
-                  </span>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-800">Defect:</span>{" "}
-                  <span className="text-green-700">
-                    {activeProduct?.isDefectInProduct === "Yes" ? "Yes" : "No"}
-                  </span>
-                </div>
               </div>
 
               {/* Price */}
-              <div className="text-2xl md:text-3xl font-bold text-green-700 mt-4">
+              <div className="text-2xl md:text-3xl font-bold text-green-700 mt-3">
                 {activeProduct?.priceToBuyer} AED
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4 mt-6">
+              <div className="flex gap-4 mt-3">
                 <button
                   onClick={handleAddToCart}
                   className="flex-1 flex justify-center items-center gap-2 py-2 bg-green-700 text-white rounded-md font-semibold hover:bg-green-800 transition duration-200 shadow-sm"
@@ -436,7 +197,7 @@ export default function ProductDetails() {
               </div>
 
               {/* Description Section */}
-              <div className="mt-6 border-t pt-4 space-y-2 text-sm text-gray-700">
+              {/* <div className="mt-6 border-t pt-4 space-y-2 text-sm text-gray-700">
                 <h3 className="text-md font-semibold text-gray-900 mb-2">
                   Product Description
                 </h3>
@@ -459,6 +220,52 @@ export default function ProductDetails() {
                       Defect Description:
                     </span>{" "}
                     {activeProduct?.defectDescription || "N/A"}
+                  </p>
+                )}
+              </div> */}
+              <div className="mt-6 bg-white border border-gray-200 rounded-lg shadow-sm p-4 space-y-3 text-sm text-gray-700">
+                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
+                  Product Description
+                </h3>
+
+                <p>
+                  <span className="font-medium text-gray-800">
+                    Product Category:
+                  </span>{" "}
+                  <span className="text-green-700">
+                    {activeProduct?.productCategory || "N/A"}
+                  </span>{" "}
+                </p>
+
+                <p>
+                  <span className="font-medium text-gray-800">
+                    Uniform Category:
+                  </span>{" "}
+                  <span className="text-green-700">
+                    {activeProduct?.uniformCategory || "N/A"}{" "}
+                  </span>
+                </p>
+                <div>
+                  <span className="font-medium text-gray-800">Condition:</span>{" "}
+                  <span className="text-green-700">
+                    {activeProduct?.condition}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-800">Defect:</span>{" "}
+                  <span className="text-green-700">
+                    {activeProduct?.isDefectInProduct === "Yes" ? "Yes" : "No"}
+                  </span>
+                </div>
+                {activeProduct?.isDefectInProduct === "Yes" && (
+                  <p>
+                    <span className="font-medium text-gray-800">
+                      Defect Description:
+                    </span>{" "}
+                    <span className="text-green-700">
+                      {" "}
+                      {activeProduct?.defectDescription || "N/A"}
+                    </span>
                   </p>
                 )}
               </div>

@@ -76,7 +76,8 @@ const OrdersPage = () => {
           variant="secondary"
           className="fixed bottom-4 right-4 border  border-green-800 text-green-800"
         >
-          Help<Headphones />
+          Help
+          <Headphones />
         </Button>
       </Link>
 
@@ -88,7 +89,7 @@ const OrdersPage = () => {
         </div>
         <Link href="/user/add">
           <button className="text-sm flex gap-2 items-center text-green-700 border border-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold ">
-             Sell/Donate Uniform
+            Sell/Donate Uniform
           </button>{" "}
         </Link>
       </div>
@@ -134,7 +135,7 @@ const OrdersPage = () => {
         )
       ) : buyorders?.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-20 text-center">
-          <img src="/NoOrder.svg" alt="No Orders" className="w-60 mb-4" />
+          <img src="/noorder.svg" alt="No Orders" className="w-60 mb-4" />
           <p className="text-gray-600">You have no orders yet</p>
         </div>
       ) : (

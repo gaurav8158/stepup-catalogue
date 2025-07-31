@@ -39,10 +39,11 @@ const RegisterUserForm = () => {
     e.preventDefault();
     const url = process.env.NEXT_PUBLIC_BASE_URL;
     if (!isValidUaeMobile(formData.mobile)) {
-      toast.error("Invalid mobile number. Must be 9 digits.");
+      toast.error("Invalid mobile number");
+      return;
     }
     const Newmobile = "+971" + formData.mobile;
- 
+
     try {
       const res = await fetch(`${url}/users/register`, {
         method: "POST",

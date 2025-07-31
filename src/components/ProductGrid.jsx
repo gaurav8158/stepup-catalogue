@@ -127,7 +127,7 @@ export default function ProductGrid() {
       </div>
 
       {/* Product Grid */}
-      <div className="p-2 sm:p-4 container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
+      <div className="p-2 sm:p-4 sm:pb-20  container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
         {loading ? (
           [...Array(12)].map((_, idx) => (
             <div key={idx} className="flex flex-col space-y-3">

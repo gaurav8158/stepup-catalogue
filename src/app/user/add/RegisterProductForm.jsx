@@ -40,7 +40,7 @@ const RegisterProductForm = () => {
         isDonated: "",
         images: [],
         senderName: user?.name || "",
-        senderMobile: user?.mobile || "",
+        senderMobile: user?.mobile?.slice(-9) || "",
         senderAddress: user?.address || "",
         policyOptIn: false,
       });
@@ -81,9 +81,7 @@ const RegisterProductForm = () => {
       .matches(
         /^(?:50|51|52|54|55|56|58)\d{7}$/,
         "Enter a valid mobile number"
-      )
-      ,
-
+      ),
     senderAddress: Yup.string()
       .min(10, "Address must be at least 10 characters")
       .required("Address is required"),
@@ -205,7 +203,7 @@ const RegisterProductForm = () => {
         userId: user.id,
         senderMobile: "+971" + values.senderMobile,
       };
-     
+
       const res = await fetch(`${BASE_URL}/products/register`, {
         method: "POST",
         headers: {
@@ -601,66 +599,6 @@ const RegisterProductForm = () => {
                   />
                 </div>
 
-                {/* Image URL input */}
-                {/* <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image URLs *
-                  </label>
-                  <div className="flex  flex-col sm:flex-row gap-2">
-                    <input
-                      type="text"
-                      placeholder="Paste image URL"
-                      value={newImageUrl}
-                      onChange={(e) => setNewImageUrl(e.target.value)}
-                      className="flex-1 custom-input-class"
-                    />
-                    <button
-                      disabled={values?.images?.length >= 4}
-                      type="button"
-                      onClick={() =>
-                        handleAddImage(setFieldValue, values.images)
-                      }
-                      className="px-4 py-2 text-sm text-green-700 border border-green-700 bg-green-50 rounded-full hover:bg-green-100"
-                    >
-                      Add
-                    </button>
-                  </div>
-                  <p className="text-green-500">
-                    {" "}
-                    *You can upload a maximum of 4 pictures.
-                  </p>
-                  {values?.images?.length > 0 && (
-                    <div className="flex gap-3 mt-4 flex-wrap">
-                      {values.images?.map((url, idx) => (
-                        <div key={idx} className="relative">
-                          <img
-                            src={url}
-                            alt={`Product image ${idx + 1}`}
-                            className="w-20 h-20 object-cover border rounded"
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleRemoveImage(
-                                idx,
-                                setFieldValue,
-                                values.images
-                              )
-                            }
-                            className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <ErrorMessage
-                    name="images"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div> */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Upload Images (Max 4){" "}
