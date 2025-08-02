@@ -127,14 +127,14 @@ export default function ProductGrid() {
       </div>
 
       {/* Product Grid */}
-      <div className="p-2 sm:p-4 sm:pb-20  container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
+      <div className="p-2 sm:p-4 sm:pb-20  container min-h-dvh mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {loading ? (
-          [...Array(12)].map((_, idx) => (
+          [...Array(15)].map((_, idx) => (
             <div key={idx} className="flex flex-col space-y-3">
-              <Skeleton className="h-[125px] w-full sm:w-[250px] rounded-xl" />
+              <Skeleton className="h-[125px] w-full sm:w-[200px] rounded-xl" />
               <div className="space-y-2">
-                <Skeleton className="h-4 w-full sm:w-[250px]" />
-                <Skeleton className="h-4 w-[80%] sm:w-[200px]" />
+                <Skeleton className="h-4 w-full sm:w-[200px]" />
+                <Skeleton className="h-4 w-[80%] sm:w-[180px]" />
               </div>
             </div>
           ))

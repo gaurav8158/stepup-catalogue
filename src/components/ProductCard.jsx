@@ -8,11 +8,11 @@ export default function ProductCard({ product }) {
     >
       <div className="bg-white group rounded-md overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
         {/* Image */}
-        <div className="relative overflow-hidden rounded-md">
+        <div className="relative overflow-hidden bg-gray-100 rounded-t-md">
           <img
             src={product.images[0]}
             alt={product.images[0]}
-            className="w-full aspect-[3/4] max-h-[240px] object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+            className="w-full aspect-[3/4] max-h-[240px] object-contain transition-transform duration-300 ease-in-out hover:scale-105"
           />
         </div>
 

@@ -104,24 +104,24 @@ export default function ProductDetails() {
             {/* Left: Image Section */}
             <div className="w-full  gap-2 md:gap-10 flex flex-col md:flex-row  space-y-3">
               {/* Main Image */}
-              <div className="md:h-[330px] md:w-[330px]  rounded-lg overflow-hidden border shadow-sm">
+              <div className="md:h-[330px] md:w-[330px]  rounded-lg overflow-hidden border shadow-sm bg-gray-50">
                 <Image
                   src={activeImage || "/loadimg.png"}
                   alt="Product"
                   width={400}
                   height={500}
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
                   priority
                 />
               </div>
 
               {/* Thumbnail Images */}
-              <div className="flex  flex-row md:flex-col gap-5">
+              <div className="flex  flex-row md:flex-col gap-5 ">
                 {activeProduct?.images.slice(0, 4).map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImage(img)}
-                    className={`w-16 h-16 md:w-20 md:h-20 rounded-md p-1 overflow-hidden border transition-all duration-200 ${
+                    className={`w-16 h-16  md:w-20 md:h-20 rounded-md p-1 overflow-hidden border transition-all duration-200 ${
                       activeImage === img
                         ? "ring-2 ring-green-600 scale-105"
                         : "hover:ring-1 hover:scale-105"

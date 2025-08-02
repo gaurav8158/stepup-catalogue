@@ -14,6 +14,12 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'stepup-store.s3.me-central-1.amazonaws.com', // ✅ Added S3 bucket
             },
+             {
+                protocol: 'https',
+                hostname: 'ksbpumpbvc.s3.ap-south-1.amazonaws.com', // Added for your S3 images
+                port: '',
+                pathname: '/**',
+            },
         ],
     },
 };
