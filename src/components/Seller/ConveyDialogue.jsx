@@ -79,7 +79,7 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
       <AlertDialogTrigger asChild>
         <button
           onClick={() => setOpen(true)}
-          className="text-sm text-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold hover:bg-green-100 transition"
+          className="text-sm cursor-pointer text-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold hover:bg-green-100 transition"
         >
           Do You Accept Our Offered Price?
         </button>
@@ -90,7 +90,7 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
           <AlertDialogTitle>Do You Accept Our Offered Price?</AlertDialogTitle>
           <AlertDialogDescription>
             <p className="text-sm text-gray-700">
-              Offered Seling Price :<strong>  {amount} AED</strong>
+              Offered Seling Price :<strong> {amount} AED</strong>
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>

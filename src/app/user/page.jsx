@@ -119,7 +119,7 @@ const OrdersPage = () => {
       {activeTab === "sell" ? (
         orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-20 text-center">
-            <img src="/NoOrder.svg" alt="No Orders" className="w-60 mb-4" />
+            <img src="/noorder.svg" alt="No Orders" className="w-60 mb-4" />
             <p className="text-gray-600">You have no orders yet</p>
           </div>
         ) : (

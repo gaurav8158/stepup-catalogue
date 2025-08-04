@@ -26,7 +26,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
           <span className="text-sm text-gray-500">
             Order Date: {formatDate(order?.createdAt)}
           </span>
-          <span className="ext-sm text-gray-500">Order No. {order._id}</span>
+          <span className="text-sm text-gray-500">Order No. {order._id}</span>
         </div>
         <div className="flex gap-2 flex-wrap items-center">
           {order.isConvey === "Pending" ? (
