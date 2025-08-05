@@ -22,8 +22,15 @@ const Footer = () => {
         <div>
           <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
           <ul className="space-y-1 text-gray/90">
-            <li>+971 4 583 9744</li>
-            <li>rashi@step-up.earth</li>
+          
+              <li>
+                <a className="decoration-0" href="tel:+971522726979">+971 522726979</a>
+              </li>
+              <li>
+                <a href="mailto:rashi@step-up.earth">rashi@step-up.earth</a>
+              </li>
+    
+
             <li>Vibrant Venture LLC</li>
             <li>Sharjah Media City</li>
             <li>Sharjah, UAE</li>
@@ -69,10 +76,7 @@ const Footer = () => {
               </a>
             </li>
             <li>
-              <a
-                href="/user/add"
-                className="hover:underline"
-              >
+              <a href="/user/add" className="hover:underline">
                 Sell/Donate Uniforms
               </a>
             </li>
