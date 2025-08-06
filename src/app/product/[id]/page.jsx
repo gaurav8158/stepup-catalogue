@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowLeft, CircleCheck, ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
+import _ from "lodash";
 import { useCart } from "@/context/CartContext";
 import Layout from "@/components/layout";
 import BackBtn from "@/components/BackBtn";
@@ -10,6 +11,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const productNamePrefixes = /^(PE|UX) /i;
 
 export default function ProductDetails() {
   const { addToCart } = useCart();
@@ -148,7 +151,7 @@ export default function ProductDetails() {
 
               {/* Product Name */}
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                {activeProduct?.productName}
+                {_.startCase(_.lowerCase(activeProduct.productName)).replace(productNamePrefixes, (m, m1) => _.toUpper(m1 + " "))}
               </h1>
 
               {/* Stock Status */}

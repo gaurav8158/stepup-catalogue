@@ -19,8 +19,34 @@ export function FilterDrawer({ onApply }) {
     gender: ["Boy", "Girl", "Unisex"],
 
     sizes: [
-      2, 4, 6,7, 8, 10, 12, 14, 16, 18,19, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
-      40,"M","XS","28WX24L","2-3","156","158"
+      2,
+      4,
+      6,
+      7,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      19,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      "M",
+      "XS",
+      "28WX24L",
+      "2-3",
+      "156",
+      "158",
     ],
   });
   const filterKeys = Object.keys(filters);
@@ -55,9 +81,14 @@ export function FilterDrawer({ onApply }) {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(data.data);
+        const schoolNames = data.data
+          // extract school names
+          .map((item) => item.schoolName)
+          // filter school without name
+          .filter((item) => Boolean(item))
+          // short school in alphabetical order
+          .sort((a, b) => a < b);
 
-        const schoolNames = data.data.map((item) => item.schoolName);
         setFilters((prev) => ({
           ...prev,
           schoolName: schoolNames,

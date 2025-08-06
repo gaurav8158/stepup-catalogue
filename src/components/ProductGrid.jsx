@@ -68,7 +68,6 @@ export default function ProductGrid() {
       const matchesGender =
         gender.length === 0 || gender.includes(product.gender);
 
-      console.log(typeof product.size, product.size);
       //       const matchesSize =
       //         sizes.length === 0 || sizes.map(String).includes(String(product.size));
       // sizes

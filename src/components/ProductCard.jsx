@@ -1,6 +1,14 @@
 import Link from "next/link";
+import _ from "lodash"
+
+const productNamePrefixes = /^(PE|UX) /i;
 
 export default function ProductCard({ product }) {
+  const productName = _.startCase(
+    _.lowerCase(product.productName))
+      .replace(productNamePrefixes, (m, m1) => _.toUpper(m1 + " ")
+  );
+
   return (
     <Link
       href={product?.inStock ? `/product/${product._id}` : ""}
@@ -28,7 +36,7 @@ export default function ProductCard({ product }) {
           </div>
           <div className="flex items-center justify-between mt-1 gap-3">
             <span className="text-[13px] font-medium text-gray-800">
-              {product.productName}
+              {productName}
             </span>
             <div className="text-right">
               <div className="text-[13px] font-semibold text-gray-800">
