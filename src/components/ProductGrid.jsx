@@ -31,9 +31,13 @@ export default function ProductGrid() {
 
       const resData = await res.json();
       setLoading(false);
-
-      setAllProducts(resData.products);
-      setFilteredProducts(sortProducts(resData.products, sortBy));
+      const visibleProducts = resData.products.filter(
+        (product) => product.isShow
+      );
+      setFilteredProducts(visibleProducts);
+      setFilteredProducts(sortProducts(visibleProducts, sortBy));
+      // setAllProducts(resData.products);
+      // setFilteredProducts(sortProducts(resData.products, sortBy));
     } catch (error) {
       console.error("Fetch error:", error);
       setLoading(false);

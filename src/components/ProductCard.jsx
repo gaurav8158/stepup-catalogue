@@ -1,12 +1,12 @@
 import Link from "next/link";
-import _ from "lodash"
+import _ from "lodash";
 
 const productNamePrefixes = /^(PE|UX) /i;
 
 export default function ProductCard({ product }) {
-  const productName = _.startCase(
-    _.lowerCase(product.productName))
-      .replace(productNamePrefixes, (m, m1) => _.toUpper(m1 + " ")
+  const productName = _.startCase(_.lowerCase(product.productName)).replace(
+    productNamePrefixes,
+    (m, m1) => _.toUpper(m1 + " ")
   );
 
   return (
@@ -34,17 +34,18 @@ export default function ProductCard({ product }) {
               {product?.uniformCategory}
             </div>
           </div>
-          <div className="flex items-center justify-between mt-1 gap-3">
-            <span className="text-[13px] font-medium text-gray-800">
+
+          <div className="flex items-center truncate justify-between mt-1 gap-3">
+            <span className="text-[13px] truncate font-medium text-gray-800">
               {productName}
             </span>
+            {/* Simply remove 'truncate' from this div */}
             <div className="text-right">
               <div className="text-[13px] font-semibold text-gray-800">
                 {product.priceToBuyer} AED
               </div>
             </div>
           </div>
-
           <div className="flex flex-wrap justify-between gap-1 mt-2">
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <span className="font-medium">Size</span>

@@ -1,7 +1,5 @@
 import { Assistant, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/context/CartContext";
 
