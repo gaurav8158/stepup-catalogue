@@ -108,7 +108,7 @@ export default function Header() {
               </Link>
             )}
 
-            <a
+            {/* <a
               href="https://api.whatsapp.com/send?phone=971522726979&text=Hi"
               target="_blank"
               rel="noopener noreferrer"
@@ -120,14 +120,22 @@ export default function Header() {
                 height={400}
                 className="w-9 h-9"
               />{" "}
-            </a>
+            </a> */}
 
             <Link href="/cart" className="flex justify-center items-center">
-              <button className="relative">
-                <span className="bg-orange-500 w-5 h-5 flex items-center justify-center rounded-full -top-2 p-1 text-xs -right-2 font-bold absolute text-white">
+       
+
+              <button className="flex  flex-col justify-center items-center cursor-pointer">
+                
+                <div className="inline-block relative font-semibold p-1 rounded-full text-black transition-colors ">
+                 <span className="bg-green-500 w-5 h-5 flex items-center justify-center rounded-full -top-1 p-1 text-xs -right-2 font-bold absolute text-white">
                   {cartItemlength}
                 </span>
-                <ShoppingBag size={20} className="text-gray-700" />
+                  <ShoppingBag  className="text-gray-600 w-6 h-6" />
+                </div>
+                <span className="text-sm font-bold max-w-[50px] truncate">
+                  Cart
+                </span>
               </button>
             </Link>
           </div>

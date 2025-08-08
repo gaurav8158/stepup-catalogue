@@ -32,17 +32,22 @@ export function ProfileDropdown({ user }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex flex-col justify-center items-center cursor-pointer">
-          <div className="inline-block bg-[#28B083] font-semibold p-1 rounded-full text-white hover:bg-green-700 transition-colors shadow">
-            <User className="w-5 h-5" />
+          <div className="inline-block font-semibold p-1 rounded-full text-black transition-colors ">
+            <User className="w-6 h-6" />
           </div>
-          <span className="text-xs font-semibold max-w-[50px] truncate">
-            {user.name || "User"}
+          <span className="text-sm font-bold max-w-[50px] truncate">
+            Profile
           </span>
         </div>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-40" align="end">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuContent className="w-44" align="end">
+        {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+        <DropdownMenuLabel className="truncate">
+          Hello {user.name || "User"}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
         <DropdownMenuGroup>
           {/* <DropdownMenuItem>
             Profile

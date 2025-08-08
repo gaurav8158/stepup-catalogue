@@ -107,7 +107,7 @@ export default function ProductDetails() {
             {/* Left: Image Section */}
             <div className="w-full  gap-2 md:gap-10 flex flex-col md:flex-row  space-y-3">
               {/* Main Image */}
-              <div className="md:h-[330px] md:w-[330px]  rounded-lg overflow-hidden border shadow-sm bg-gray-50">
+              <div className="h-[330px] md:w-[330px]  rounded-lg overflow-hidden border shadow-sm bg-gray-50">
                 <Image
                   src={activeImage || "/loadimg.png"}
                   alt="Product"
