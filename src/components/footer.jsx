@@ -27,7 +27,7 @@ const Footer = () => {
                 <a className="decoration-0" href="tel:+971522726979">+971 522726979</a>
               </li>
               <li>
-                <a href="mailto:rashi@step-up.earth">rashi@step-up.earth</a>
+                <a href="mailto:support@step-up.earth">support@step-up.earth</a>
               </li>
     
 
