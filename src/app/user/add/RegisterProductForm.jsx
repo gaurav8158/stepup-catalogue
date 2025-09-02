@@ -599,7 +599,7 @@ const RegisterProductForm = () => {
                   />
                 </div>
 
-                <div className="md:col-span-2">
+                {/* <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Upload Images (Max 4){" "}
                     <span className="text-red-500">*</span>
@@ -705,8 +705,140 @@ const RegisterProductForm = () => {
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
-                </div>
+                </div> */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Images (Max 4){" "}
+                    <span className="text-red-500">*</span>
+                  </label>
 
+                  <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center border-2 border-dashed border-gray-300 rounded-2xl bg-white transition hover:border-green-500 w-full max-w-md">
+                    <Cloudy />
+
+                    <p className="text-sm font-medium text-gray-700">
+                      Choose files or drag & drop them here
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      JPEG, JPG, and PNG formats
+                    </p>
+
+                    <label
+                      htmlFor="image-upload"
+                      className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-green-700 cursor-pointer mt-2"
+                    >
+                      <Upload />
+                      Browse Files
+                      <input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        multiple // <-- Allows multiple file selection
+                        disabled={values?.images?.length >= 4}
+                        onChange={async (e) => {
+                          const files = e.target.files;
+                          if (!files || files.length === 0) return;
+
+                          const remainingSlots = 4 - values.images.length;
+                          if (files.length > remainingSlots) {
+                            alert(
+                              `You can only upload ${remainingSlots} more image(s).`
+                            );
+                            e.target.value = ""; // Clear the selection
+                            return;
+                          }
+
+                          // Create an array of upload promises
+                          const uploadPromises = Array.from(files).map(
+                            async (file) => {
+                              const formData = new FormData();
+                              formData.append("product", file);
+
+                              const res = await fetch(
+                                `${BASE_URL}/images/upload`,
+                                {
+                                  method: "POST",
+                                  body: formData,
+                                }
+                              );
+
+                              if (!res.ok) {
+                                throw new Error(
+                                  `Upload failed for ${file.name}`
+                                );
+                              }
+
+                              const data = await res.json();
+                              return data.url;
+                            }
+                          );
+
+                          try {
+                            // Wait for all uploads to complete
+                            const newImageUrls = await Promise.all(
+                              uploadPromises
+                            );
+
+                            // Update the form state with all new URLs
+                            setFieldValue("images", [
+                              ...values.images,
+                              ...newImageUrls,
+                            ]);
+                          } catch (err) {
+                            console.error("Image upload error:", err);
+                            alert(
+                              "An error occurred. Some images may not have been uploaded."
+                            );
+                          } finally {
+                            // Reset the file input
+                            e.target.value = "";
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  <p className="text-green-600 text-sm mt-1">
+                    *You can upload a maximum of 4 images.
+                  </p>
+
+                  {values?.images?.length > 0 && (
+                    <div className="flex flex-wrap  gap-4 mt-4">
+                      {values.images.map((url, idx) => (
+                        <div
+                          key={idx}
+                          className="relative h-24 w-24  sm:h-40 sm:w-40 group"
+                        >
+                          <img
+                            src={url}
+                            alt={`Uploaded ${idx + 1}`}
+                            className="w-full h-full  object-cover rounded-lg shadow"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleRemoveImage(
+                                idx,
+                                setFieldValue,
+                                values.images
+                              )
+                            }
+                            className="absolute top-1 right-1 bg-gray-200 cursor-pointer text-gray-600 p-[2px] rounded-full w-5 h-5 text-xs flex items-center justify-center transition"
+                            title="Remove"
+                          >
+                            <X />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <ErrorMessage
+                    name="images"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
                 <div className="md:col-span-2 flex justify-end">
                   <button
                     type="button"
@@ -757,7 +889,7 @@ const RegisterProductForm = () => {
                     <Field
                       id="senderMobile"
                       name="senderMobile"
-                      placeholder="Enter 10-digit mobile number"
+                      placeholder="Enter mobile number"
                       className="mt-2 w-full custom-input-class"
                       style={{ paddingLeft: "50px" }}
                     />
