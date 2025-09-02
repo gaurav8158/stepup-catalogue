@@ -36,7 +36,7 @@ export default function ProductGrid() {
       );
       setFilteredProducts(visibleProducts);
       setFilteredProducts(sortProducts(visibleProducts, sortBy));
-      // setAllProducts(resData.products);
+      setAllProducts(resData.products);
       // setFilteredProducts(sortProducts(resData.products, sortBy));
     } catch (error) {
       console.error("Fetch error:", error);
@@ -60,6 +60,7 @@ export default function ProductGrid() {
         schoolName
           .map((name) => name.toLowerCase())
           .includes(product.schoolName.toLowerCase());
+
       // const matchesCategory =
       //   uniformCategory?.length === 0 ||
       //   uniformCategory
