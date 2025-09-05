@@ -33,7 +33,7 @@ const OrdersPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log("Fetched products:", data.products);
+      
         setOrders(data.products);
       } else {
         console.error("Failed to fetch buyers:", data.error || data.message);
@@ -60,7 +60,7 @@ const OrdersPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log("Fetched products:", data.orders);
+      
         setBuyOrders(data.orders);
       } else {
         console.log("Failed to fetch buyers:", data.error || data.message);

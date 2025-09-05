@@ -62,7 +62,7 @@ const CartPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(data);
+     
 
         // Find the quote with tag === "For Seller"
         const sellerQuote = data.find((item) => item.tag === "For Buyer");
@@ -146,7 +146,7 @@ const CartPage = () => {
           cartItems: cartItemIds,
         }
       );
-      console.log("Order Response:", response.data);
+   
       toast.success(response.data?.message || "Order Placed successfully");
     } catch (error) {
       console.log(error);

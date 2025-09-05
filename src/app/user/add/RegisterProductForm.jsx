@@ -84,7 +84,7 @@ const RegisterProductForm = () => {
       ),
     senderAddress: Yup.string()
       .min(10, "Address must be at least 10 characters")
-      .required("Address is required"),
+      .required("Pickup Address is required"),
     policyOptIn: Yup.boolean().oneOf(
       [true],
       "You must accept the terms and conditions"
@@ -101,7 +101,7 @@ const RegisterProductForm = () => {
       const res = await fetch(`${BASE_URL}/schoolDress`);
       const data = await res.json();
       if (res.ok) {
-        console.log(data.data);
+      
         setSchoolData(data.data);
       } else {
         console.error("Fetch failed:", data.message);
@@ -116,7 +116,7 @@ const RegisterProductForm = () => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(data);
+ 
 
         // Find the quote with tag === "For Seller"
         const sellerQuote = data.find((item) => item.tag === "For Seller");
@@ -914,7 +914,7 @@ const RegisterProductForm = () => {
                     as="textarea"
                     id="senderAddress"
                     name="senderAddress"
-                    placeholder="Enter your complete address with pincode"
+                    placeholder="Enter your complete address"
                     className="custom-input-class"
                     rows="3"
                   />

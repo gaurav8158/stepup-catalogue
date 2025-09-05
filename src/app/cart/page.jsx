@@ -14,7 +14,7 @@ const CartPage = () => {
   const [productDetails, setProductDetails] = React.useState([]);
   const [quotes, setQuotes] = useState("");
   const route = useRouter();
-  console.log(cart);
+
   React.useEffect(() => {
     if (!cart || cart.length === 0) {
       setProductDetails([]);
@@ -54,7 +54,7 @@ const CartPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(data);
+     
 
         // Find the quote with tag === "For Seller"
         const sellerQuote = data.find((item) => item.tag === "For Add to Cart");

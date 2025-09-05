@@ -34,7 +34,7 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
       const data = await res.json();
 
       if (res.ok) {
-        console.log("Conveyed successfully:", data);
+       
         fetchOrders();
         setOpen(false);
       } else {

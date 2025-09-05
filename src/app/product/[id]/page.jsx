@@ -31,7 +31,7 @@ export default function ProductDetails() {
             },
           }
         );
-        console.log("response ", response.data.product);
+      
         if (response.data.product) {
           setActiveProduct(response.data.product);
           setActiveImage(response.data.product.images[0]);
