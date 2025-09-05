@@ -19,7 +19,7 @@ const OrderCard = ({ order, fetchOrders }) => {
       <div className="flex flex-col gap-3 sm:flex-row items-start">
         <div className="flex flex-col gap-1">
           <span className="font-semibold text-sm md:text-lg text-gray-900">
-            Order No. {order._id}
+            Order ID: {order?.orderId}
           </span>
 
           <span className="text-sm text-gray-500">
@@ -109,7 +109,7 @@ const OrderCard = ({ order, fetchOrders }) => {
                     <div className="flex flex-col mt-2">
                       <span className="text-sm text-gray-500">Item Price</span>
                       <span className="text-lg font-bold text-gray-900">
-                         {item.price} AED
+                        {item.price} AED
                       </span>
                     </div>
                   )}
@@ -131,7 +131,7 @@ const OrderCard = ({ order, fetchOrders }) => {
             Total Amount:
           </span>
           <span className="text-2xl font-bold text-green-600">
-             {order.totalAmount} AED
+            {order.totalAmount} AED
           </span>
         </div>
       </div>

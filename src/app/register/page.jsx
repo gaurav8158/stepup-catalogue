@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import { Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -13,17 +13,6 @@ const RegisterUserForm = () => {
     password: "",
   });
   const router = useRouter();
-  // const [allcountry, setAllcountry] = useState([]);
-  // useEffect(() => {
-  //   fetchcountry();
-  // }, []);
-  // const fetchcountry = async () => {
-  //   const data = await axios.get(
-  //     "https://restcountries.com/v3.1/all?fields=name,idd"
-  //   );
-  //   console.log(data);
-  //   setAllcountry(data?.data);
-  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -32,9 +21,6 @@ const RegisterUserForm = () => {
     const regex = /^[0-9]{9}$/;
     return regex.test(mobile);
   }
-
-  // Usage
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = process.env.NEXT_PUBLIC_BASE_URL;
@@ -140,11 +126,12 @@ const RegisterUserForm = () => {
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-900">
-              Email
+              Email <span className="text-red-600">*</span>
             </label>
             <input
               type="email"
               name="email"
+              required
               value={formData.email}
               onChange={handleChange}
               className="mt-2 w-full custom-input-class"
@@ -156,7 +143,7 @@ const RegisterUserForm = () => {
               Password <span className="text-red-600">*</span>
             </label>
             <input
-              type="password"
+              type="text"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -175,6 +162,10 @@ const RegisterUserForm = () => {
               onChange={handleChange}
               className="mt-2 w-full custom-input-class"
             />
+            <p className="mt-1 flex items-center gap-1 text-sm text-red-500">
+              <Truck className="w-4 h-4" />
+              Please provide your full address
+            </p>
           </div>
 
           {/* Submit */}

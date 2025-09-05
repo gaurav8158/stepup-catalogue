@@ -26,7 +26,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
           <span className="text-sm text-gray-500">
             Order Date: {formatDate(order?.createdAt)}
           </span>
-          <span className="text-sm text-gray-500">Order No. {order._id}</span>
+          {/* <span className="text-sm text-gray-500">Order No. {order._id}</span> */}
         </div>
         <div className="flex gap-2 flex-wrap items-center">
           {order.isConvey === "Pending" ? (
@@ -112,7 +112,7 @@ const SellerOrderCard = ({ order, fetchOrders }) => {
               <div className="flex flex-col mt-2">
                 <span className="text-sm text-gray-500">Total Amount</span>
                 <span className="text-lg font-bold text-gray-900">
-                   {order.priceToSeller} AED
+                  {order.priceToSeller} AED
                 </span>
               </div>
             )}

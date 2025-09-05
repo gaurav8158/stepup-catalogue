@@ -98,7 +98,15 @@ export default function Header() {
           {/* Icons */}
           <div className="flex items-center gap-4">
             {user ? (
-              <ProfileDropdown user={user} />
+              <div className="flex items-center gap-2 sm:gap-4">
+                <Link
+                  href="/user/add"
+                  className="inline-block bg-[#28B083] font-semibold px-3 md:px-6 py-2 text-sm md:text-base rounded-full text-white hover:bg-green-700 transition-colors"
+                >
+                  Sell/Donate Uniform
+                </Link>
+                <ProfileDropdown user={user} />
+              </div>
             ) : (
               <Link
                 href="/login"
@@ -108,30 +116,13 @@ export default function Header() {
               </Link>
             )}
 
-            {/* <a
-              href="https://api.whatsapp.com/send?phone=971522726979&text=Hi"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                src="/whatsapp.gif"
-                alt="whatsapp"
-                width={400}
-                height={400}
-                className="w-9 h-9"
-              />{" "}
-            </a> */}
-
             <Link href="/cart" className="flex justify-center items-center">
-       
-
               <button className="flex  flex-col justify-center items-center cursor-pointer">
-                
                 <div className="inline-block relative font-semibold p-1 rounded-full text-black transition-colors ">
-                 <span className="bg-green-500 w-5 h-5 flex items-center justify-center rounded-full -top-1 p-1 text-xs -right-2 font-bold absolute text-white">
-                  {cartItemlength}
-                </span>
-                  <ShoppingBag  className="text-gray-600 w-6 h-6" />
+                  <span className="bg-green-500 w-5 h-5 flex items-center justify-center rounded-full -top-1 p-1 text-xs -right-2 font-bold absolute text-white">
+                    {cartItemlength}
+                  </span>
+                  <ShoppingBag className="text-gray-600 w-6 h-6" />
                 </div>
                 <span className="text-sm font-bold max-w-[50px] truncate">
                   Cart

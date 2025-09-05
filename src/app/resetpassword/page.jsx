@@ -3,23 +3,29 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react"; // 👈 using lucide-react icons
+import { Eye, EyeOff } from "lucide-react"; // 👈 for show/hide password
 
 const Page = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    email: "",
+    mobile: "",
     password: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value } = e.target;
+
+    // Ensure only 9 digits for mobile
+    if (name === "mobile") {
+      if (/^\d{0,9}$/.test(value)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -27,23 +33,26 @@ const Page = () => {
     const url = process.env.NEXT_PUBLIC_BASE_URL;
 
     try {
-      const res = await fetch(`${url}/users/login`, {
+      const payload = {
+        mobile: `+971${formData.mobile}`,
+        password: formData.password,
+      };
+
+      const res = await fetch(`${url}/users/resetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
-      if (res.ok && data.token) {
-        localStorage.setItem("usertoken", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        toast.success("Login successful!");
-        router.push("/user");
+      if (res.ok) {
+        toast.success("Password reset successful!");
+        router.push("/login");
       } else {
-        toast.error(data?.error || "Login failed");
+        toast.error(data?.error || "Reset failed");
       }
     } catch (err) {
       console.error(err);
@@ -61,41 +70,43 @@ const Page = () => {
             className="mx-auto h-12 w-auto"
           />
           <h2 className="mt-3 font-sans text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            Reset Your Password
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
+            {/* Mobile Number */}
             <div>
               <label
-                htmlFor="email"
+                htmlFor="mobile"
                 className="block text-sm/6 font-medium text-gray-900"
               >
-                Email address
+                Mobile Number
               </label>
-              <div className="mt-2">
+              <div className="w-full relative mt-2">
+                <p className="absolute left-2 top-[9px] text-gray-600">+971</p>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
+                  type="tel"
+                  id="mobile"
+                  name="mobile"
+                  value={formData.mobile}
                   onChange={handleChange}
                   required
-                  autoComplete="email"
                   className="w-full custom-input-class"
+                  style={{ paddingLeft: "50px" }}
+                  placeholder="Enter 9 digit number"
                 />
               </div>
             </div>
 
-            {/* Password */}
+            {/* Password with eye toggle */}
             <div>
               <label
                 htmlFor="password"
                 className="block text-sm/6 font-medium text-gray-900"
               >
-                Password
+                New Password
               </label>
               <div className="mt-2 relative">
                 <input
@@ -105,7 +116,6 @@ const Page = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  autoComplete="current-password"
                   className="w-full custom-input-class pr-10"
                 />
                 <button
@@ -120,14 +130,6 @@ const Page = () => {
                   )}
                 </button>
               </div>
-              <p className=" text-end text-sm/6 text-gray-500">
-                <Link
-                  href="/resetpassword"
-                  className="font-semibold text-green-600 hover:text-green-500"
-                >
-                  Forgot Your Password ?
-                </Link>
-              </p>
             </div>
 
             {/* Submit */}
@@ -136,18 +138,18 @@ const Page = () => {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
               >
-                Sign in
+                Reset Password
               </button>
             </div>
           </form>
 
           <p className="mt-8 text-center text-sm/6 text-gray-500">
-            Not registered?{" "}
+            Remembered your password?{" "}
             <Link
-              href="/register"
+              href="/login"
               className="font-semibold text-green-600 hover:text-green-500"
             >
-              Register Now
+              Sign in
             </Link>
           </p>
         </div>
