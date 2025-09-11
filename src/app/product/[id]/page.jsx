@@ -6,7 +6,7 @@ import _ from "lodash";
 import { useCart } from "@/context/CartContext";
 import Layout from "@/components/layout";
 import BackBtn from "@/components/BackBtn";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -31,7 +31,7 @@ export default function ProductDetails() {
             },
           }
         );
-      
+
         if (response.data.product) {
           setActiveProduct(response.data.product);
           setActiveImage(response.data.product.images[0]);
@@ -58,6 +58,10 @@ export default function ProductDetails() {
       _id: activeProduct?._id,
     });
   };
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  const fallbackUrl = "/";
+  const backurl = callbackUrl ? decodeURIComponent(callbackUrl) : fallbackUrl;
 
   return (
     <Layout>
@@ -66,7 +70,7 @@ export default function ProductDetails() {
         <div className="text-sm text-gray-500 mb-3">
           <span>
             <Link
-              href="/"
+              href={backurl}
               className="text-green-700 font-semibold hover:underline"
             >
               Home
@@ -151,7 +155,10 @@ export default function ProductDetails() {
 
               {/* Product Name */}
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                {_.startCase(_.lowerCase(activeProduct.productName)).replace(productNamePrefixes, (m, m1) => _.toUpper(m1 + " "))}
+                {_.startCase(_.lowerCase(activeProduct.productName)).replace(
+                  productNamePrefixes,
+                  (m, m1) => _.toUpper(m1 + " ")
+                )}
               </h1>
 
               {/* Stock Status */}

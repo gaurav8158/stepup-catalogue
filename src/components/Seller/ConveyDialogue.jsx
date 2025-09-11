@@ -33,8 +33,7 @@ export function ConveyDialogue({ orderId, fetchOrders, amount }) {
 
       const data = await res.json();
 
-      if (res.ok) {
-       
+      if (res.ok) {       
         fetchOrders();
         setOpen(false);
       } else {

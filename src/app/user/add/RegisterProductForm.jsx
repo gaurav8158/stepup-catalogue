@@ -173,14 +173,6 @@ const RegisterProductForm = () => {
     setFilteredSizes(productObj?.sizes || []);
   };
 
-  // Handle image addition
-  const handleAddImage = (setFieldValue, images) => {
-    if (newImageUrl.trim() !== "") {
-      setFieldValue("images", [...images, newImageUrl.trim()]);
-      setNewImageUrl("");
-    }
-  };
-
   // Handle image removal
   const handleRemoveImage = (index, setFieldValue, images) => {
     const updatedImages = images?.filter((_, i) => i !== index);
@@ -215,7 +207,7 @@ const RegisterProductForm = () => {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success("Product registered successfully!");
+        toast.success("Product registered successfully!");    
         resetForm();
         setStep(1);
         route.push("/user");

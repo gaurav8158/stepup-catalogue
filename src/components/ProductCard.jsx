@@ -1,5 +1,6 @@
 import Link from "next/link";
 import _ from "lodash";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const productNamePrefixes = /^(PE|UX) /i;
 
@@ -8,10 +9,18 @@ export default function ProductCard({ product }) {
     productNamePrefixes,
     (m, m1) => _.toUpper(m1 + " ")
   );
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const returnUrl = `${pathname}?${searchParams.toString()}`;
+  const encodedReturnUrl = encodeURIComponent(returnUrl);
+  console.log("Return URL:", returnUrl);
+  console.log("Encoded Return URL:", encodedReturnUrl);
+  // const hrefWithCallback = `/product/${product._id}?callbackUrl=${encodeURIComponent(returnUrl)}`;
+  const hrefWithCallback = `/product/${product._id}?callbackUrl=${encodedReturnUrl}`;
 
   return (
     <Link
-      href={product?.inStock ? `/product/${product._id}` : ""}
+      href={product?.inStock ? hrefWithCallback : ""}
       className={`no-underline ${product?.inStock ? "" : "opacity-60"}`}
     >
       <div className="bg-white group rounded-md overflow-hidden shadow-sm hover:shadow-md relative text-[13px] font-sans">
