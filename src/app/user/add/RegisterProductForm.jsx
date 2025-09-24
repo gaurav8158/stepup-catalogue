@@ -193,7 +193,7 @@ const RegisterProductForm = () => {
       const payload = {
         ...values,
         userId: user.id,
-        senderMobile: "+971" + values.senderMobile,
+       senderMobile: "+971" + values.senderMobile,
       };
 
       const res = await fetch(`${BASE_URL}/products/register`, {
