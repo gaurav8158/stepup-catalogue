@@ -24,7 +24,7 @@ const Footer = () => {
           <ul className="space-y-1 text-gray/90">
             <li>
               <a className="decoration-0" href="tel:+971522726979">
-                +971 522726979
+                +971 52 272 6979
               </a>
             </li>
             <li>
