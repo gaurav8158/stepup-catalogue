@@ -1,6 +1,7 @@
 "use client";
 
 import Layout from "@/components/layout";
+import Loadermain from "@/components/Loadermain";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -21,6 +22,11 @@ const FormSkeleton = () => (
     </div>
   </div>
 );
+export const Loader = () => (
+  <div className="h-dvh w-full flex justify-center items-center">
+    <Loadermain />
+  </div>
+);
 const AuthLayoutClient = ({ children }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,7 +39,7 @@ const AuthLayoutClient = ({ children }) => {
       // Save token to localStorage
       localStorage.setItem("usertoken", id);
       const decoded = parseJwt(id);
-     localStorage.setItem('user', JSON.stringify({ id: decoded.id }));
+      localStorage.setItem("user", JSON.stringify({ id: decoded.id }));
 
       const currentPath = window.location.pathname; // /user/add
       router.replace(currentPath); //  without query
@@ -80,7 +86,7 @@ const AuthLayoutClient = ({ children }) => {
   const decoded = parseJwt(token);
   console.log(decoded);
 
-  return <Layout>{loading ? <FormSkeleton /> : <div>{children}</div>}</Layout>;
+  return <Layout>{loading ? <Loader /> : <div>{children}</div>}</Layout>;
 };
 
 export default AuthLayoutClient;

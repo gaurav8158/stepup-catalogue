@@ -65,7 +65,7 @@ const Page = () => {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
@@ -150,6 +150,15 @@ const Page = () => {
               Register Now
             </Link>
           </p>
+          {/* Added Homepage Link Here */}
+          <div className="mt-2 text-center text-sm/6 text-gray-500">
+            <Link
+              href="/"
+              className="font-semibold border border-green-600 shadow-md rounded-md px-10 py-1 text-green-600 hover:text-green-500"
+            >
+              Go to Homepage
+            </Link>
+          </div>
         </div>
       </div>
     </>
