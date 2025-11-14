@@ -69,6 +69,10 @@ const RegisterProductForm = () => {
     images: Yup.array()
       .min(1, "At least one image is required")
       .max(4, "You can upload a maximum of 4 images only"),
+       policyOptIn: Yup.boolean().oneOf(
+      [true],
+      "You must accept the terms and conditions"
+    ),
   });
 
   // Validation schema for step 2
@@ -85,10 +89,7 @@ const RegisterProductForm = () => {
     senderAddress: Yup.string()
       .min(10, "Address must be at least 10 characters")
       .required("Pickup Address is required"),
-    policyOptIn: Yup.boolean().oneOf(
-      [true],
-      "You must accept the terms and conditions"
-    ),
+   
   });
 
   // Combined validation schema
@@ -101,7 +102,6 @@ const RegisterProductForm = () => {
       const res = await fetch(`${BASE_URL}/schoolDress`);
       const data = await res.json();
       if (res.ok) {
-      
         setSchoolData(data.data);
       } else {
         console.error("Fetch failed:", data.message);
@@ -116,8 +116,6 @@ const RegisterProductForm = () => {
       const data = await res.json();
 
       if (res.ok) {
- 
-
         // Find the quote with tag === "For Seller"
         const sellerQuote = data.find((item) => item.tag === "For Seller");
 
@@ -193,7 +191,7 @@ const RegisterProductForm = () => {
       const payload = {
         ...values,
         userId: user.id,
-       senderMobile: "+971" + values.senderMobile,
+        senderMobile: "+971" + values.senderMobile,
       };
 
       const res = await fetch(`${BASE_URL}/products/register`, {
@@ -207,7 +205,7 @@ const RegisterProductForm = () => {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success("Product registered successfully!");    
+        toast.success("Product registered successfully!");
         resetForm();
         setStep(1);
         route.push("/user");
@@ -591,113 +589,6 @@ const RegisterProductForm = () => {
                   />
                 </div>
 
-                {/* <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Upload Images (Max 4){" "}
-                    <span className="text-red-500">*</span>
-                  </label>
-
-                  <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center border-2 border-dashed border-gray-300 rounded-2xl bg-white transition hover:border-green-500 w-full max-w-md">
-                    <Cloudy />
-
-                    <p className="text-sm font-medium text-gray-700">
-                      Choose a file or drag & drop it here
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      JPEG, JPG, and PNG formats
-                    </p>
-
-                    <label
-                      htmlFor="image-upload"
-                      className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-green-700 cursor-pointer mt-2"
-                    >
-                      <Upload />
-                      Browse File
-                      <input
-                        id="image-upload"
-                        type="file"
-                        accept="image/*"
-                        disabled={values?.images?.length >= 4}
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-
-                          const formData = new FormData();
-                          formData.append("product", file);
-
-                          try {
-                            const res = await fetch(
-                              `${BASE_URL}/images/upload`,
-                              {
-                                method: "POST",
-                                body: formData,
-                              }
-                            );
-
-                            if (!res.ok) throw new Error("Upload failed");
-
-                            const data = await res.json(); // expect { url: "https://..." }
-                            const imageUrl = data.url;
-
-                            if (values.images.length < 4) {
-                              setFieldValue("images", [
-                                ...values.images,
-                                imageUrl,
-                              ]);
-                            }
-                          } catch (err) {
-                            console.error("Image upload error:", err);
-                            alert("Failed to upload image");
-                          }
-
-                          e.target.value = "";
-                        }}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-
-                  <p className="text-green-600 text-sm mt-1">
-                    *You can upload a maximum of 4 images.
-                  </p>
-
-                  {values?.images?.length > 0 && (
-                    <div className="flex flex-wrap  gap-4 mt-4">
-                      {values.images.map((url, idx) => (
-                        <div
-                          key={idx}
-                          className="relative h-24 w-24  sm:h-40 sm:w-40 group"
-                        >
-                          <img
-                            src={url}
-                            alt={`Uploaded ${idx + 1}`}
-                            className="w-full h-full  object-cover rounded-lg shadow"
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleRemoveImage(
-                                idx,
-                                setFieldValue,
-                                values.images
-                              )
-                            }
-                            className="absolute top-1 right-1 bg-gray-200 cursor-pointer text-gray-600 p-[2px] rounded-full w-5 h-5 text-xs flex items-center justify-center transition"
-                            title="Remove"
-                          >
-                            <X />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <ErrorMessage
-                    name="images"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div> */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Upload Images (Max 4){" "}
@@ -831,13 +722,33 @@ const RegisterProductForm = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
+                  {/* Terms and Conditions */}
+                <div className="md:col-span-2">
+                  <div className="flex items-center gap-2">
+                    <Field
+                      type="checkbox"
+                      id="policyOptIn"
+                      name="policyOptIn"
+                      className="w-4 h-4"
+                    />
+                    <label htmlFor="policyOptIn" className="text-sm">
+                      I Agree to the Terms and Conditions.{" "}
+                      <TermsAndConditionsDialog />
+                    </label>
+                  </div>
+                  <ErrorMessage
+                    name="policyOptIn"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
                 <div className="md:col-span-2 flex justify-end">
                   <button
                     type="button"
                     onClick={() =>
                       handleNextStep(validateForm, values, setTouched)
                     }
-                    className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500"
+                    className="bg-green-600 cursor-pointer text-white px-6 py-2 rounded-full hover:bg-green-500"
                   >
                     Next
                   </button>
@@ -918,7 +829,7 @@ const RegisterProductForm = () => {
                 </div>
 
                 {/* Terms and Conditions */}
-                <div className="md:col-span-2">
+                {/* <div className="md:col-span-2">
                   <div className="flex items-center gap-2">
                     <Field
                       type="checkbox"
@@ -936,20 +847,20 @@ const RegisterProductForm = () => {
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
-                </div>
+                </div> */}
 
                 <div className="md:col-span-2 flex justify-between">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="bg-gray-50 text-gray-800 shadow px-6 py-2 rounded-full hover:bg-gray-100"
+                    className="bg-gray-50  cursor-pointer text-gray-800 shadow border border-gray-400 px-6 py-2 rounded-full hover:bg-gray-100"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-500 disabled:opacity-50"
+                    className="bg-green-600  cursor-pointer text-white px-6 py-2 rounded-full hover:bg-green-500 disabled:opacity-50"
                   >
                     {isSubmitting ? "Submitting..." : "Submit"}
                   </button>

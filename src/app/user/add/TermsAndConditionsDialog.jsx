@@ -16,18 +16,18 @@ export default function TermsAndConditionsAlert() {
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          className="text-blue-600 underline text-sm hover:text-blue-800 ml-1"
+          className="text-blue-600 cursor-pointer underline text-sm hover:text-blue-800 ml-1"
         >
           View T&C
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent className="h-[90vh]">
         <AlertDialogHeader className="text-left">
-          <AlertDialogCancel className="absolute top-3 right-3">
+          <AlertDialogCancel className="absolute top-3  cursor-pointer right-3">
             <X />
           </AlertDialogCancel>
           <AlertDialogTitle>Terms & Conditions</AlertDialogTitle>
-          <AlertDialogDescription className="max-h-[72vh] overflow-y-auto space-y-4 text-sm leading-relaxed">
+          <div className="max-h-[72vh] overflow-y-auto space-y-4 text-sm leading-relaxed">
             <div className="space-y-6">
               <div>
                 <p className="font-medium text-gray-900 mb-2">Introduction</p>
@@ -134,7 +134,7 @@ export default function TermsAndConditionsAlert() {
                 <p>Stepup reserves the right to modify these Seller Terms at any time. The Sellers shall be notified about the changes and, by continuing to access or utilise the Platform, the Seller is deemed to have agreed to the updated Seller Terms.</p>
               </div>
             </div>
-          </AlertDialogDescription>
+          </div>
         </AlertDialogHeader>
       </AlertDialogContent>
     </AlertDialog>

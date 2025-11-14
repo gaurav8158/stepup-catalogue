@@ -6,10 +6,10 @@ import { Button } from "./ui/button";
 const BackBtn = ({ link, text }) => {
   return (
     <Link href={link}>
-      <Button variant="outline">
+      <Button variant="outline" size="sm">
         {" "}
         <ArrowLeft />
-        {text}
+        <span className="hidden sm:block"> {text}</span>
       </Button>{" "}
     </Link>
   );

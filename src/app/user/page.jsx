@@ -33,7 +33,6 @@ const OrdersPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-      
         setOrders(data.products);
       } else {
         console.error("Failed to fetch buyers:", data.error || data.message);
@@ -60,7 +59,6 @@ const OrdersPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-      
         setBuyOrders(data.orders);
       } else {
         console.log("Failed to fetch buyers:", data.error || data.message);
@@ -81,14 +79,14 @@ const OrdersPage = () => {
         </Button>
       </Link>
 
-      <div className="flex justify-between flex-col md:flex-row gap-2 md:gap-0 mb-4 ">
+      <div className="flex justify-between flex-row gap-2 md:gap-0 mb-4 ">
         <div className="flex items-center gap-2">
           {" "}
           <BackBtn text="Back" link="/" />
-          <h1 className="text-2xl font-semibold ">My Orders</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold ">My Orders</h1>
         </div>
         <Link href="/user/add">
-          <button className="text-sm flex gap-2 items-center text-green-700 border border-green-700 bg-green-50 rounded-full px-6 py-2 font-semibold ">
+          <button className="text-sm  cursor-pointer flex gap-2 items-center text-green-700 border border-green-700 bg-green-50 rounded-full px-4 sm:px-6 py-2 font-semibold ">
             Sell/Donate Uniform
           </button>{" "}
         </Link>

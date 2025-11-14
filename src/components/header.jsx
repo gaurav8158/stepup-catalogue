@@ -136,7 +136,7 @@ export default function Header() {
               <div className="flex items-center gap-2 sm:gap-4">
                 <Link
                   href="/user/add"
-                  className="inline-block bg-[#28B083] font-semibold px-3 md:px-6 py-2 text-sm md:text-base rounded-full text-white hover:bg-green-700 transition-colors"
+                  className="inline-block  bg-[#28B083] font-semibold px-3 md:px-6 py-2 text-sm md:text-base rounded-full text-white hover:bg-green-700 transition-colors"
                 >
                   Sell/Donate Uniform
                 </Link>
