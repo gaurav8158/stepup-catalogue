@@ -9,7 +9,7 @@ const Page = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    email: "",
+    mobile: "",
     password: "",
   });
 
@@ -25,14 +25,17 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = process.env.NEXT_PUBLIC_BASE_URL;
-
+    const payload = {
+      mobile: `+971${formData.mobile}`,
+      password: formData.password,
+    };
     try {
       const res = await fetch(`${url}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -67,8 +70,32 @@ const Page = () => {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
+            {/* Mobile Number */}
             <div>
+              <label
+                htmlFor="mobile"
+                className="block text-sm/6 font-medium text-gray-900"
+              >
+                Mobile Number
+              </label>
+              <div className="w-full relative mt-2">
+                <p className="absolute left-2 top-[9px] text-gray-600">+971</p>
+                <input
+                  type="tel"
+                  id="mobile"
+                  name="mobile"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  required
+                  className="w-full custom-input-class"
+                  style={{ paddingLeft: "50px" }}
+                  placeholder="Enter 9 digit number"
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            {/* <div>
               <label
                 htmlFor="email"
                 className="block text-sm/6 font-medium text-gray-900"
@@ -87,7 +114,7 @@ const Page = () => {
                   className="w-full custom-input-class"
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Password */}
             <div>
