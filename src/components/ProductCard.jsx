@@ -13,8 +13,6 @@ export default function ProductCard({ product }) {
   const searchParams = useSearchParams();
   const returnUrl = `${pathname}?${searchParams.toString()}`;
   const encodedReturnUrl = encodeURIComponent(returnUrl);
-  console.log("Return URL:", returnUrl);
-  console.log("Encoded Return URL:", encodedReturnUrl);
   // const hrefWithCallback = `/product/${product._id}?callbackUrl=${encodeURIComponent(returnUrl)}`;
   const hrefWithCallback = `/product/${product._id}?callbackUrl=${encodedReturnUrl}`;
 

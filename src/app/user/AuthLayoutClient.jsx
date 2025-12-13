@@ -80,12 +80,7 @@ const AuthLayoutClient = ({ children }) => {
     }
   }
 
-  // Example usage:
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGNkZjBmM2NlMmEyNmNhY2YyZDViNSIsImlhdCI6MTc1NDI1MzYzMiwiZXhwIjoxNzU2ODQ1NjMyfQ.RTXnuI6WpN-qBP0EvExTfKhks07uDcFYy-r5iSdKmaU";
-  const decoded = parseJwt(token);
-  console.log(decoded);
-
+ 
   return <Layout>{loading ? <Loader /> : <div>{children}</div>}</Layout>;
 };
 

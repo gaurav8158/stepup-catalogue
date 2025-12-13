@@ -25,7 +25,7 @@ const CartPage = () => {
         const details = await Promise.all(
           cart.map(async (cartItem) => {
             const response = await axios.get(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/products/${cartItem._id}`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}/products/approved/${cartItem._id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("usertoken")}`,
